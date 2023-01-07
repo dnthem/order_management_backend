@@ -1,22 +1,19 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import './index.css'
+import indexedDBController from './indexedDB/indexedDB';
 
-let state = undefined;
-
+const DB_NAME = 'ORDER_MANAGEMENT';
 
 const root = ReactDOM.createRoot(document.getElementById('layoutSidenav_content'));
 
 function Render (state) {
   root.render(
     <React.StrictMode>
-      <App message={state}/>
+      <App db={state}/>
     </React.StrictMode>,
   )
 }
-
-
 
 function toggleSideBar () {
   const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -33,19 +30,24 @@ function toggleSideBar () {
   }
 }
 
-function bindButton () {
-  const doThis = () => {
-    const message = prompt('Enter someting');
-    Render(message);
+async function registerIndexedDB () {
+  if (!('indexedDB' in window)) {
+    alert('You browser does not support indexedDB, cannot store data in offline mode')
+  } else {
+    console.log('initialize indexedDB...')
+    try {
+      return await indexedDBController.createDB(DB_NAME, 1)
+    } catch (error) {
+      alert('Error has occured: \n' + error)
+    }
+    
   }
-  document.querySelector('#clickme').addEventListener('click', doThis)
 }
 
-
-function init () {
+async function init () {
+  const DB = await registerIndexedDB();
   toggleSideBar();
-  bindButton();
-  Render();
+  Render(DB);
 }
 
 window.addEventListener('DOMContentLoaded', init);
