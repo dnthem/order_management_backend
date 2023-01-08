@@ -1,7 +1,51 @@
 import Header from "../../components/Header";
 import ItemCardV2 from "../../components/ItemCard_v2";
+import {FaUndoAlt} from "react-icons/fa";
+import {AiOutlineCheckCircle} from "react-icons/ai";
+import {BiDownload} from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { GetDataBaseContext } from "../../App";
+import indexedDBController from "../../indexedDB/indexedDB";
+import OrderItemCard from "../../components/OrderItemCard";
+import OrderCard from "../../components/OrderCard";
+
+const STORE_MENU = 'Menu';
+const STORE_ORDERS = 'Orders';
 
 function Orders(props) {
+    const {db} = GetDataBaseContext();
+    const [menu, setMenu] = useState([]);
+    const [orders, setOrders] = useState();
+    const [loading, setLoading] = useState(true);
+    const [date, setDate] = useState(new Date().toLocaleDateString('en-us'));
+    const [total, setTotal] = useState(0);
+
+    useEffect(() => {
+        const getMenu = async () => {
+          setLoading(true);
+          try {
+            const retrievedMenu = await indexedDBController.getAllDataFromStore(
+              db,
+              STORE_MENU
+            );
+            setMenu(retrievedMenu);
+            const retrievedOrders = await indexedDBController.getARecord(db, STORE_ORDERS, date);
+            setOrders(retrievedOrders.ItemKeys.map((val, idx) => 
+            <OrderCard key={val} 
+            Title={retrievedOrders.ItemNames[idx]}
+            Price={retrievedOrders.Prices[idx]} 
+            Quantity={retrievedOrders.Quantity[idx]}
+            Total = {retrievedOrders.Totals[idx]}/>
+            ));
+            setTotal(retrievedOrders.Totals.reduce((acc, curr) => acc + curr,0));
+            
+          } catch (error) {
+            console.error(error.message);
+          }
+          setLoading(false);
+        };
+        getMenu();
+      }, []);
     return ( 
         <>
             <div className="row">
@@ -10,21 +54,33 @@ function Orders(props) {
                 </div>
                 <div className="col-4">
                     <div className="d-flex justify-content-between">
-                        <button className="mt-4 btn btn-primary">Undo</button>
-                        <button className="mt-4 btn btn-primary">Complete</button>
-                        <button className="mt-4 btn btn-primary">Save to local</button>
+                        <button className="mt-4 btn">Undo <FaUndoAlt/></button>
+                        <button className="mt-4 btn">Complete <AiOutlineCheckCircle/></button>
+                        <button className="mt-4 btn">Save to local <BiDownload/></button>
                     </div>
                     
                 </div>
             </div>
             <div className="row">
-                <div className="col-6 bg-primary vh-100">
-                    abc
+                <div className="col-6 overflow-hidden">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Price</th>
+                                <th></th><th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {loading? <tr><td>'Loading...'</td></tr>:''}
+                            {menu.map(e => <OrderItemCard key={e.id} cardID={e.id} Title={e.Title} Price={e.Price} Photo={e.Photo}/>)}
+                        </tbody>
+                    </table>
                 </div>
-                <div className="col-6 bg-success vh-100">
+                <div className="col-6 overflow-scroll h-75">
                     <h2 className="h2">Completed Orders Today</h2>
-                    <h3>Date:</h3> <h3>Total:</h3>
-                <table class="table">
+                    <h3>Date:{date}</h3> <h3>Total:${total}</h3>
+                <table className="table">
                     <thead>
                         <tr>
                         <th scope="col">Item Name</th>
@@ -34,19 +90,8 @@ function Orders(props) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <th >1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        </tr>
-                        <tr>
-                        <th >2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                        </tr>
-                    
+                        
+                    {console.log(orders.ItemNames)}
                     </tbody>
                     </table>
 

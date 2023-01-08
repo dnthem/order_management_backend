@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { GetDataBaseContext } from "../App";
+import indexedDBController from "../indexedDB/indexedDB";
 
 function ItemCardV2(props) {
     const [cardProps, setCardProps] = useState({})
@@ -11,21 +12,31 @@ function ItemCardV2(props) {
     const imageRef = useRef();
 
     const setChanges = (e) => {
-      const title = titleRef.current.innerText;
-      const price = priceRef.current.innerText;
-      const content = contentRef.current.InnertText;
+      const Title = titleRef.current.innerText;
+      const Price = priceRef.current.innerText;
+      const Content = contentRef.current.textContent;
+      const Photo = imageRef.current.files[0];
+
       const newProp = {...cardProps}
-      // handle Image
 
-      newProp.title = title;
-      newProp.price = Number(price);
-      newProp.content = content;
-      
+      newProp.Title = Title? Title: newProp.Title;
+      newProp.Price = Price? Number(Price): Number(newProp.Price);
+      newProp.Content = Content? Content: newProp.Content;
+      newProp.Photo = Photo? Photo: newProp.Photo;
       // update database
-
+      const newData = {
+        Count: 0,
+        Content: newProp.Content,
+        Photo: newProp.Photo,
+        Title: newProp.Title,
+        Price: newProp.Price,
+        id: props.cardID,
+      }
+      indexedDBController.updateARecord(db, 'Menu', newData)
       // update current card
-      setCardProps(newProp);
-      setEdit(false);
+      props.updateMenu(newData)
+      // setCardProps(newProp);
+      // setEdit(false);
     }
 
     const remove = (e) => {

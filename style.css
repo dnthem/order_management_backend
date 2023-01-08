@@ -70,11 +70,17 @@
   box-sizing: border-box;
 }
 
+*:not(p) {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   :root {
     scroll-behavior: smooth;
   }
 }
+
 
 body {
   margin: 0;

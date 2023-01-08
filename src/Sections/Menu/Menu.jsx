@@ -27,9 +27,9 @@ function Menu(props) {
     // create empty item from db
     const data = {
       Title: undefined,
-      Price: undefined,
+      Price: 0,
       Notes: undefined,
-      Count: undefined,
+      Count: 0,
       Photo: undefined,
       DateAdded: new Date().toLocaleDateString("en-us"),
     };
@@ -39,6 +39,20 @@ function Menu(props) {
     setMenu([...menu, data]);
     //
   };
+
+  const updateMenu = (newItem) => {
+    const temp = menu.map(e => e.id != newItem.id? e: 
+      {
+        id: newItem.id,
+        Title: newItem.Title,
+        Price: newItem.Price,
+        Content: newItem.Content,
+        Photo: newItem.Photo, 
+        Count: newItem.Count,
+        DateAdded: newItem.DateAdded,
+      })
+      setMenu(temp);
+  }
 
   useEffect(() => {
     const getMenu = async () => {
@@ -80,6 +94,7 @@ function Menu(props) {
             Price={e.Price}
             Content={e.Content}
             Photo={e.Photo}
+            updateMenu={updateMenu}
           />
         ))}
       </div>

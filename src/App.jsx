@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import Menu from "./Sections/Menu/Menu"
 import Orders from "./Sections/Orders/Orders";
 
@@ -9,8 +9,12 @@ export function GetDataBaseContext() {
 }
 function App(props) {
   const [db, setDB] = useState(props.db);
-  const [state, setState] = useState(1)
+  const [state, setState] = useState(0)
   const value = { db }
+
+  useEffect(() => {
+    setState(props.state)
+  })
   return (
     <ctx.Provider value={value}>
 

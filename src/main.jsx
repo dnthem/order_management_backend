@@ -7,10 +7,10 @@ const DB_NAME = 'ORDER_MANAGEMENT';
 
 const root = ReactDOM.createRoot(document.getElementById('layoutSidenav_content'));
 
-function Render (state) {
+function Render (db, state = 0) {
   root.render(
     <React.StrictMode>
-      <App db={state}/>
+      <App db={db} state={state}/>
     </React.StrictMode>,
   )
 }
@@ -44,10 +44,13 @@ async function registerIndexedDB () {
   }
 }
 
+
 async function init () {
   const DB = await registerIndexedDB();
   toggleSideBar();
   Render(DB);
+  document.querySelector('#Menu').addEventListener('click', () => {Render(DB, 0)})
+  document.querySelector('#Orders').addEventListener('click', () => {Render(DB, 1)})
 }
 
 window.addEventListener('DOMContentLoaded', init);
