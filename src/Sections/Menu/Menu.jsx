@@ -18,6 +18,7 @@ function Menu(props) {
     // remove item from menu
     setMenu(menu.filter((e) => e.id !== key));
     // remove item from indexedDB
+    indexedDBController.deleteARecord(db, 'Menu', key);
   };
 
   const addNewItem = async () => {
@@ -75,7 +76,8 @@ function Menu(props) {
             cardID={e.id}
             Title={e.Title}
             Price={e.Price}
-            Conent={e.Content}
+            Content={e.Content}
+            Photo={e.Photo}
           />
         ))}
       </div>
