@@ -29,6 +29,7 @@ function ItemCardV2(props) {
     }
 
     const remove = (e) => {
+      if (!confirm('Are you sure to remove this item')) return;
       props.remove(props.cardID)
       console.log('remove was called')
     }
@@ -43,7 +44,7 @@ function ItemCardV2(props) {
     },[props])
 
   return (
-    <div className="col-xl-3 col-md-6">
+    <div className="col-xl-3 col-md-3">
     <div className={edit? 'card border-danger': 'card'} style={{width:'15rem'}}>
 
       <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):'/template.jpg'} className="card-img-top" alt={cardProps.Title} />

@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react"
 import Menu from "./Sections/Menu/Menu"
+import Orders from "./Sections/Orders/Orders";
 
 const ctx = createContext();
 
@@ -8,12 +9,14 @@ export function GetDataBaseContext() {
 }
 function App(props) {
   const [db, setDB] = useState(props.db);
-
+  const [state, setState] = useState(1)
   const value = { db }
   return (
     <ctx.Provider value={value}>
+
       <main className="container-fluid px-4">
-        <Menu/>
+        {state=== 0 && <Menu/>}
+        {state===1 && <Orders/>}
       </main>
     </ctx.Provider>
   )

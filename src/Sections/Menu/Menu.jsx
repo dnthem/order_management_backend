@@ -5,6 +5,8 @@ import ItemCard from "../../components/ItemCard";
 import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
 
+const STORE = 'Menu';
+
 function Menu(props) {
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,7 +20,7 @@ function Menu(props) {
     // remove item from menu
     setMenu(menu.filter((e) => e.id !== key));
     // remove item from indexedDB
-    indexedDBController.deleteARecord(db, 'Menu', key);
+    indexedDBController.deleteARecord(db, STORE, key);
   };
 
   const addNewItem = async () => {
@@ -31,7 +33,7 @@ function Menu(props) {
       Photo: undefined,
       DateAdded: new Date().toLocaleDateString("en-us"),
     };
-    const id = await indexedDBController.addData(db, "Menu", data);
+    const id = await indexedDBController.addData(db, STORE, data);
     console.log("id:" + id);
     data.id = id;
     setMenu([...menu, data]);
@@ -44,7 +46,7 @@ function Menu(props) {
       try {
         const retrievedMenu = await indexedDBController.getAllDataFromStore(
           db,
-          "Menu"
+          STORE
         );
         setMenu(retrievedMenu);
       } catch (error) {
@@ -62,7 +64,7 @@ function Menu(props) {
           <Header title="Menu" />
         </div>
         <div className="col">
-          <button className="mt-4 btn bg-primary" onClick={addNewItem}>
+          <button className="mt-4 btn btn-primary" onClick={addNewItem}>
             Add new item
           </button>
         </div>
