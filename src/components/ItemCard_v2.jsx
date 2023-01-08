@@ -36,7 +36,7 @@ function ItemCardV2(props) {
       // update current card
       props.updateMenu(newData)
       // setCardProps(newProp);
-      // setEdit(false);
+      setEdit(false);
     }
 
     const remove = (e) => {
@@ -47,7 +47,7 @@ function ItemCardV2(props) {
 
     useEffect(() => {
         const checkStatus = () => {
-          if (props.Title === undefined) setEdit(true);
+          if (props.Title === undefined || props.Title === null) setEdit(true);
         }
         checkStatus();
         setCardProps(props)

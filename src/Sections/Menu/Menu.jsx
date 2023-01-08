@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { GetDataBaseContext } from "../../App";
 import Header from "../../components/Header";
-import ItemCard from "../../components/ItemCard";
 import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
 

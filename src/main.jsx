@@ -7,7 +7,7 @@ const DB_NAME = 'ORDER_MANAGEMENT';
 
 const root = ReactDOM.createRoot(document.getElementById('layoutSidenav_content'));
 
-function Render (db, state = 0) {
+function Render (db, state = 1) {
   root.render(
     <React.StrictMode>
       <App db={db} state={state}/>
