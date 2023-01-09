@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { GetDataBaseContext } from "../../App";
 import Header from "../../components/Header";
-import ItemCard from "../../components/ItemCard";
 import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
+
+const STORE = 'Menu';
 
 function Menu(props) {
   const [menu, setMenu] = useState([]);
@@ -18,25 +19,39 @@ function Menu(props) {
     // remove item from menu
     setMenu(menu.filter((e) => e.id !== key));
     // remove item from indexedDB
-    indexedDBController.deleteARecord(db, 'Menu', key);
+    indexedDBController.deleteARecord(db, STORE, key);
   };
 
   const addNewItem = async () => {
     // create empty item from db
     const data = {
       Title: undefined,
-      Price: undefined,
+      Price: 0,
       Notes: undefined,
-      Count: undefined,
+      Count: 0,
       Photo: undefined,
       DateAdded: new Date().toLocaleDateString("en-us"),
     };
-    const id = await indexedDBController.addData(db, "Menu", data);
+    const id = await indexedDBController.addData(db, STORE, data);
     console.log("id:" + id);
     data.id = id;
     setMenu([...menu, data]);
     //
   };
+
+  const updateMenu = (newItem) => {
+    const temp = menu.map(e => e.id != newItem.id? e: 
+      {
+        id: newItem.id,
+        Title: newItem.Title,
+        Price: newItem.Price,
+        Content: newItem.Content,
+        Photo: newItem.Photo, 
+        Count: newItem.Count,
+        DateAdded: newItem.DateAdded,
+      })
+      setMenu(temp);
+  }
 
   useEffect(() => {
     const getMenu = async () => {
@@ -44,7 +59,7 @@ function Menu(props) {
       try {
         const retrievedMenu = await indexedDBController.getAllDataFromStore(
           db,
-          "Menu"
+          STORE
         );
         setMenu(retrievedMenu);
       } catch (error) {
@@ -62,7 +77,7 @@ function Menu(props) {
           <Header title="Menu" />
         </div>
         <div className="col">
-          <button className="mt-4 btn bg-primary" onClick={addNewItem}>
+          <button className="mt-4 btn btn-primary" onClick={addNewItem}>
             Add new item
           </button>
         </div>
@@ -78,6 +93,8 @@ function Menu(props) {
             Price={e.Price}
             Content={e.Content}
             Photo={e.Photo}
+            updateMenu={updateMenu}
+            Count={e.Count}
           />
         ))}
       </div>
