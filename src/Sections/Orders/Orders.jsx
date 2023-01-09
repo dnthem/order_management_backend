@@ -10,7 +10,7 @@ import indexedDBController from "../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../App";
 import convertReadable from "./FormatFile";
 
-
+// Helper function
 function updateOrder(order, item) {
     let resOrder = {...order};
     const idx = resOrder.ItemKeys.findIndex(e => e === item.id);
@@ -28,6 +28,7 @@ function updateOrder(order, item) {
     return resOrder
 }
 
+// Helper function
 function undoOrder(order, item) {
     let resOrder = {...order};
     const idx = resOrder.ItemKeys.findIndex(e => e === item.id);
@@ -43,6 +44,7 @@ function undoOrder(order, item) {
     return resOrder;
 }
 
+// Helper function
 function updateCounter(db, order, menu) {
     menu.forEach(item => {
         const idx = order.ItemKeys.findIndex(e => e === item.id);
@@ -87,6 +89,7 @@ function Orders(props) {
     }
 
     const handleSave = async () => {
+        if (order.IsComplete) { alert('Order is marked as completed, cannot perform any further actions'); return;}
         try {
             await indexedDBController.updateARecord(db, 'Orders', order)
             alert ('Update order successful')
@@ -102,6 +105,7 @@ function Orders(props) {
         if (!(confirm('Are you sure to complete today order? This action cannot be undone?'))) return;
         try {
             await indexedDBController.updateARecord(db, 'Orders', {...order, IsComplete: true})
+            await indexedDBController.updateARecord(db, 'Income', {Date: date, Income: total})
             updateCounter(db, order, menu);
             setOrder({...order, IsComplete: true})
             alert('Completed')
@@ -158,7 +162,10 @@ function Orders(props) {
                 <div className="col-6 ">
                     <div className="d-flex justify-content-center">
                         <h2 className="h2">Completed Today Orders </h2>
+                        
+                        
                     </div>
+                    {order.IsComplete && <aside className="text-danger">NOTE: Order has been marked as completed (view only), DO NOT add more orders</aside>}
                     <h3 className="d-flex justify-content-between"><span>Date: {date}</span> <span>Total: ${total}</span></h3>
                     <OrderTable order={order}/>
                 </div>
