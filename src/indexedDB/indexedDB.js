@@ -18,7 +18,8 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       sampleData['Menu'].forEach(e => menu.add(e))
       const order = db.createObjectStore("Orders", { keyPath: "Date" });
       sampleData['Orders'].forEach(e => order.add(e))
-      db.createObjectStore("Income", { keyPath: "Date" });
+      const income = db.createObjectStore("Income", { keyPath: "Date" });
+      sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
 

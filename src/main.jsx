@@ -51,6 +51,7 @@ async function init () {
   Render(DB);
   document.querySelector('#Menu').addEventListener('click', () => {Render(DB, 0)})
   document.querySelector('#Orders').addEventListener('click', () => {Render(DB, 1)})
+  document.querySelector('#Dashboard').addEventListener('click', () => {Render(DB, 2)})
 }
 
 window.addEventListener('DOMContentLoaded', init);

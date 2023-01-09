@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import Dashboard from "./Sections/Dashboard/Dashboard";
 import Menu from "./Sections/Menu/Menu"
 import Orders from "./Sections/Orders/Orders";
 
@@ -9,7 +10,6 @@ export function GetDataBaseContext() {
 }
 function App(props) {
   const [db, setDB] = useState(props.db);
-  const [state, setState] = useState(0)
   const value = { db }
 
   const RenderOnState = () => {
@@ -19,13 +19,12 @@ function App(props) {
         res = <Menu/>; break;
       case 1:
         res= <Orders/>; break;
+      case 2:
+        res = <Dashboard/>; break;
     }
     return res;
   }
 
-  useEffect(() => {
-    setState(props.state)
-  })
   return (
     <ctx.Provider value={value}>
 

@@ -5,7 +5,7 @@ const sampleData = {
         Price: 12,
         Content: undefined,
         Photo: undefined,
-        Count: 0,
+        Count: 12,
         DateAdded: "Fri Jan 06 2023 17:23:39 GMT-0800 (Pacific Standard Time)",
       },
       {
@@ -13,8 +13,24 @@ const sampleData = {
         Price: 12,
         Content: undefined,
         Photo: undefined,
-        Count: 0,
+        Count: 5,
         DateAdded: "Fri Jan 06 2023 15:22:00 GMT-0800 (Pacific Standard Time)",
+      },
+      {
+        Title: "Trứng Nướng",
+        Price: 12,
+        Content: undefined,
+        Photo: undefined,
+        Count: 7,
+        DateAdded: "Fri Jan 07 2023 15:22:00 GMT-0800 (Pacific Standard Time)",
+      },
+      {
+        Title: "Bắp Xào",
+        Price: 12,
+        Content: undefined,
+        Photo: undefined,
+        Count: 5,
+        DateAdded: "Fri Jan 07 2023 15:22:00 GMT-0800 (Pacific Standard Time)",
       },
     ],
     Orders: [
@@ -28,6 +44,32 @@ const sampleData = {
         IsComplete: false
       },
     ],
+    Income: [
+      {
+        Date: new Date(2023,0,1).toLocaleDateString('en-us'),
+        Income: 128
+      },
+      {
+        Date: new Date(2023,0,2).toLocaleDateString('en-us'),
+        Income: 80
+      },
+      {
+        Date: new Date(2023,0,3).toLocaleDateString('en-us'),
+        Income: 140
+      },
+      {
+        Date: new Date(2023,0,4).toLocaleDateString('en-us'),
+        Income: 180
+      },
+      {
+        Date: new Date(2023,0,5).toLocaleDateString('en-us'),
+        Income: 200
+      },
+      {
+        Date: new Date(2023,0,6).toLocaleDateString('en-us'),
+        Income: 145
+      },
+    ]
   };
   
   export default sampleData;
