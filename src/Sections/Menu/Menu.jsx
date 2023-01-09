@@ -94,6 +94,7 @@ function Menu(props) {
             Content={e.Content}
             Photo={e.Photo}
             updateMenu={updateMenu}
+            Count={e.Count}
           />
         ))}
       </div>

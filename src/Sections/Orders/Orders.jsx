@@ -8,6 +8,7 @@ import MenuTable from "./MenuTable";
 import OrderTable from "./OrderTable";
 import indexedDBController from "../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../App";
+import convertReadable from "./FormatFile";
 
 
 function updateOrder(order, item) {
@@ -42,6 +43,14 @@ function undoOrder(order, item) {
     return resOrder;
 }
 
+function updateCounter(db, order, menu) {
+    menu.forEach(item => {
+        const idx = order.ItemKeys.findIndex(e => e === item.id);
+        item.Count += order.Quantities[idx];
+        indexedDBController.updateARecord(db, 'Menu', item)
+    })
+}
+
 function Orders(props) {
     const {db} = GetDataBaseContext()
     const [date, setDate] = useState(new Date().toLocaleDateString('en-us'))
@@ -55,14 +64,12 @@ function Orders(props) {
             ItemNames: [],
             Prices: [],
             Quantities: [],
-            Totals: []
+            Totals: [],
+            IsComplete: false
         }
     );
 
     const selectOrder = (key) => {
-        // Add item to orders
-        console.log(key)
-        // update order
         const item =  menu.find(e => e.id === key)
         const newOrder = updateOrder(order, item)
         setUndoStack([...undoStack, item]);
@@ -83,12 +90,34 @@ function Orders(props) {
         try {
             await indexedDBController.updateARecord(db, 'Orders', order)
             alert ('Update order successful')
+            
             setUndoStack([]);
         } catch (error) {
             alert (error)
         }
     }
+
+    const handleComplete = async () => {
+        if (order.IsComplete) { alert('Order is marked as completed, cannot perform any further actions'); return;}
+        if (!(confirm('Are you sure to complete today order? This action cannot be undone?'))) return;
+        try {
+            await indexedDBController.updateARecord(db, 'Orders', {...order, IsComplete: true})
+            updateCounter(db, order, menu);
+            setOrder({...order, IsComplete: true})
+            alert('Completed')
+        } catch (error) {
+            alert(error);
+        }
+    }
     
+    const handleSaveToLocal = () => {
+        const a = document.createElement("a");
+        const file = new Blob([convertReadable(order)], {type: 'text/plain'});
+        a.href = URL.createObjectURL(file);
+        a.download = 'Order_date_' + date;
+        a.click();
+    }
+
     useEffect(() => {
         const getMenuOrderStores = async () => {
             try {
@@ -115,8 +144,8 @@ function Orders(props) {
                     <div className="d-flex justify-content-between">
                         <button className="mt-4 btn" onClick={handleSave}>Save <FiSave/></button>
                         <button className="mt-4 btn" onClick={handleUndo}  disabled={undoStack.length===0? true:false}>Undo <FaUndoAlt/></button>
-                        <button className="mt-4 btn">Complete <AiOutlineCheckCircle/></button>
-                        <button className="mt-4 btn">Save to local <BiDownload/></button>
+                        <button className="mt-4 btn" onClick={handleComplete}>Complete <AiOutlineCheckCircle/></button>
+                        <button className="mt-4 btn" onClick={handleSaveToLocal}>Save to local <BiDownload/></button>
                     </div>
                     
                 </div>
@@ -128,7 +157,7 @@ function Orders(props) {
 
                 <div className="col-6 ">
                     <div className="d-flex justify-content-center">
-                        <h2 className="h2">Completed Orders Today</h2>
+                        <h2 className="h2">Completed Today Orders </h2>
                     </div>
                     <h3 className="d-flex justify-content-between"><span>Date: {date}</span> <span>Total: ${total}</span></h3>
                     <OrderTable order={order}/>

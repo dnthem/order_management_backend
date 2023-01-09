@@ -25,12 +25,12 @@ function ItemCardV2(props) {
       newProp.Photo = Photo? Photo: newProp.Photo;
       // update database
       const newData = {
-        Count: 0,
         Content: newProp.Content,
         Photo: newProp.Photo,
         Title: newProp.Title,
         Price: newProp.Price,
         id: props.cardID,
+        Count: props.Count,
       }
       indexedDBController.updateARecord(db, 'Menu', newData)
       // update current card

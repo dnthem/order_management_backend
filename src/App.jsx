@@ -12,6 +12,17 @@ function App(props) {
   const [state, setState] = useState(0)
   const value = { db }
 
+  const RenderOnState = () => {
+    let res;
+    switch (props.state) {
+      case 0:
+        res = <Menu/>; break;
+      case 1:
+        res= <Orders/>; break;
+    }
+    return res;
+  }
+
   useEffect(() => {
     setState(props.state)
   })
@@ -19,8 +30,7 @@ function App(props) {
     <ctx.Provider value={value}>
 
       <main className="container-fluid px-4">
-        {state=== 0 && <Menu/>}
-        {state===1 && <Orders/>}
+        {RenderOnState()}
       </main>
     </ctx.Provider>
   )

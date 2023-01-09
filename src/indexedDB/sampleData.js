@@ -25,14 +25,7 @@ const sampleData = {
         Prices: [12, 12],
         Quantities: [1, 1],
         Totals: [12, 12],
-      },
-      {
-        Date: new Date(2023, 0, 7).toLocaleDateString("en-us"),
-        ItemKeys: [1, 2, 3],
-        ItemNames: ["Banh Trang Tron", "Banh Trang Nuong", "Banh Trang Cuon"],
-        Prices: [12, 12, 12],
-        Quantities: [3, 1, 2],
-        Totals: [36, 12, 24],
+        IsComplete: false
       },
     ],
   };
