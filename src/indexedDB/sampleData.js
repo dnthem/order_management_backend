@@ -2,7 +2,7 @@ const sampleData = {
     Menu: [
       {
         Title: "Banh Trang Tron",
-        Price: "12",
+        Price: 12,
         Content: undefined,
         Photo: undefined,
         Count: 0,
@@ -10,7 +10,7 @@ const sampleData = {
       },
       {
         Title: "Banh Trang Nuong",
-        Price: "12",
+        Price: 12,
         Content: undefined,
         Photo: undefined,
         Count: 0,

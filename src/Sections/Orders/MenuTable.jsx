@@ -1,25 +1,8 @@
-import { useEffect, useState } from "react";
-import { GetDataBaseContext } from "../../App";
-import OrderItemCard from "../../components/OrderMenuItemCard";
-import indexedDBController from "../../indexedDB/indexedDB";
-
-const STORE = 'Menu';
+import MenuTableCard from "../../components/MenuTableCard";
 
 function MenuTable(props) {
-    const {db} = GetDataBaseContext();
-    const [menu, setMenu] = useState([]);
+    
 
-    useEffect(() => {
-        const getMenu = async () => {
-            try {
-                const res = await indexedDBController.getAllDataFromStore(db, STORE)
-                setMenu(res);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        getMenu();
-    },[])
     return ( 
         <table className="table">
             <thead>
@@ -30,11 +13,14 @@ function MenuTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {menu.map(e => <OrderItemCard 
+                {props.menu.map(e => <MenuTableCard 
                     Photo={e.Photo}
                     Title={e.Title}
                     Price={e.Price}
-                    key={e.id}/>
+                    key={e.id}
+                    cardID={e.id}
+                    select={props.select}
+                    />
                 )}
             </tbody>
         </table>
