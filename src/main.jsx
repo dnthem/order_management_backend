@@ -4,7 +4,7 @@ import App from './App'
 import indexedDBController from './indexedDB/indexedDB';
 
 const DB_NAME = 'ORDER_MANAGEMENT';
-
+let State = 1;
 const root = ReactDOM.createRoot(document.getElementById('layoutSidenav_content'));
 
 function Render (db, state = 1) {
@@ -45,13 +45,16 @@ async function registerIndexedDB () {
 }
 
 
+
+
 async function init () {
   const DB = await registerIndexedDB();
+  State = localStorage.getItem('State')? JSON.parse(localStorage.getItem('State')): 1;
   toggleSideBar();
-  Render(DB);
-  document.querySelector('#Menu').addEventListener('click', () => {Render(DB, 0)})
-  document.querySelector('#Orders').addEventListener('click', () => {Render(DB, 1)})
-  document.querySelector('#Dashboard').addEventListener('click', () => {Render(DB, 2)})
+  Render(DB, State);
+  document.querySelector('#Menu').addEventListener('click', () => {localStorage.setItem('State', 0) ;Render(DB, 0)})
+  document.querySelector('#Orders').addEventListener('click', () => {localStorage.setItem('State', 1) ;Render(DB, 1)})
+  document.querySelector('#Dashboard').addEventListener('click', () => {localStorage.setItem('State', 2) ;Render(DB, 2)})
 }
 
 window.addEventListener('DOMContentLoaded', init);
