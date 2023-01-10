@@ -55,16 +55,19 @@ function ItemCardV2(props) {
     },[props])
 
   return (
-    <div className="col-xl-3 col-md-3">
-    <div className={edit? 'card border-danger': 'card'} style={{width:'15rem'}}>
+    <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2">
+    <div className={edit? 'card border-danger': 'card'}>
 
       <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):'/template.jpg'} className="card-img-top" alt={cardProps.Title} />
       {edit && <input type='file' ref={imageRef}/>}
 
       <div className="card-body">
-        <h5 ref={titleRef} contentEditable={edit} suppressContentEditableWarning={true} className="card-title">{cardProps.Title}</h5>
+        <h5 ref={titleRef} contentEditable={edit} suppressContentEditableWarning={true} className="card-title">
+          {cardProps.Title}
+        </h5>
         <h6 className="card-subtitle mb-2 text-muted" >
             Price: $<span ref={priceRef} contentEditable={edit} suppressContentEditableWarning={true}>{cardProps.Price}</span>
+
         </h6>
         <p ref={contentRef} data-name='content' className="card-text" contentEditable={edit} suppressContentEditableWarning={true}>
           {cardProps.Content}

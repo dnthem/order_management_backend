@@ -141,10 +141,10 @@ function Orders(props) {
     return ( 
         <>
             <div className="row">
-                <div className="col-8">
+                <div className="col-md-8 col-sm-12">
                     <Header title='Orders'/>
                 </div>
-                <div className="col-4">
+                <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-between">
                         <button className="mt-4 btn" onClick={handleSave}>Save <FiSave/></button>
                         <button className="mt-4 btn" onClick={handleUndo}  disabled={undoStack.length===0? true:false}>Undo <FaUndoAlt/></button>
@@ -155,11 +155,11 @@ function Orders(props) {
                 </div>
             </div>
             <div className="row">
-                <div className="col-6">
+                <div className="col-md-6 col-sm-12">
                     <MenuTable menu={menu} select={selectOrder}/>
                 </div>
 
-                <div className="col-6 ">
+                <div className="col-md-6 col-sm-12">
                     <div className="d-flex justify-content-center">
                         <h2 className="h2">Completed Today Orders </h2>
                         
