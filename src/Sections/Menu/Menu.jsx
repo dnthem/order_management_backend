@@ -3,7 +3,7 @@ import { GetDataBaseContext } from "../../App";
 import Header from "../../components/Header";
 import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
-
+import {GrFormAdd} from 'react-icons/gr';
 const STORE = 'Menu';
 
 function Menu(props) {
@@ -77,9 +77,12 @@ function Menu(props) {
           <Header title="Menu" />
         </div>
         <div className="col">
-          <button className="mt-4 btn btn-primary" onClick={addNewItem}>
-            Add new item
-          </button>
+          <div className="d-flex justify-content-center">
+            <button className="mt-4 btn border-black" onClick={addNewItem}>
+              Add new item <GrFormAdd/>
+            </button>
+          </div>
+          
         </div>
       </div>
       <div className="row">
