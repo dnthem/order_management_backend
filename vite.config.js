@@ -19,7 +19,7 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}']
       },
-      includeAssets: ['template.png','icon_512x512.png', 'icon_180x180.png', 'favicon.ico'],
+      includeAssets: ['template.jpg','icon_512x512.png', 'icon_180x180.png', 'favicon.ico'],
       manifest: {
         name: 'Order Management',
         short_name:'Order Management',

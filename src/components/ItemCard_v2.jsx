@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
-
+import imgTemplate from '../assets/template.jpg'
 function ItemCardV2(props) {
     const [cardProps, setCardProps] = useState({})
     const [edit, setEdit] = useState(false)
@@ -58,7 +58,7 @@ function ItemCardV2(props) {
     <div className="col-xl-3 col-md-3">
     <div className={edit? 'card border-danger': 'card'} style={{width:'15rem'}}>
 
-      <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):'/template.jpg'} className="card-img-top" alt={cardProps.Title} />
+      <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):imgTemplate} className="card-img-top" alt={cardProps.Title} />
       {edit && <input type='file' ref={imageRef}/>}
 
       <div className="card-body">
