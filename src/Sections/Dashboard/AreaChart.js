@@ -27,6 +27,10 @@ function AreaChart(target, data) {
         options: {
           scales: {
             xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Dates'
+              },
               time: {
                 unit: 'date'
               },
@@ -38,10 +42,17 @@ function AreaChart(target, data) {
               }
             }],
             yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'US Dollars ($)'
+              },
               ticks: {
                 min: 0,
                 max: data.max,
-                maxTicksLimit: 5
+                maxTicksLimit: 5,
+                callback: function(value, index, ticks) {
+                  return '$' + value;
+              }
               },
               gridLines: {
                 color: "rgba(0, 0, 0, .125)",

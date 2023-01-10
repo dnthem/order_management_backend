@@ -19,6 +19,10 @@ function LoadBarChart(target, data) {
         options: {
           scales: {
             xAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Items'
+              },
               time: {
                 unit: 'item'
               },
@@ -30,6 +34,10 @@ function LoadBarChart(target, data) {
               }
             }],
             yAxes: [{
+              scaleLabel: {
+                display: true,
+                labelString: 'Counts'
+              },
               ticks: {
                 min: 0,
                 max: data.max,

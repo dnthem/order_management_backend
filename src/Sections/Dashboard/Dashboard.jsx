@@ -1,30 +1,10 @@
 import { useEffect, useRef } from "react";
 import { GetDataBaseContext } from "../../App";
 import Header from "../../components/Header";
-import indexedDBController from "../../indexedDB/indexedDB";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
+import { dataConverterIncome, dataConverterMenu } from "./DataConverter";
 
-async function dataConverterIncome(db) {
-    const data = await indexedDBController.getAllDataFromStore(db, 'Income');
-    const res = {};
-    const maxLen = data.length - 7<0 ? 0: data.length;
-    res.labels = data.map(e => e.Date).slice(maxLen-7);
-    res.data = data.map(e => e.Income).slice(maxLen-7);
-    res.max = Math.max(...res.data);
-
-
-    return res;
-}
-
-async function dataConverterMenu(db) {
-    const data = await indexedDBController.getAllDataFromStore(db, 'Menu');
-    const res = {};
-    res.labels = data.map(e => e.Title);
-    res.data = data.map(e => e.Count);
-    res.max = Math.max(...res.data);
-    return res;
-}
 
 
 function Dashboard(props) {
