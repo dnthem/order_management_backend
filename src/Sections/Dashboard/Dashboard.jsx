@@ -1,23 +1,27 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { GetDataBaseContext } from "../../App";
 import CardInfoDB from "../../components/CardInfoDB";
 import Header from "../../components/Header";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
-import { dataConverterIncome, dataConverterMenu } from "./DataConverter";
-
+import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate } from "./DataConverter";
+import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs'
 
 
 function Dashboard(props) {
     const {db} = GetDataBaseContext();
     const incomeChart = useRef();
     const mostOrderedChart = useRef();
+    const [incomeUpToDate, setIncomeUpToDate] = useState(0);
     useEffect(() => {
         const loadChart = async () => {
             const dataIncome = await dataConverterIncome(db);
             AreaChart(incomeChart.current, dataIncome);
             const dataMenu = await dataConverterMenu(db);
             LoadBarChart(mostOrderedChart.current, dataMenu);
+
+            const income = await getIncomeUpToDate(db);
+            setIncomeUpToDate(income);
         }
         loadChart();
     },[])
@@ -36,7 +40,8 @@ function Dashboard(props) {
                 
         </div>
         <div className="row">
-            <CardInfoDB title='' value=''/>
+            <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate)} icon={<BsCurrencyDollar size={30}/>}/>
+            <CardInfoDB title='Total items sold' value='12' icon={<BsFillBarChartFill size={30}/>}/>
         </div>
 
         <div className="row">

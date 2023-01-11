@@ -3,7 +3,7 @@
 #### Goals:
 - [x] Income chart - options: 7 days (default), 30 days, all
 - [x] Most ordered Items - top 7
-- [ ] Adding sing number data
+- [x] Adding sing number data
 
 ### Menu-log:
 

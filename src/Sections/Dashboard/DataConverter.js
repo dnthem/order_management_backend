@@ -53,5 +53,6 @@ async function getIncomeUpToDate(db) {
 
 export {
     dataConverterIncome,
-    dataConverterMenu
+    dataConverterMenu,
+    getIncomeUpToDate
 }
