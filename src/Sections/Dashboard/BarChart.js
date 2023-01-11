@@ -30,7 +30,7 @@ function LoadBarChart(target, data) {
                 display: false
               },
               ticks: {
-                maxTicksLimit: 6
+                maxTicksLimit: 7
               }
             }],
             yAxes: [{

@@ -21,6 +21,11 @@ function Dashboard(props) {
         loadChart();
     },[])
 
+
+    const handleIncomeOnChange = async (e) => {
+        const dataIncome = await dataConverterIncome(db, Number(e.target.value));
+        AreaChart(incomeChart.current, dataIncome); 
+    }
     return (
         <>
         <div className="row">
@@ -31,6 +36,17 @@ function Dashboard(props) {
         </div>
         <div className="row">
             <div className="col-xl-6">
+            <div onChange={handleIncomeOnChange} className="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" className="btn-check" name="income" id="income1" autoComplete="off" value='0' defaultChecked={true}/>
+                <label className="btn btn-outline-primary" for="income1">Last 7 days</label>
+
+                <input type="radio" className="btn-check" name="income" id="income2" autoComplete="off" value='1'/>
+                <label className="btn btn-outline-primary" for="income2">Last 30 days</label>
+
+                <input type="radio" className="btn-check" name="income" id="income3" autoComplete="off" value='2'/>
+                <label className="btn btn-outline-primary" for="income3">All</label>
+            </div>
+
                 <div className="card mb-4">
                     <div className="card-header">
                         <i className="fas fa-chart-area me-1"></i>
