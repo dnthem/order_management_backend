@@ -11,7 +11,7 @@ function ItemCardV2(props) {
     const contentRef = useRef();
     const imageRef = useRef();
 
-    const setChanges = (e) => {
+    const saveHandler = (e) => {
       const Title = titleRef.current.innerText;
       const Price = priceRef.current.innerText;
       const Content = contentRef.current.textContent;
@@ -39,26 +39,31 @@ function ItemCardV2(props) {
       setEdit(false);
     }
 
-    const remove = (e) => {
-      if (!confirm('Are you sure to remove this item')) return;
+    const removeHandler = (e) => {
+      if (!confirm('Are you sure to remove this item?')) return;
       props.remove(props.cardID)
-      console.log('remove was called')
     }
-
-    useEffect(() => {
-        const checkStatus = () => {
-          if (props.Title === undefined || props.Title === null) setEdit(true);
-        }
-        checkStatus();
-        setCardProps(props)
-
-    },[props])
 
     const selectHandler = (e) => {
       if (!edit) return;
       const target = e.target;
       window.getSelection().selectAllChildren(target);
     }
+
+    const cancleHandler = () => {
+      titleRef.current.innerText = cardProps.Title;
+      priceRef.current.innerText = cardProps.Price;
+      contentRef.current.textContent = cardProps.Content;
+      setEdit(false);
+    }
+
+    useEffect(() => {
+      const checkStatus = () => {
+        if (props.Title === undefined || props.Title === null) setEdit(true);
+      }
+      checkStatus();
+      setCardProps(props)
+    },[props])
 
   return (
     <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2">
@@ -79,10 +84,11 @@ function ItemCardV2(props) {
           {cardProps.Content}
         </p>
         <div class="d-grid gap-2">
-          <button onClick={remove} className="btn btn-danger" type="button" disabled={edit?true:false}>Remove</button>
+          {!edit && <button onClick={removeHandler} className="btn btn-danger" type="button">Remove</button>}
+          {edit && <button onClick={cancleHandler} className="btn btn-danger" type="button">Cancel</button>}
 
           {!edit && <button className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>}
-          {edit && <button className="btn btn-primary "  type="button"onClick={setChanges}>Save</button>}
+          {edit && <button className="btn btn-primary "  type="button"onClick={saveHandler}>Save</button>}
 
           
         </div>

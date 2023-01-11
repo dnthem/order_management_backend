@@ -9,6 +9,7 @@
 #### Goals:
 - [x] Newly added item appears at the begining of the list
 - [x] Changed appearance of remove and edit buttons
+- [x] Added Cancel button when editting items info
 
 ### Orders-log:
 
