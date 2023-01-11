@@ -32,6 +32,22 @@ const sampleData = {
         Count: 5,
         DateAdded: "Fri Jan 07 2023 15:22:00 GMT-0800 (Pacific Standard Time)",
       },
+      {
+        Title: "Xôi Phá Lấu",
+        Price: 12,
+        Content: undefined,
+        Photo: undefined,
+        Count: 20,
+        DateAdded: "Fri Jan 07 2023 12:22:00 GMT-0800 (Pacific Standard Time)",
+      },
+      {
+        Title: "Tàu Hũ",
+        Price: 12,
+        Content: undefined,
+        Photo: undefined,
+        Count: 15,
+        DateAdded: "Fri Jan 07 2023 01:22:00 GMT-0800 (Pacific Standard Time)",
+      },
     ],
     Orders: [
       {
@@ -45,6 +61,10 @@ const sampleData = {
       },
     ],
     Income: [
+      {
+        Date: new Date(2022,11,31).toLocaleDateString('en-us'),
+        Income: 128
+      },
       {
         Date: new Date(2023,0,1).toLocaleDateString('en-us'),
         Income: 128
@@ -63,11 +83,27 @@ const sampleData = {
       },
       {
         Date: new Date(2023,0,5).toLocaleDateString('en-us'),
-        Income: 200
+        Income: 350
       },
       {
         Date: new Date(2023,0,6).toLocaleDateString('en-us'),
         Income: 145
+      },
+      {
+        Date: new Date(2023,0,7).toLocaleDateString('en-us'),
+        Income: 100
+      },
+      {
+        Date: new Date(2023,0,8).toLocaleDateString('en-us'),
+        Income: 250
+      },
+      {
+        Date: new Date(2023,0,9).toLocaleDateString('en-us'),
+        Income: 175
+      },
+      {
+        Date: new Date(2023,0,10).toLocaleDateString('en-us'),
+        Income: 270
       },
     ]
   };

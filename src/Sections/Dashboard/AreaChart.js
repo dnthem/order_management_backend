@@ -38,7 +38,7 @@ function AreaChart(target, data) {
                 display: false
               },
               ticks: {
-                maxTicksLimit: 7
+                maxTicksLimit: data.maxTick
               }
             }],
             yAxes: [{
