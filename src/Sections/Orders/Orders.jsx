@@ -159,7 +159,7 @@ function Orders(props) {
             </div>
             <div className="row h-80">
                 <div className="col-md-6 col-sm-12">
-                    <div style={{overflow:'auto', height: '100vh'}}>
+                    <div style={{overflow:'auto', height: '75vh'}}>
                     <MenuTable menu={menu} select={selectOrder}/>
                     </div>
                     
@@ -171,7 +171,7 @@ function Orders(props) {
                     </div>
                     {order.IsComplete && <aside className="text-danger">NOTE: Order has been marked as completed (view only), DO NOT add more orders</aside>}
                     <h3 className="d-flex justify-content-between"><span>Date: {date}</span> <span>Total: ${total}</span></h3>
-                    <div style={{overflow:'auto', height: '100vh'}}>
+                    <div style={{overflow:'auto', height: '80vh'}}>
                         
                         
                         <OrderTable order={order} recentChange={recentChange} setRecentChange={setRecentChange}/>
