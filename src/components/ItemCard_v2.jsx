@@ -54,6 +54,12 @@ function ItemCardV2(props) {
 
     },[props])
 
+    const selectHandler = (e) => {
+      if (!edit) return;
+      const target = e.target;
+      window.getSelection().selectAllChildren(target);
+    }
+
   return (
     <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2">
     <div className={edit? 'card border-danger': 'card'}>
@@ -62,14 +68,14 @@ function ItemCardV2(props) {
       {edit && <input type='file' ref={imageRef}/>}
 
       <div className="card-body">
-        <h5 ref={titleRef} contentEditable={edit} suppressContentEditableWarning={true} className="card-title">
+        <h5 ref={titleRef} contentEditable={edit} suppressContentEditableWarning={true} className="card-title" style={{outline: 'none'}} onClick={selectHandler}>
           {cardProps.Title}
         </h5>
         <h6 className="card-subtitle mb-2 text-muted" >
-            Price: $<span ref={priceRef} contentEditable={edit} suppressContentEditableWarning={true}>{cardProps.Price}</span>
+            Price: $<span ref={priceRef} contentEditable={edit} suppressContentEditableWarning={true} style={{outline: 'none'}} onClick={selectHandler}>{cardProps.Price}</span>
 
         </h6>
-        <p ref={contentRef} data-name='content' className="card-text" contentEditable={edit} suppressContentEditableWarning={true}>
+        <p ref={contentRef} data-name='content' className="card-text" contentEditable={edit} suppressContentEditableWarning={true}  style={{outline: 'none'}} onClick={selectHandler}>
           {cardProps.Content}
         </p>
 

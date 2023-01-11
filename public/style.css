@@ -70,7 +70,7 @@
   box-sizing: border-box;
 }
 
-*:not(p, button) {
+button {
   user-select: none;
   -webkit-user-select: none;
 }
