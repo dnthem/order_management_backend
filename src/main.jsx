@@ -44,9 +44,6 @@ async function registerIndexedDB () {
   }
 }
 
-
-
-
 async function init () {
   const DB = await registerIndexedDB();
   State = localStorage.getItem('State')? JSON.parse(localStorage.getItem('State')): 1;

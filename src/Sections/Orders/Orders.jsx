@@ -70,11 +70,13 @@ function Orders(props) {
             IsComplete: false
         }
     );
+    const [recentChange, setRecentChange] = useState(-1); // store the key
 
     const selectOrder = (key) => {
         const item =  menu.find(e => e.id === key)
         const newOrder = updateOrder(order, item)
         setUndoStack([...undoStack, item]);
+        setRecentChange(key);
         setOrder(newOrder);
         setTotal(newOrder.Totals.reduce((acc, curr) => acc + curr, 0))
     }
@@ -84,6 +86,7 @@ function Orders(props) {
         
         const newOrder = undoOrder(order, item);
         setOrder(newOrder);
+        setRecentChange(item.id);
         setUndoStack(undoStack);
         setTotal(total - item.Price);
     }
@@ -154,20 +157,26 @@ function Orders(props) {
                     
                 </div>
             </div>
-            <div className="row">
+            <div className="row h-80">
                 <div className="col-md-6 col-sm-12">
+                    <div style={{overflow:'auto', height: '80vh'}}>
                     <MenuTable menu={menu} select={selectOrder}/>
+                    </div>
+                    
                 </div>
 
-                <div className="col-md-6 col-sm-12">
+                <div className="col-md-6 col-sm-12 ">
                     <div className="d-flex justify-content-center">
                         <h2 className="h2">Completed Today Orders </h2>
-                        
-                        
                     </div>
                     {order.IsComplete && <aside className="text-danger">NOTE: Order has been marked as completed (view only), DO NOT add more orders</aside>}
                     <h3 className="d-flex justify-content-between"><span>Date: {date}</span> <span>Total: ${total}</span></h3>
-                    <OrderTable order={order}/>
+                    <div style={{overflow:'auto', height: '80vh'}}>
+                        
+                        
+                        <OrderTable order={order} recentChange={recentChange} setRecentChange={setRecentChange}/>
+                    </div>
+                    
                 </div>
             </div>
         </>

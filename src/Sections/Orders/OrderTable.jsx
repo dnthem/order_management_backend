@@ -11,6 +11,8 @@ function OrderTable(props) {
                 Price={props.order.Prices[idx]}
                 Quantity={props.order.Quantities[idx]}
                 Total={props.order.Totals[idx]}
+                recentChange={props.recentChange === val?true:false}
+                setRecentChange={props.setRecentChange}
             />
         )
     }
