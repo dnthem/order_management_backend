@@ -35,7 +35,7 @@ function Menu(props) {
     const id = await indexedDBController.addData(db, STORE, data);
     console.log("id:" + id);
     data.id = id;
-    setMenu([...menu, data]);
+    setMenu([data, ...menu]);
     //
   };
 
@@ -79,7 +79,7 @@ function Menu(props) {
         <div className="col">
           <div className="d-flex justify-content-center">
             <button className="mt-4 btn border-black" onClick={addNewItem}>
-              Add new item <GrFormAdd/>
+            <GrFormAdd/>Add new item 
             </button>
           </div>
           

@@ -78,11 +78,14 @@ function ItemCardV2(props) {
         <p ref={contentRef} data-name='content' className="card-text" contentEditable={edit} suppressContentEditableWarning={true}  style={{outline: 'none'}} onClick={selectHandler}>
           {cardProps.Content}
         </p>
+        <div class="d-grid gap-2">
+          <button onClick={remove} className="btn btn-danger" type="button" disabled={edit?true:false}>Remove</button>
 
-        {!edit && <button className="btn btn-primary" onClick={() => {setEdit(true)}}>Edit</button>}
-        {edit && <button className="btn btn-primary " onClick={setChanges}>Save</button>}
+          {!edit && <button className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>}
+          {edit && <button className="btn btn-primary "  type="button"onClick={setChanges}>Save</button>}
 
-        <button onClick={remove} className="btn btn-danger ms-2">Remove</button>
+          
+        </div>
       </div>
     </div>
     </div>
