@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { GetDataBaseContext } from "../../App";
+import CardInfoDB from "../../components/CardInfoDB";
 import Header from "../../components/Header";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
@@ -34,6 +35,10 @@ function Dashboard(props) {
             </div>
                 
         </div>
+        <div className="row">
+            <CardInfoDB title='' value=''/>
+        </div>
+
         <div className="row">
             <div className="col-xl-6">
                 <div className="d-flex justify-content-end my-2">
