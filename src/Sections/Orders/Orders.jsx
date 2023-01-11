@@ -70,11 +70,13 @@ function Orders(props) {
             IsComplete: false
         }
     );
+    const [recentChange, setRecentChange] = useState(-1); // store the key
 
     const selectOrder = (key) => {
         const item =  menu.find(e => e.id === key)
         const newOrder = updateOrder(order, item)
         setUndoStack([...undoStack, item]);
+        setRecentChange(key);
         setOrder(newOrder);
         setTotal(newOrder.Totals.reduce((acc, curr) => acc + curr, 0))
     }
@@ -84,6 +86,7 @@ function Orders(props) {
         
         const newOrder = undoOrder(order, item);
         setOrder(newOrder);
+        setRecentChange(item.id);
         setUndoStack(undoStack);
         setTotal(total - item.Price);
     }
@@ -167,7 +170,7 @@ function Orders(props) {
                     </div>
                     {order.IsComplete && <aside className="text-danger">NOTE: Order has been marked as completed (view only), DO NOT add more orders</aside>}
                     <h3 className="d-flex justify-content-between"><span>Date: {date}</span> <span>Total: ${total}</span></h3>
-                    <OrderTable order={order}/>
+                    <OrderTable order={order} recentChange={recentChange} setRecentChange={setRecentChange}/>
                 </div>
             </div>
         </>
