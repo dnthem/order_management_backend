@@ -51,8 +51,14 @@ async function getIncomeUpToDate(db) {
     return data.reduce((acc, curr) => acc + curr.Income, 0);
 }
 
+async function getTotalItemSold(db) {
+    const data = await indexedDBController.getAllDataFromStore(db, MENU_STORE);
+    return data.reduce((acc, curr) => acc + curr.Count, 0);
+}
+
 export {
     dataConverterIncome,
     dataConverterMenu,
-    getIncomeUpToDate
+    getIncomeUpToDate,
+    getTotalItemSold
 }

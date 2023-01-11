@@ -4,7 +4,7 @@ import CardInfoDB from "../../components/CardInfoDB";
 import Header from "../../components/Header";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
-import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate } from "./DataConverter";
+import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate, getTotalItemSold } from "./DataConverter";
 import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs'
 
 
@@ -13,6 +13,7 @@ function Dashboard(props) {
     const incomeChart = useRef();
     const mostOrderedChart = useRef();
     const [incomeUpToDate, setIncomeUpToDate] = useState(0);
+    const [totalItemsSold, setTotalItemsSold] = useState(0);
     useEffect(() => {
         const loadChart = async () => {
             const dataIncome = await dataConverterIncome(db);
@@ -22,6 +23,9 @@ function Dashboard(props) {
 
             const income = await getIncomeUpToDate(db);
             setIncomeUpToDate(income);
+
+            const total = await getTotalItemSold(db);
+            setTotalItemsSold(total);
         }
         loadChart();
     },[])
@@ -41,7 +45,7 @@ function Dashboard(props) {
         </div>
         <div className="row">
             <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate)} icon={<BsCurrencyDollar size={30}/>}/>
-            <CardInfoDB title='Total items sold' value='12' icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
         </div>
 
         <div className="row">
