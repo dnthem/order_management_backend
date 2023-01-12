@@ -52,6 +52,8 @@ async function init () {
   document.querySelector('#Menu').addEventListener('click', () => {localStorage.setItem('State', 0) ;Render(DB, 0)})
   document.querySelector('#Orders').addEventListener('click', () => {localStorage.setItem('State', 1) ;Render(DB, 1)})
   document.querySelector('#Dashboard').addEventListener('click', () => {localStorage.setItem('State', 2) ;Render(DB, 2)})
+  document.querySelector('#History').addEventListener('click', () => {localStorage.setItem('State', 3) ;Render(DB, 3)})
+  document.querySelector('#Setting').addEventListener('click', () => {localStorage.setItem('State', 4) ;Render(DB, 4)})
 }
 
 window.addEventListener('DOMContentLoaded', init);
