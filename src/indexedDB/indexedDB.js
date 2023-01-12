@@ -15,10 +15,11 @@ indexedDBController.createDB = function (dbName, version = undefined) {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       const menu = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
-      sampleData['Menu'].forEach(e => menu.add(e))
       const order = db.createObjectStore("Orders", { keyPath: "Date" });
-      sampleData['Orders'].forEach(e => order.add(e))
       const income = db.createObjectStore("Income", { keyPath: "Date" });
+      
+      sampleData['Menu'].forEach(e => menu.add(e))
+      sampleData['Orders'].forEach(e => order.add(e))
       sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
