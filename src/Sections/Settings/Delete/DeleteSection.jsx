@@ -29,7 +29,7 @@ function DeleteSection(props) {
     return ( 
         <div className="list-group mb-5 shadow my-2 py-2" style={{outline: 'red 1px solid'}}>
             <h2 className="ms-4 text-danger">Delete</h2>
-            <aside className="text-danger ms-4"> (danger zone)</aside>
+            <aside className="text-danger ms-4 my-2"> (danger zone)</aside>
             <div className="ms-4">
                 <ListItem
                     title='Delete All your data'
