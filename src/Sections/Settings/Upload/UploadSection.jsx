@@ -3,7 +3,7 @@ import InputFile from "../InputFile";
 import indexedDBController from "../../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../../App";
 
-const MENU = 'Menu', INCOME = 'Income', ORDERS = 'Orders', ALL = 'All';
+const MENU = 'Menu', INCOME = 'Income', ORDERS = 'Orders', ALL = 'All Data';
 
 function UploadSection(props) {
     const {db} = GetDataBaseContext();
@@ -53,10 +53,11 @@ function UploadSection(props) {
     return ( 
         <div className="list-group mb-5 shadow my-2 py-2">
             <h2 className="ms-4">Upload</h2>
+            <aside className="my-2 text-muted">All files in this section must be in correct format, which means only files that are downloaded from this app</aside>
             <div className="ms-4">
                 <ListItem
                     title='All'
-                    detail="Load all data from a file. It must be the file "
+                    detail="Load all data from a file "
                 >
                     <InputFile onChange={(e) => handleOnChange(e, ALL)} />
                 </ListItem>
