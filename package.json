@@ -1,7 +1,7 @@
 {
   "name": "order-management",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",

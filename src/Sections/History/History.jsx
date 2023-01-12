@@ -47,7 +47,7 @@ function History(props) {
             </div>
         </div>
         <div className="container-lg ">
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center my-2">
                         <h2 className="h2">Completed Orders </h2>
             </div>
             <h3 className="d-flex justify-content-between">

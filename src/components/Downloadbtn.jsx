@@ -2,7 +2,7 @@ import {BiDownload} from "react-icons/bi";
 
 /**
  * Create a downloadable file as text
- * @param {*} props data - data to write, contentFormat - a function to format input data, insert null if not use, fileName - file name
+ * @param {*} props data - string type data to write, contentFormat - a function to format input data, insert null if not use, fileName - file name
  * @returns 
  */
 function DownloadBtn(props) {
