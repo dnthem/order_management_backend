@@ -44,3 +44,10 @@
      - Load orders to database
      - Load menu to database
      - Load income to database
+
+### History-log:
+- Allow user to select orders in the past
+
+
+### Order-log:
+- Refactor download button

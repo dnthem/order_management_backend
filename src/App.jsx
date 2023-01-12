@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react"
 import Dashboard from "./Sections/Dashboard/Dashboard";
+import History from "./Sections/History/History";
 import Menu from "./Sections/Menu/Menu"
 import Orders from "./Sections/Orders/Orders";
+import Settings from "./Sections/Settings/Settings";
 
 const ctx = createContext();
 
@@ -21,6 +23,10 @@ function App(props) {
         res= <Orders/>; break;
       case 2:
         res = <Dashboard/>; break;
+      case 3:
+        res = <History/>; break;
+      case 4:
+        res = <Settings/>; break;
     }
     return res;
   }

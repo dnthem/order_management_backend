@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import {FaUndoAlt} from "react-icons/fa";
-import {AiOutlineCheckCircle} from "react-icons/ai";
-import {BiDownload} from "react-icons/bi";
+import {AiOutlineCheckCircle, AiOutlineShoppingCart} from "react-icons/ai";
+
 import {FiSave} from "react-icons/fi";
 import { useEffect, useState } from "react";
 import MenuTable from "./MenuTable";
@@ -9,6 +9,7 @@ import OrderTable from "./OrderTable";
 import indexedDBController from "../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../App";
 import convertReadable from "./FormatFile";
+import DownloadBtn from "../../components/Downloadbtn";
 
 // Helper function
 function updateOrder(order, item) {
@@ -117,13 +118,7 @@ function Orders(props) {
         }
     }
     
-    const handleSaveToLocal = () => {
-        const a = document.createElement("a");
-        const file = new Blob([convertReadable(order)], {type: 'text/plain'});
-        a.href = URL.createObjectURL(file);
-        a.download = 'Order_date_' + date;
-        a.click();
-    }
+    
 
     useEffect(() => {
         const getMenuOrderStores = async () => {
@@ -145,14 +140,14 @@ function Orders(props) {
         <>
             <div className="row">
                 <div className="col-md-8 col-sm-12">
-                    <Header title='Orders'/>
+                    <Header icon={<AiOutlineShoppingCart/>} title='Orders'/>
                 </div>
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-between">
                         <button className="mt-4 btn" onClick={handleSave}>Save <FiSave/></button>
                         <button className="mt-4 btn" onClick={handleUndo}  disabled={undoStack.length===0? true:false}>Undo <FaUndoAlt/></button>
                         <button className="mt-4 btn" onClick={handleComplete}>Complete <AiOutlineCheckCircle/></button>
-                        <button className="mt-4 btn" onClick={handleSaveToLocal}>Download <BiDownload/></button>
+                        <DownloadBtn data={order} fileName='Order_Date_' contentFormat={convertReadable}/>
                     </div>
                     
                 </div>

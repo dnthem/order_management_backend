@@ -28,7 +28,7 @@ function OrderTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {!props.order? <tr><td>No orders for today yet</td></tr>:renderOrders()}
+                {!props.order? <tr><td colSpan={4} style={{textAlign: 'center'}}>No orders for today yet</td></tr>:renderOrders()}
                
             </tbody>
         </table>

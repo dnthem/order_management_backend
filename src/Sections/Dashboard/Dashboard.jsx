@@ -5,8 +5,8 @@ import Header from "../../components/Header";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
 import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate, getTotalItemSold } from "./DataConverter";
-import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs'
-
+import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs';
+import {RiDashboard3Line} from 'react-icons/ri';
 
 function Dashboard(props) {
     const {db} = GetDataBaseContext();
@@ -39,7 +39,7 @@ function Dashboard(props) {
         <>
         <div className="row">
             <div className="col-8">
-                <Header title='Dashboard'/>
+                <Header icon={<RiDashboard3Line/>} title='Dashboard'/>
             </div>
                 
         </div>
