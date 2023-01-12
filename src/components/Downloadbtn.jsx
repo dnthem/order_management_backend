@@ -19,7 +19,7 @@ function DownloadBtn(props) {
         a.click();
     }
     return ( 
-        <button className="mt-4 btn" onClick={handleSaveToLocal}>Download <BiDownload/></button>
+        <button className="mt-4 btn" onClick={handleSaveToLocal} disabled={props.disabled}>Download <BiDownload/></button>
      );
 }
 

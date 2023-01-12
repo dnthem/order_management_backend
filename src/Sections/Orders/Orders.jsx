@@ -1,6 +1,6 @@
 import Header from "../../components/Header";
 import {FaUndoAlt} from "react-icons/fa";
-import {AiOutlineCheckCircle} from "react-icons/ai";
+import {AiOutlineCheckCircle, AiOutlineShoppingCart} from "react-icons/ai";
 
 import {FiSave} from "react-icons/fi";
 import { useEffect, useState } from "react";
@@ -140,7 +140,7 @@ function Orders(props) {
         <>
             <div className="row">
                 <div className="col-md-8 col-sm-12">
-                    <Header title='Orders'/>
+                    <Header icon={<AiOutlineShoppingCart/>} title='Orders'/>
                 </div>
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-between">

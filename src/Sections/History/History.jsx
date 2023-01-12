@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { GetDataBaseContext } from "../../App";
+import DownloadBtn from "../../components/Downloadbtn";
 import Header from "../../components/Header";
 import indexedDBController from "../../indexedDB/indexedDB";
+import convertReadable from "../Orders/FormatFile";
 import OrderTable from "../Orders/OrderTable";
-
+import {FaHistory} from 'react-icons/fa';
 function History(props) {
     const [order, setOrder] = useState(null);
     const [date, setDate] = useState('');
@@ -28,17 +30,25 @@ function History(props) {
     return ( 
         <>
          <div className="row">
-            <Header title="History"/>
+            <div className="col">
+                <Header icon={<FaHistory/>} title="History"/>
+            </div>
+            <div className="col">
+                <div className="d-flex justify-content-center">
+                    <DownloadBtn data={order} contentFormat={convertReadable} fileName='Order_Date' disabled={typeof order === 'undefined'? true:false}/>
+                </div>
+            </div>
+            
         </div>
         <div className="row">
             <div className="d-flex justify-content-center align-items-center">
-                <label htmlFor="inputDate">Select Date: </label>
-                <input onChange={handleOnDateChange} type="date" name="inputDate" id="inputDate" style={{outline: 'none', border: 'black solid 1px', backgroundColor: 'transparent'}} />
+                <label>Select Date: </label>
+                <input onChange={handleOnDateChange} type="date" style={{outline: 'none', border: 'black solid 1px', backgroundColor: 'transparent'}} />
             </div>
         </div>
-        <div className="row">
+        <div className="container-lg ">
             <div className="d-flex justify-content-center">
-                        <h2 className="h2">Completed Today Orders </h2>
+                        <h2 className="h2">Completed Orders </h2>
             </div>
             <h3 className="d-flex justify-content-between">
                 <span>Date: {date}</span> <span>Total: ${total}</span>

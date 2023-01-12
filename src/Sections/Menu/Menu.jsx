@@ -4,6 +4,7 @@ import Header from "../../components/Header";
 import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
 import {GrFormAdd} from 'react-icons/gr';
+import {MdMenuBook} from 'react-icons/md';
 const STORE = 'Menu';
 
 function Menu(props) {
@@ -74,7 +75,7 @@ function Menu(props) {
     <>
       <div className="row">
         <div className="col">
-          <Header title="Menu" />
+          <Header icon={<MdMenuBook/>} title="Menu" />
         </div>
         <div className="col">
           <div className="d-flex justify-content-center">
