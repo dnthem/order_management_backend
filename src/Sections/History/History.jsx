@@ -40,19 +40,18 @@ function History(props) {
             </div>
             
         </div>
-        <div className="row">
-            <div className="d-flex justify-content-center align-items-center">
-                <label>Select Date: </label>
-                <input onChange={handleOnDateChange} type="date" style={{outline: 'none', border: 'black solid 1px', backgroundColor: 'transparent'}} />
-            </div>
-        </div>
+    
         <div className="container-lg ">
             <div className="d-flex justify-content-center my-2">
                         <h2 className="h2">Completed Orders </h2>
             </div>
-            <h3 className="d-flex justify-content-between">
-                <span>Date: {date}</span> <span>Total: ${total}</span>
-            </h3>
+            <div className="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                        <label className="mx-2">Select Date: </label>
+                        <input onChange={handleOnDateChange} type="date" style={{outline: 'none', border: '#c7c7c7 solid 1px', backgroundColor: 'transparent', borderRadius: '5px 5px 5px 5px ', width: '10em', height: '2em'}} />
+                </div>
+                <div>Total: ${total}</div>
+            </div>
             <div className="d-flex justify-content-center align-items-center">
                 <OrderTable order={order} recentChange={() => {}} setRecentChange={() => {}}/>
             </div>

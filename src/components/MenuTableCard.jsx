@@ -8,7 +8,7 @@ function MenuTableCard(props) {
         trRef.current.classList.add('fade-out');
         setTimeout(() => {
             trRef.current.classList.remove('fade-out');
-        },2000);
+        },1000);
 
         props.select(props.cardID);
     }

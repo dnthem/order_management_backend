@@ -108,6 +108,24 @@ indexedDBController.deleteARecord = function (db, store, keyPath) {
   })
 }
 
+indexedDBController.deleteAllRecord = function (db, store) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readwrite');
+    const objStore = trans.objectStore(store);
+    const request = objStore.clear();
+    request.onsuccess = function (event) {
+        console.log('Successfully deleted all records ' + store)
+        res(true)
+    }
+    request.onerror = (event) => {
+      console.log('failed to delete all records ' + store)
+      rej(event.target.error);
+    }
+  })
+}
+
+
+
 indexedDBController.updateARecord = function (db, store, newVal) {
     return new Promise((res, rej) => {
         const trans = db.transaction(store, 'readwrite');

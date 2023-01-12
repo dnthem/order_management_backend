@@ -37,10 +37,10 @@
    - Allow user to select orders in the past
 
 - Setting tab:
-     - Save specific an order to locals
-     - Save every orders to locals
-     - Save menu to locals
-     - Save Income to locals
+     - Save a specific order to local
+     - Save every orders to local
+     - Save menu to local
+     - Save Income to local
      - Load orders to database
      - Load menu to database
      - Load income to database

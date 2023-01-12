@@ -8,7 +8,7 @@ function OrderCard(props) {
             setTimeout(() => {
                 trRef.current.classList.remove('fade-out');
                 props.setRecentChange(-1);
-            },2000);
+            },1000);
         }
     },[props.recentChange])
     return ( 
