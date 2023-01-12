@@ -80,7 +80,7 @@ button:hover{
 }
 
 .fade-out {
-  animation: fadeOut 2s ease-out; /* animation effect */
+  animation: fadeOut 0.75s ease-out; /* animation effect */
 }
 
 @keyframes fadeOut {
