@@ -152,7 +152,7 @@ function Orders(props) {
                         <button className="mt-4 btn" onClick={handleSave}>Save <FiSave/></button>
                         <button className="mt-4 btn" onClick={handleUndo}  disabled={undoStack.length===0? true:false}>Undo <FaUndoAlt/></button>
                         <button className="mt-4 btn" onClick={handleComplete}>Complete <AiOutlineCheckCircle/></button>
-                        <button className="mt-4 btn" onClick={handleSaveToLocal}>Save to local <BiDownload/></button>
+                        <button className="mt-4 btn" onClick={handleSaveToLocal}>Download <BiDownload/></button>
                     </div>
                     
                 </div>
