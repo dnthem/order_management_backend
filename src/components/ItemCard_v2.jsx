@@ -84,11 +84,12 @@ function ItemCardV2(props) {
           {cardProps.Content}
         </p>
         <div class="d-grid gap-2">
-          {!edit && <button onClick={removeHandler} className="btn btn-danger" type="button">Remove</button>}
-          {edit && <button onClick={cancleHandler} className="btn btn-danger" type="button">Cancel</button>}
 
           {!edit && <button className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>}
           {edit && <button className="btn btn-primary "  type="button"onClick={saveHandler}>Save</button>}
+
+          {!edit && <button onClick={removeHandler} className="btn btn-danger" type="button">Remove</button>}
+          {edit && <button onClick={cancleHandler} className="btn btn-danger" type="button">Cancel</button>}
 
           
         </div>
