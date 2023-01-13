@@ -15,10 +15,10 @@ indexedDBController.createDB = function (dbName, version = undefined) {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       const menu = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
-      const order = db.createObjectStore("Orders", { keyPath: "Date" });
-      const income = db.createObjectStore("Income", { keyPath: "Date" });
+      db.createObjectStore("Orders", { keyPath: "Date" });
+      db.createObjectStore("Income", { keyPath: "Date" });
       
-      // sampleData['Menu'].forEach(e => menu.add(e))
+      sampleData['Menu'].forEach(e => menu.add(e))
       // sampleData['Orders'].forEach(e => order.add(e))
       // sampleData['Income'].forEach(e => income.add(e))
     };
@@ -123,8 +123,6 @@ indexedDBController.deleteAllRecord = function (db, store) {
     }
   })
 }
-
-
 
 indexedDBController.updateARecord = function (db, store, newVal) {
     return new Promise((res, rej) => {
