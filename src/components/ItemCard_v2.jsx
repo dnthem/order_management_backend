@@ -22,7 +22,7 @@ function ItemCardV2(props) {
       newProp.Title = Title? Title: newProp.Title;
       newProp.Price = Price? Number(Price): Number(newProp.Price);
       newProp.Content = Content? Content: newProp.Content;
-      newProp.Photo = Photo? Photo: newProp.Photo;
+      newProp.Photo = (Photo === null || typeof Photo === 'undefined')? Photo: newProp.Photo;
       // update database
       const newData = {
         Content: newProp.Content,
