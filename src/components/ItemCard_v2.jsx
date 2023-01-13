@@ -22,7 +22,7 @@ function ItemCardV2(props) {
       newProp.Title = Title? Title: newProp.Title;
       newProp.Price = Price? Number(Price): Number(newProp.Price);
       newProp.Content = Content? Content: newProp.Content;
-      newProp.Photo = (Photo === null || typeof Photo === 'undefined')? Photo: newProp.Photo;
+      newProp.Photo = !(Photo === null || typeof Photo === 'undefined')? Photo: newProp.Photo;
       // update database
       const newData = {
         Content: newProp.Content,
@@ -70,7 +70,7 @@ function ItemCardV2(props) {
     <div className={edit? 'card border-danger': 'card'}>
 
       <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):'/template.jpg'} className="card-img-top" alt={cardProps.Title} />
-      {edit && <input type='file' ref={imageRef}/>}
+      {edit && <input type='file' accept="image" ref={imageRef}/>}
 
       <div className="card-body">
         <h5 ref={titleRef} contentEditable={edit} suppressContentEditableWarning={true} className="card-title" style={{outline: 'none'}} onClick={selectHandler}>
