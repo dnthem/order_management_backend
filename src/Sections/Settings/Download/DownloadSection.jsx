@@ -8,7 +8,7 @@ function DownloadSection(props) {
                 <div className="ms-4">
                 <ListItem 
                     title='Save all data' 
-                    detail='Take a snapshot of all your data into a single file so you can save it whever you want'
+                    detail='Take a snapshot of all your data into a single file so you can save it wherever you want'
                 >
                     <DownloadBtn data={JSON.stringify(props.allData)} contentFormat={null} fileName='All_Data_'/>
                 </ListItem>
