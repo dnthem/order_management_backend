@@ -113,6 +113,7 @@ function Orders(props) {
             await indexedDBController.updateARecord(db, 'Income', {Date: date, Income: total})
             updateCounter(db, order, menu);
             setOrder({...order, IsComplete: true})
+            setUndoStack([]);
             alert('Completed')
         } catch (error) {
             alert(error);

@@ -9,7 +9,7 @@ function convertReadable (content) {
         All items sold today: ${allItems}\n
         Total: $${total} \n
     `;
-    return JSON.stringify(content) + res;
+    return JSON.stringify([content]) + res;
 }
 
 export default convertReadable
