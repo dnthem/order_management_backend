@@ -1,6 +1,5 @@
 import Header from "../../components/Header";
 import {RiSettings5Line} from 'react-icons/ri'
-
 import { GetDataBaseContext } from "../../App";
 import { useEffect, useState } from "react";
 import indexedDBController from "../../indexedDB/indexedDB";
@@ -16,10 +15,11 @@ function Settings(props) {
 
     useEffect (() => {
         const getAllData  = async () => {
-            const menu = await indexedDBController.getAllDataFromStore(db, 'Menu');
+            // Can't not convert Photo
+            const menu = await indexedDBController.getAllDataFromStore(db, 'Menu').map(e =>{ delete e.Photo; return e});
             const income = await indexedDBController.getAllDataFromStore(db, 'Income');
             const orders = await indexedDBController.getAllDataFromStore(db, 'Orders');
-            setAllData({Menu: menu, Income: income, Orders: orders});
+            setAllData({Menu:menu, Income: income, Orders: orders});
             setMenu(menu);
             setIncome(income);
             setOrders(orders);
