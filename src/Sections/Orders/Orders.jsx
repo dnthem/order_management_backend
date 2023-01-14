@@ -49,6 +49,7 @@ function undoOrder(order, item) {
 function updateCounter(db, order, menu) {
     menu.forEach(item => {
         const idx = order.ItemKeys.findIndex(e => e === item.id);
+        if (idx === -1) return;
         item.Count += order.Quantities[idx];
         indexedDBController.updateARecord(db, 'Menu', item)
     })

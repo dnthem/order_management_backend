@@ -6,7 +6,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded:  new Date() .toLocaleDateString("en-us"),
+        
       },
       {
         Title: "Bánh Tráng Cuộn",
@@ -14,7 +14,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded:  new Date() .toLocaleDateString("en-us"),
+        
       },
       {
         Title: "Trứng Nướng",
@@ -22,7 +22,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded: new Date() .toLocaleDateString("en-us"),
+        
       },
       {
         Title: "Bắp Xào",
@@ -30,7 +30,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded:  new Date() .toLocaleDateString("en-us"),
+        
       },
       {
         Title: "Sữa Bắp",
@@ -38,7 +38,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded:  new Date() .toLocaleDateString("en-us"),
+       
       },
       {
         Title: "Xôi Xá Xíu",
@@ -46,7 +46,7 @@ const sampleData = {
         Content: undefined,
         Photo: undefined,
         Count: 0,
-        DateAdded:  new Date() .toLocaleDateString("en-us"),
+        
       },
     ],
     Orders: [
@@ -57,7 +57,8 @@ const sampleData = {
         Prices: [12, 12],
         Quantities: [1, 1],
         Totals: [12, 12],
-        IsComplete: false
+        IsComplete: false,
+        
       },
     ],
     Income: [

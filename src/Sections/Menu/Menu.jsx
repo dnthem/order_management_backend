@@ -17,7 +17,7 @@ function Menu(props) {
    * @param {Number} key item identifier, it is uneque to each item
    */
   const removeItemFromMenu = (key) => {
-    // remove item from menu
+    //remove item from menu
     setMenu(menu.filter((e) => e.id !== key));
     // remove item from indexedDB
     indexedDBController.deleteARecord(db, STORE, key);
@@ -31,7 +31,7 @@ function Menu(props) {
       Notes: undefined,
       Count: 0,
       Photo: undefined,
-      DateAdded: new Date().toLocaleDateString("en-us"),
+      Hidden: false,
     };
     const id = await indexedDBController.addData(db, STORE, data);
     console.log("id:" + id);
@@ -50,6 +50,7 @@ function Menu(props) {
         Photo: newItem.Photo, 
         Count: newItem.Count,
         DateAdded: newItem.DateAdded,
+        Hidden: newItem.Hidden
       })
       setMenu(temp);
   }
@@ -99,6 +100,7 @@ function Menu(props) {
             Photo={e.Photo}
             updateMenu={updateMenu}
             Count={e.Count}
+            Hidden={e.Hidden}
           />
         ))}
       </div>

@@ -13,14 +13,14 @@ function MenuTable(props) {
                 </tr>
             </thead>
             <tbody>
-                {props.menu.map(e => <MenuTableCard 
+                {props.menu.map(e =>{ if (!e.Hidden) return <MenuTableCard 
                     Photo={e.Photo}
                     Title={e.Title}
                     Price={e.Price}
                     key={e.id}
                     cardID={e.id}
                     select={props.select}
-                    />
+                    />}
                 )}
             </tbody>
         </table>

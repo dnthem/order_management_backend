@@ -5,6 +5,7 @@ function OrderTable(props) {
     
     const renderOrders = () => {
         return props.order['ItemKeys'].map((val, idx) => 
+            
             <OrderCard 
                 key={val} 
                 Title={props.order.ItemNames[idx]}

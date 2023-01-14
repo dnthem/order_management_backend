@@ -31,6 +31,7 @@ function ItemCardV2(props) {
         Price: newProp.Price,
         id: props.cardID,
         Count: props.Count,
+        Hidden: props.Hidden
       }
       indexedDBController.updateARecord(db, 'Menu', newData)
       // update current card
@@ -57,6 +58,25 @@ function ItemCardV2(props) {
       setEdit(false);
     }
 
+    const hideHandler = () => {
+      try {
+        const newData = {
+          Content: cardProps.Content,
+          Photo: cardProps.Photo,
+          Title: cardProps.Title,
+          Price: cardProps.Price,
+          id: cardProps.cardID,
+          Count: cardProps.Count,
+          Hidden: !cardProps.Hidden
+        }
+        indexedDBController.updateARecord(db, 'Menu', newData);
+        props.updateMenu(newData)
+
+      } catch(error) {
+        alert(error);
+      }
+
+    }
     useEffect(() => {
       const checkStatus = () => {
         if (props.Title === undefined || props.Title === null) setEdit(true);
@@ -66,7 +86,7 @@ function ItemCardV2(props) {
     },[props])
 
   return (
-    <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2">
+    <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2" style={cardProps.Hidden? {opacity: 0.5}:{}}>
     <div className={edit? 'card border-danger': 'card'}>
 
       <img src={cardProps.Photo !== undefined? URL.createObjectURL(cardProps.Photo):'/template.jpg'} className="card-img-top" alt={cardProps.Title} />
@@ -83,7 +103,16 @@ function ItemCardV2(props) {
         <p ref={contentRef} data-name='content' className="card-text" contentEditable={edit} suppressContentEditableWarning={true}  style={{outline: 'none'}} onClick={selectHandler}>
           {cardProps.Content}
         </p>
-        <div class="d-grid gap-2">
+        <div className="d-grid gap-2">
+          <div className="d-flex justify-content-between">
+            <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Hide from today order</label>
+            <div className="form-check form-switch">
+              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={hideHandler} checked={props.Hidden}/>
+              
+            </div>
+          </div>
+
+
 
           {!edit && <button className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>}
           {edit && <button className="btn btn-primary "  type="button"onClick={saveHandler}>Save</button>}
