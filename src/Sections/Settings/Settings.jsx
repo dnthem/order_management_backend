@@ -16,7 +16,7 @@ function Settings(props) {
     useEffect (() => {
         const getAllData  = async () => {
             // Can't not convert Photo
-            const menu = await indexedDBController.getAllDataFromStore(db, 'Menu').map(e =>{ delete e.Photo; return e});
+            const menu = (await indexedDBController.getAllDataFromStore(db, 'Menu')).map(e =>{ delete e.Photo; return e});
             const income = await indexedDBController.getAllDataFromStore(db, 'Income');
             const orders = await indexedDBController.getAllDataFromStore(db, 'Orders');
             setAllData({Menu:menu, Income: income, Orders: orders});
