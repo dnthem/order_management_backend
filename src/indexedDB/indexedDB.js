@@ -17,7 +17,14 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       const menu = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
       db.createObjectStore("Orders", { keyPath: "Date" });
       db.createObjectStore("Income", { keyPath: "Date" });
-      
+      const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
+      orderV2.createIndex("userID", "userID", { unique: false });
+      orderV2.createIndex("date", "date", { unique: false });
+
+      const users = db.createObjectStore("Users", { keyPath: "userID", autoIncrement: true });
+
+      sampleData['Users'].forEach(e => users.add(e))
+      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e))
       // sampleData['Orders'].forEach(e => order.add(e))
       // sampleData['Income'].forEach(e => income.add(e))
@@ -138,6 +145,30 @@ indexedDBController.updateARecord = function (db, store, newVal) {
           rej(event.target.error);
         }
       })
+}
+
+/**
+ * Get all records from an object store with a particular value index
+ * @param {indexedDB Object} db reference to indexedDB
+ * @param {string} store store name
+ * @param {string} index index name
+ * @param {any} value value of the index
+ * @returns list of records with the same value of the index
+ */
+indexedDBController.getListOfRecords = function (db, store, index, value) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readwrite');
+    const objStore = trans.objectStore(store).index(index);
+    const request = objStore.getAll(value);
+    request.onsuccess = function (event) {
+        console.log('Successfully retreived all data')
+        res(event.target.result)
+    }
+    request.onerror = (event) => {
+      console.log('failed to retreive all data')
+      rej(event.target.error);
+    }
+  })
 }
 
 export default indexedDBController;
