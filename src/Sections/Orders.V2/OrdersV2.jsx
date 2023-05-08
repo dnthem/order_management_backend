@@ -5,12 +5,26 @@ import { useData } from "./OrdersV2Data";
 import OrderCardV2 from "../../components/OrdersCardV2";
 
 function OrdersV2(props) {
-    const ordersV2 = useData({
-        store: 'OrdersV2', 
-        index: 'date', 
+    const [orders, setOrders] = useData({
+        store: 'OrdersV2',
+        index: 'date',
         keyPath: new Date().toLocaleDateString("en-us")
     });
-    console.log(ordersV2);
+
+
+    const pending = orders.filter(order => !order.status);
+    const completed = orders.filter(order => order.status);
+    const total = completed.reduce((acc, order) => acc + order.total, 0);
+    const onDelete = (id) => {
+        setOrders({type: 'delete', keyPath: id, newVal: null});
+    }
+    const onComplete = (id) => {
+        setOrders({type: 'update', keyPath: id, newVal: {...orders[id], status: true}});
+    }
+    const onEdit = (id, newVal) => {
+        setOrders({type: 'update', keyPath: id, newVal: newVal});
+    }
+    console.log(orders);
     return ( 
         <>
             <div className="row">
@@ -35,27 +49,44 @@ function OrdersV2(props) {
                         <h2>Completed Orders
                         
                         </h2>
-                        <aside className="text-muted">Total: $100</aside>
+                        <aside className="text-muted">Total: ${total}</aside>
                     </div>
                     <div className="section-content">
-                        <li>
-                            Them Dang - 91234567 - $20
-                        </li>
-                        <li>Them Dang - 91234567 - $20</li>
-                        <li>Them Dang - 91234567 - $20</li>
+                        <ul className="list-group">
+                            {
+                                completed.reverse().map((order, index) => {
+                                    return <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>{order.orderID}</span> - 
+                                        <span>${order.total}</span>
+                                    </li>
+                                })
+                            }
+                        </ul>
                     </div>
                     
                 </div>
 
-                <div className="col-md-9 px-2 col-sm-12 d-flex flex-column align-items-center " style={{backgroundColor : "lightgreen"}}>
-                    <div className="section-title ">
+                <div className="col-md-9 px-2 col-sm-12" style={{backgroundColor : "lightgreen"}}>
+                    <div className="section-title width-100 text-center">
                         <h2>Pending Orders</h2>
                     </div>
-                    <div className="section-content row" style={{backgroundColor : "violet"}}>
-                        <OrderCardV2/>
-                        <OrderCardV2/>
-                        <OrderCardV2/>
-                        <OrderCardV2/>
+                    <div className="section-content row d-flex justify-content-center px-1" style={
+                        {
+                            backgroundColor : "violet",
+                        }
+                    }>
+                        {
+                            pending.map((order, index) => {
+                                return <OrderCardV2 
+                                key={index} 
+                                id={order.orderID}
+                                order={order}
+                                onDelete={onDelete}
+                                onComplete={onComplete}
+                                onEdit={onEdit}
+                                />
+                            }).reverse()
+                        }
                     </div>
                 </div>
             </div>

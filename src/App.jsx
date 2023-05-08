@@ -21,7 +21,7 @@ function App(props) {
       case 0:
         res = <Menu/>; break;
       case 1:
-        res= <Orders/>; break;
+        res= <OrdersV2/>; break;
       case 2:
         res = <Dashboard/>; break;
       case 3:
@@ -36,8 +36,8 @@ function App(props) {
     <ctx.Provider value={value}>
 
       <main className="container-fluid px-4">
-        {/* {RenderOnState()} */}
-        <OrdersV2/>
+        {RenderOnState()}
+        {/* <OrdersV2/> */}
       </main>
     </ctx.Provider>
   )

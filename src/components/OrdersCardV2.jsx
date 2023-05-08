@@ -1,35 +1,57 @@
-import { TiTick } from "react-icons/ti";
+import ListItem from "./ListItems";
 
-function OrderCardV2({ order, onRemove, onComplete, onEdit }) {
+/**
+ * @param {object} order - order object
+ * @param {function} onRemove
+ * @param {function} onComplete
+ * @param {function} onEdit
+ * @returns
+ * @description
+ * This component is used to display an order card
+  */
+function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
+  const orderList = [
+    ["Chicken", 2],
+    ["Beef", 1],
+    ["Pork", 1],
+    ["Shrimp", 1],
+    ["Tofu", 1],
+    ["Vegetables", 1],
+    ["Egg", 1],
+    ["Rice", 1],
+    ["Noodles", 1],
+  ];
   return (
     <div
-      className="col-xl-3 col-lg-3 mx-1 my-2"
-      style={{ backgroundColor: "lightblue", borderRadius: "20px" }}
+      className="col-xl-2 col-lg-3 mx-1 my-2"
+      style={{ backgroundColor: "lightblue", borderRadius: "20px", position: "relative", minHeight: "200px", paddingBottom: "2em" }}
     >
       <div className="card-body" style={{ position: "relative" }}>
-        <button
+        <button onClick={() => onDelete(id)}
           className="btn rounded-circle btn-outline-primary"
           style={{ position: "absolute", right: "0", top: ".5em", color: "white", backgroundColor: "black", fontWeight: "bold"}}
         >
           X
         </button>
         <div className="header">
-          <h5 className="card-title">Your name</h5>
+          <h5 className="card-title">{id} - {order.userID}</h5>
           <h6 className="card-subtitle mb-2 text-muted">913-215-4632</h6>
-          <h6 className="card-subtitle mb-2 text-muted">$23 - zelle</h6>
-          <h6 className="card-subtitle mb-2 text-muted">03:15pm</h6>
+          <h6 className="card-subtitle mb-2 text-muted">{`$${order.total} - ${order.paymentType}`}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">{`${order.date}`}</h6>
         </div>
 
-        <ul className="list-group" style={{ listStyle: "none" }}>
-          <li className="">1 banh trang tron</li>
-          <li className="">2 xoi chien</li>
-          <li className="">2 đá me</li>
-          <li className="">...</li>
-        </ul>
-        <div className="d-flex flex-row-reverse my-2">
-          <button className="btn btn-outline-primary">Complete</button>
-        </div>
+        
+          <ListItem list={order.order} /> 
+
+        
+          
       </div>
+      <button 
+          style={{
+            position: "absolute", right: "0.5em", bottom : "0.5em"
+          }}
+          onClick={() => onComplete(id)} className="btn text-primary">Complete</button>
+        
     </div>
   );
 }

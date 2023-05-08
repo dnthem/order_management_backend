@@ -83,6 +83,14 @@ indexedDBController.getAllDataFromStore = function (db, store) {
   })
 }
 
+/**
+ * Retrieves all records from an object store with a particular value index
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @param {string} index index name
+ * @param {any} keyPath value of the index
+ * @returns list of records with the same value of the index
+*/
 indexedDBController.getARecord = function (db, store, keyPath) {
   return new Promise((res, rej) => {
       const trans = db.transaction(store, 'readonly');
@@ -99,6 +107,13 @@ indexedDBController.getARecord = function (db, store, keyPath) {
     })
 }
 
+/**
+ * Deletes a record from an object store
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @param {any} keyPath value of the index
+ * @returns true if successful otherwise error message
+ * */
 indexedDBController.deleteARecord = function (db, store, keyPath) {
   return new Promise((res, rej) => {
     const trans = db.transaction(store, 'readwrite');
@@ -115,6 +130,12 @@ indexedDBController.deleteARecord = function (db, store, keyPath) {
   })
 }
 
+/**
+ * Deletes all records from an object store
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @returns true if successful otherwise error message
+ * */
 indexedDBController.deleteAllRecord = function (db, store) {
   return new Promise((res, rej) => {
     const trans = db.transaction(store, 'readwrite');
@@ -131,6 +152,13 @@ indexedDBController.deleteAllRecord = function (db, store) {
   })
 }
 
+/**
+ * Updates a record from an object store 
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @param {any} newVal new value of the record
+ * @returns key for the new or updated record if successful otherwise error message
+ * */
 indexedDBController.updateARecord = function (db, store, newVal) {
     return new Promise((res, rej) => {
         const trans = db.transaction(store, 'readwrite');
@@ -138,7 +166,7 @@ indexedDBController.updateARecord = function (db, store, newVal) {
         const request = objStore.put(newVal);
         request.onsuccess = function (event) {
             console.log('Successfully update the ' + store)
-            res(true)
+            res(event.target.result)
         }
         request.onerror = (event) => {
           console.log('failed to update the ' + store)
