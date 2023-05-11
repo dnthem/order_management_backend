@@ -3,6 +3,8 @@ import {AiOutlineCheckCircle, AiOutlineShoppingCart, AiOutlinePlusCircle} from "
 import DownloadBtn from "../../components/Downloadbtn";
 import { useData } from "./OrdersV2Data";
 import OrderCardV2 from "../../components/OrdersCardV2";
+import CompleteOrderList from "./CompleteOrderList";
+import UserInfoForm from "./UserInfoForm";
 
 function OrdersV2(props) {
     const [orders, setOrders] = useData({
@@ -27,6 +29,7 @@ function OrdersV2(props) {
     console.log(orders);
     return ( 
         <>
+            <UserInfoForm/>
             <div className="row">
                 <div className="col-md-8 col-sm-12">
                         <Header icon={<AiOutlineShoppingCart/>} 
@@ -44,7 +47,7 @@ function OrdersV2(props) {
             </div>
 
             <div className="row">
-                <div className="col-md-3 col-sm-12 d-flex flex-column align-items-center" style={{backgroundColor : "lightblue"}}>
+                <div className="col-md-3 col-sm-12 d-flex flex-column align-items-center">
                     <div className="section-title ">
                         <h2>Completed Orders
                         
@@ -52,29 +55,16 @@ function OrdersV2(props) {
                         <aside className="text-muted">Total: ${total}</aside>
                     </div>
                     <div className="section-content">
-                        <ul className="list-group">
-                            {
-                                completed.reverse().map((order, index) => {
-                                    return <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <span>{order.orderID}</span> - 
-                                        <span>${order.total}</span>
-                                    </li>
-                                })
-                            }
-                        </ul>
+                        <CompleteOrderList orders={completed}/>
                     </div>
                     
                 </div>
 
-                <div className="col-md-9 px-2 col-sm-12" style={{backgroundColor : "lightgreen"}}>
+                <div className="col-md-9 px-2 col-sm-12" >
                     <div className="section-title width-100 text-center">
                         <h2>Pending Orders</h2>
                     </div>
-                    <div className="section-content row d-flex justify-content-center px-1" style={
-                        {
-                            backgroundColor : "violet",
-                        }
-                    }>
+                    <div className="section-content row d-flex justify-content-center px-1">
                         {
                             pending.map((order, index) => {
                                 return <OrderCardV2 

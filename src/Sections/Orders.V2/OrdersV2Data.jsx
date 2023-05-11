@@ -4,114 +4,63 @@ import indexedDBController from "../../indexedDB/indexedDB";
 
 let sampleData = [
   {
-    orderID: 1,
-    userID: 1,
-    date: "4/26/2023",
-    order: [
+    "orderID": 1,
+    "customer": {
+      "customerID": 1,
+      "customerName": "John Doe",
+      "phone": "123-456-7890"
+    },
+    "date": "4/26/2023",
+    "order": [
       ["Item A", 1],
       ["Item B", 2],
-      ["Item C", 3],
+      ["Item C", 3]
     ],
-    total: 150.25,
-    paymentType: "Credit Card",
-    notes: "Delivery address: 123 Main St, Anytown, USA",
-    status: true, // true = complete, false = pending
+    "total": 150.25,
+    "paymentType": "Credit Card",
+    "notes": "Delivery address: 123 Main St, Anytown, USA",
+    "status": false
   },
   {
-    orderID: 2,
-    userID: 2,
-    date: "4/26/2023",
-    order: [
-      ["Item D", 2],
+    "orderID": 2,
+    "customer": {
+      "customerID": 2,
+      "customerName": "Jane Smith",
+      "phone": "555-123-4567"
+    },
+    "date": "5/1/2023",
+    "order": [
+      ["Item A", 2],
+      ["Item C", 1],
+      ["Item D", 4]
+    ],
+    "total": 225.75,
+    "paymentType": "PayPal",
+    "notes": "Delivery address: 456 Oak St, Anytown, USA",
+    "status": false
+  },
+  {
+    "orderID": 3,
+    "customer": {
+      "customerID": 3,
+      "customerName": "Bob Johnson",
+      "phone": "555-555-1212"
+    },
+    "date": "5/5/2023",
+    "order": [
+      ["Item B", 3],
+      ["Item C", 2],
       ["Item E", 2],
+      ["Item C", 2],
+      ["Item C", 2],
     ],
-    total: 75.5,
-    paymentType: "PayPal",
-    notes: "",
-    status: false,
-  },
-  {
-    orderID: 3,
-    userID: 3,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [
-      ["Item F", 2],
-      ["Item G", 2],
-      ["Item H", 2],
-      ["Item I", 2],
-    ],
-    total: 225.75,
-    paymentType: "Cash on Delivery",
-    notes: "Please call before delivery",
-    status: true,
-  },
-  {
-    orderID: 4,
-    userID: 4,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [
-      ["Product K", 2],
-      ["Product L", 2],
-      ["Product M", 2],
-    ],
-    total: 95.75,
-    paymentType: "Credit Card",
-    notes: "Please include a free sample",
-    status: true,
-  },
-  {
-    orderID: 5,
-    userID: 5,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [["Product N", 1]],
-    total: 15.0,
-    paymentType: "PayPal",
-    notes: "",
-    status: false,
-  },
-  {
-    orderID: 6,
-    userID: 6,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [
-      ["Product O", 2],
-      ["Product P", 1],
-      ["Product Q", 2],
-      ["Product R", 3],
-    ],
-    total: 175.25,
-    paymentType: "Credit Card",
-    notes: "Please call before delivery",
-    status: true,
-  },
-  {
-    orderID: 7,
-    userID: 2,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [
-      ["Product S", 4],
-      ["Product T", 1],
-    ],
-    total: 60.0,
-    paymentType: "Cash on Delivery",
-    notes: "",
-    status: false,
-  },
-  {
-    orderID: 8,
-    userID: 1,
-    date: new Date().toLocaleDateString("en-us"),
-    order: [
-      ["Product U", 2],
-      ["Product V", 2],
-      ["Product W", 1],
-    ],
-    total: 120.75,
-    paymentType: "Credit Card",
-    notes: "Please deliver after 5pm",
-    status: true,
-  },
-];
+    "total": 175.50,
+    "paymentType": "Credit Card",
+    "notes": "Delivery address: 789 Maple St, Anytown, USA",
+    "status": false
+  }
+]
+
 
 /**
  * Get all records from an object store with a particular value index

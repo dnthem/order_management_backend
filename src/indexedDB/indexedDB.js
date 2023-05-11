@@ -14,14 +14,14 @@ indexedDBController.createDB = function (dbName, version = undefined) {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      const menu = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
+      
       db.createObjectStore("Orders", { keyPath: "Date" });
       db.createObjectStore("Income", { keyPath: "Date" });
+      const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
+      const users = db.createObjectStore("Users", { keyPath: "userID", autoIncrement: true });
       const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
       orderV2.createIndex("userID", "userID", { unique: false });
       orderV2.createIndex("date", "date", { unique: false });
-
-      const users = db.createObjectStore("Users", { keyPath: "userID", autoIncrement: true });
 
       sampleData['Users'].forEach(e => users.add(e))
       sampleData['OrdersV2'].forEach(e => orderV2.add(e));
