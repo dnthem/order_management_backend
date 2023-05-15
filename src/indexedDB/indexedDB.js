@@ -18,14 +18,15 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       db.createObjectStore("Orders", { keyPath: "Date" });
       db.createObjectStore("Income", { keyPath: "Date" });
       const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
-      const users = db.createObjectStore("Users", { keyPath: "userID", autoIncrement: true });
+      const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
       const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
-      orderV2.createIndex("userID", "userID", { unique: false });
+      orderV2.createIndex("customerID", "customer.customerID", { unique: false });
       orderV2.createIndex("date", "date", { unique: false });
-
-      sampleData['Users'].forEach(e => users.add(e))
+      customers.createIndex('customerID', 'customerID', { unique: true });
+      menu.createIndex('id', 'id', { unique: true });
       sampleData['OrdersV2'].forEach(e => orderV2.add(e));
-      sampleData['Menu'].forEach(e => menu.add(e))
+      sampleData['Menu'].forEach(e => menu.add(e));
+      sampleData['Customers'].forEach(e => customers.add(e));
       // sampleData['Orders'].forEach(e => order.add(e))
       // sampleData['Income'].forEach(e => income.add(e))
     };
@@ -166,6 +167,7 @@ indexedDBController.updateARecord = function (db, store, newVal) {
         const request = objStore.put(newVal);
         request.onsuccess = function (event) {
             console.log('Successfully update the ' + store)
+            console.log(event.target )
             res(event.target.result)
         }
         request.onerror = (event) => {
@@ -183,11 +185,11 @@ indexedDBController.updateARecord = function (db, store, newVal) {
  * @param {any} value value of the index
  * @returns list of records with the same value of the index
  */
-indexedDBController.getListOfRecords = function (db, store, index, value) {
+indexedDBController.getListOfRecords = function (db, store, index, value = null) {
   return new Promise((res, rej) => {
     const trans = db.transaction(store, 'readwrite');
     const objStore = trans.objectStore(store).index(index);
-    const request = objStore.getAll(value);
+    const request = value? objStore.getAll(value) : objStore.getAll();
     request.onsuccess = function (event) {
         console.log('Successfully retreived all data')
         res(event.target.result)

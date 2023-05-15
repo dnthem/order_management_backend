@@ -109,95 +109,163 @@ const sampleData = {
     ],
     OrdersV2: [
       {
-        userID: 1,
-        date: "4/26/2023",
-        order: ["Item A", "Item B", "Item C"],
-        total: 150.25,
-        paymentType: "Credit Card",
-        notes: "Delivery address: 123 Main St, Anytown, USA",
-        status: true, // true = complete, false = pending
+      "orderID": 1,
+      "customer": {
+        "customerID": 1,
+        "customerName": "John Doe",
+        "phone": "123-456-7890"
+      },
+      "date": new Date().toLocaleDateString('en-us'),
+      "order": [
+        ["Item A", 1],
+        ["Item B", 2],
+        ["Item C", 3]
+      ],
+      "total": 150.25,
+      "paymentType": "Credit Card",
+      "notes": "Delivery address: 123 Main St, Anytown, USA",
+      "status": false
+    },
+    {
+      "orderID": 2,
+      "customer": {
+        "customerID": 2,
+        "customerName": "Jane Smith",
+        "phone": "555-123-4567"
+      },
+      "date": new Date().toLocaleDateString('en-us'),
+      "order": [
+        ["Item A", 2],
+        ["Item C", 1],
+        ["Item D", 4]
+      ],
+      "total": 225.75,
+      "paymentType": "PayPal",
+      "notes": "Delivery address: 456 Oak St, Anytown, USA",
+      "status": false
+    },
+    {
+      "orderID": 3,
+      "customer": {
+        "customerID": 3,
+        "customerName": "Bob Johnson",
+        "phone": "555-555-1212"
+      },
+      "date": new Date().toLocaleDateString('en-us'),
+      "order": [
+        ["Item B", 3],
+        ["Item C", 2],
+        ["Item E", 2],
+        ["Item C", 2],
+        ["Item C", 2],
+      ],
+      "total": 175.50,
+      "paymentType": "Credit Card",
+      "notes": "Delivery address: 789 Maple St, Anytown, USA",
+      "status": false
+    },
+    {
+      "orderID": 4,
+      "customer": {
+        "customerID": 1,
+        "customerName": "Alice Smith",
+        "phone": "555-555-1212"
+      },
+      "date": new Date().toLocaleDateString('en-us'),
+      "order": [
+        ["Item A", 2],
+        ["Item B", 1],
+        ["Item D", 1],
+        ["Item F", 3]
+      ],
+      "total": 97.25,
+      "paymentType": "Cash",
+      "notes": "Delivery address: 123 Main St, Anytown, USA",
+      "status": false
+    },
+    {
+      "orderID": 5,
+      "customer": {
+        "customerID": 2,
+        "customerName": "John Doe",
+        "phone": "555-555-1212"
+      },
+      "date": new Date().toLocaleDateString('en-us'),
+      "order": [
+        ["Item C", 2],
+        ["Item E", 1],
+        ["Item F", 1]
+      ],
+      "total": 45.75,
+      "paymentType": "Credit Card",
+      "notes": "Delivery address: 456 Oak St, Anytown, USA",
+      "status": false
+    },
+    {
+      "orderID": 6,
+      "customer": {
+        "customerID": 3,
+        "customerName": "Jane Smith",
+        "phone": "555-555-1212"
+      },
+      "date": new Date().toLocaleDateString('en-us'), 
+      "order": [
+        ["Item A", 1],
+        ["Item B", 1],
+        ["Item C", 1],
+        ["Item D", 1],
+        ["Item E", 1],
+      ],
+      "total": 75.25,
+      "paymentType": "PayPal",
+      "notes": "Delivery address: 789 Maple St, Anytown, USA",
+      "status": false
+
+    }
+  ],
+    Customers : [
+      {
+        customerID: 1,
+        customerName: "John Doe",
+        phone: "123-456-7890",
+        orderCount: 5,
       },
       {
-        userID: 2,
-        date: "4/26/2023",
-        order: ["Item D", "Item E"],
-        total: 75.5,
-        paymentType: "PayPal",
-        notes: "",
-        status: false,
+        customerID: 2,
+        customerName: "Jane Smith",
+        phone: "555-123-4567",
+        orderCount: 2,
       },
       {
-        userID: 3,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Item F", "Item G", "Item H", "Item I"],
-        total: 225.75,
-        paymentType: "Cash on Delivery",
-        notes: "Please call before delivery",
-        status: true,
+        customerID: 3,
+        customerName: "Bob Johnson",
+        phone: "555-555-1212",
+        orderCount: 3,
       },
       {
-        userID: 4,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Product K", "Product L", "Product M"],
-        total: 95.75,
-        paymentType: "Credit Card",
-        notes: "Please include a free sample",
-        status: true,
+        customerID: 4,
+        customerName: "Alice Lee",
+        phone: "987-654-3210",
+        orderCount: 1,
       },
       {
-        userID: 5,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Product N"],
-        total: 15.0,
-        paymentType: "PayPal",
-        notes: "",
-        status: false,
+        customerID: 5,
+        customerName: "Tom Green",
+        phone: "555-888-9999",
+        orderCount: 7,
       },
       {
-        userID: 6,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Product O", "Product P", "Product Q", "Product R"],
-        total: 175.25,
-        paymentType: "Credit Card",
-        notes: "Please call before delivery",
-        status: true,
+        customerID: 6,
+        customerName: "Sally Brown",
+        phone: "555-777-1212",
+        orderCount: 2,
       },
       {
-        userID: 2,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Product S", "Product T"],
-        total: 60.0,
-        paymentType: "Cash on Delivery",
-        notes: "",
-        status: false,
-      },
-      {
-        userID: 1,
-        date: new Date().toLocaleDateString("en-us"),
-        order: ["Product U", "Product V", "Product W"],
-        total: 120.75,
-        paymentType: "Credit Card",
-        notes: "Please deliver after 5pm",
-        status: true,
-      },
-    ],
-    Users: [
-      {
-        userName: "John Smith",
-        phone: "+1 123-456-7890",
-      },
-      {
-        userName: "Jane Doe",
-        phone: "+1 234-567-8901",
-      },
-      {
-        userName: "Bob Johnson",
-        phone: "+1 345-678-9012",
-      },
-      {
-        userName: "Sara Lee",
-        phone: "+1 456-789-0123",
-      },
+        customerID: 7,
+        customerName: "Jim Black",
+        phone: "123-456-7890",
+        orderCount: 5,
+      }
     ]
   };
 

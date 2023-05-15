@@ -1,11 +1,11 @@
 import Header from "../../components/Header";
 import {AiOutlineCheckCircle, AiOutlineShoppingCart, AiOutlinePlusCircle} from "react-icons/ai";
 import DownloadBtn from "../../components/Downloadbtn";
-import { useData } from "./OrdersV2Data";
 import OrderCardV2 from "../../components/OrdersCardV2";
 import CompleteOrderList from "./CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
-
+import { useState } from "react";
+import { useData } from "./customHooks/useData";
 function OrdersV2(props) {
     const [orders, setOrders] = useData({
         store: 'OrdersV2',
@@ -13,24 +13,33 @@ function OrdersV2(props) {
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
+    const [menu, setMenu] = useData({
+        store: 'Menu',
+        index: 'id',
+        keyPath: null
+    })
 
+    const [showUserInfoForm, setShowUserInfoForm] = useState(false);
+
+    
+    // use Memo to filter the orders based on the status (pending or completed)
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
+    
     const total = completed.reduce((acc, order) => acc + order.total, 0);
     const onDelete = (id) => {
-        setOrders({type: 'delete', keyPath: id, newVal: null});
+        setOrders({type: 'delete', indexField: 'orderID', keyPath: id, newVal: null});
     }
-    const onComplete = (id) => {
-        setOrders({type: 'update', keyPath: id, newVal: {...orders[id], status: true}});
+    const onComplete = (id, order) => {
+        setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true}});
     }
     const onEdit = (id, newVal) => {
-        setOrders({type: 'update', keyPath: id, newVal: newVal});
+        setOrders({type: 'update', indexField: 'orderID',keyPath: id, newVal: newVal});
     }
-    console.log(orders);
     return ( 
         <>
-            <UserInfoForm/>
-            <div className="row">
+            {showUserInfoForm && <UserInfoForm showForm={setShowUserInfoForm}/>}
+            <div className="row data-bs-backdrop">
                 <div className="col-md-8 col-sm-12">
                         <Header icon={<AiOutlineShoppingCart/>} 
                         title={"Orders - " + new Date().toLocaleDateString("en-us")}/>
@@ -38,7 +47,7 @@ function OrdersV2(props) {
 
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-between">
-                        <button className="mt-4 btn fw-bold text-primary" title="Add new order">New order <AiOutlinePlusCircle/></button>
+                        <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
                         <button className="mt-4 btn" title="Click here when complete today order">Complete <AiOutlineCheckCircle/></button>
                         <DownloadBtn data={null} fileName='Order_Date_' contentFormat={null}/>
                     </div>

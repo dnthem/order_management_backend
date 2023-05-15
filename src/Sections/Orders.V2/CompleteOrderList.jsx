@@ -1,7 +1,7 @@
 import CompleteOrderCard from "./CompleteOrderCard";
 function CompleteOrderList({orders}) {
     return ( 
-        <ul class="list-group">
+        <ul className="list-group">
             {
                 orders.map((order, index) => {
                     return <CompleteOrderCard 
@@ -9,7 +9,7 @@ function CompleteOrderList({orders}) {
                     order={order}
                     index={index}
                     />
-                }).reverse()
+                })
             }
         </ul>
      );
