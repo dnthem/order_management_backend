@@ -28,7 +28,7 @@ async function dataConverterIncome(db, time = 0) {
 }
 
 /**
- * This functions returns an object that can be passed to Chart js to create an Bar chart
+ * This functions returns an object that can be passed to Chart js to create a Bar chart
  * It tells that chart to display 'number' items what have the most count
  * @param {indexDBRef} db database object reference to retreive data
  * @param {Number} number number of data need to display

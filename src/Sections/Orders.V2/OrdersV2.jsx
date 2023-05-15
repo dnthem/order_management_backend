@@ -14,12 +14,6 @@ function OrdersV2(props) {
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
-    const [menu, setMenu] = useData({
-        store: 'Menu',
-        index: 'id',
-        keyPath: null
-    })
-
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(true);
     const pending = orders.filter(order => !order.status);

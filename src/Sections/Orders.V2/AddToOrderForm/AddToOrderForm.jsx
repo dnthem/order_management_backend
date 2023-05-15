@@ -1,8 +1,14 @@
 import Backdrop from "../../../components/Backdrop";
+import { useData } from "../customHooks/useData";
 import Customer from "./Customer";
 import Menu from "./Menu";
 
 function AddToOrderForm(props) {
+    const [menu, setMenu] = useData({
+        store: "Menu",
+        index: "id",
+        keyPath: '',
+    })
     return ( 
         <>
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
@@ -14,15 +20,17 @@ function AddToOrderForm(props) {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
-                    zIndex: "1000",
+                    zIndex: "9999",
                     boxShadow: "0 0 10px rgba(0,0,0,.5)",
-                    minHeight: "80vh",
                 }}
             >
-                <div className="row" >
+                <div className="row position-relative" style={{
+                    height: "90dvh",
+                    
+                }}>
                     <Customer/>
                     
-                    <Menu/>
+                    <Menu  menu={menu}/>
 
                 </div>
             </div>
