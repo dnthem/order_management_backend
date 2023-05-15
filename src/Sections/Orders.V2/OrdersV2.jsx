@@ -4,6 +4,7 @@ import DownloadBtn from "../../components/Downloadbtn";
 import OrderCardV2 from "../../components/OrdersCardV2";
 import CompleteOrderList from "./CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
+import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "./customHooks/useData";
 function OrdersV2(props) {
@@ -20,13 +21,13 @@ function OrdersV2(props) {
     })
 
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
-
-    
-    // use Memo to filter the orders based on the status (pending or completed)
+    const [showAddToOrderForm, setShowAddToOrderForm] = useState(true);
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
     
     const total = completed.reduce((acc, order) => acc + order.total, 0);
+
+    // order CRUD
     const onDelete = (id) => {
         setOrders({type: 'delete', indexField: 'orderID', keyPath: id, newVal: null});
     }
@@ -39,6 +40,7 @@ function OrdersV2(props) {
     return ( 
         <>
             {showUserInfoForm && <UserInfoForm showForm={setShowUserInfoForm}/>}
+            {showAddToOrderForm && <AddToOrderForm showForm={setShowAddToOrderForm}/>}
             <div className="row data-bs-backdrop">
                 <div className="col-md-8 col-sm-12">
                         <Header icon={<AiOutlineShoppingCart/>} 
