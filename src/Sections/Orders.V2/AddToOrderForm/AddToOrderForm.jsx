@@ -13,25 +13,29 @@ function AddToOrderForm(props) {
         <>
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
             <div
-                className={`col-md-12 col-xl-10 p-3 bg-light`}
+                className={`col-md-12 col-xl-10 p-3 bg-white border rounded-3 shadow-lg`}
                 style={{
-                    borderRadius: "5px",
                     position: "fixed",
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -50%)",
                     zIndex: "9999",
-                    boxShadow: "0 0 10px rgba(0,0,0,.5)",
                 }}
             >
                 <div className="row position-relative" style={{
-                    height: "90dvh",
+                    height: "80dvh",
                     
                 }}>
                     <Customer/>
                     
                     <Menu  menu={menu}/>
 
+                </div>
+                <div className="row pt-3 border-top bg-">
+                    <div className="col-12 d-flex justify-content-end">
+                        <button className="btn btn-primary">Add to Order</button>
+                        <button className="btn btn-danger ms-2" onClick={() => props.showForm(false)}>Cancel</button>
+                    </div>
                 </div>
             </div>
         </>

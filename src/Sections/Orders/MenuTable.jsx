@@ -5,8 +5,8 @@ function MenuTable(props) {
 
     return ( 
         <table className="table">
-            <thead>
-                <tr>
+            <thead className="position-sticky top-0 bg-light">
+                <tr >
                     <th>Item Name</th>
                     <th>Price</th>
                     <th></th><th></th>

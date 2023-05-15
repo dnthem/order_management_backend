@@ -35,8 +35,8 @@ function OrdersV2(props) {
         <>
             {showUserInfoForm && <UserInfoForm showForm={setShowUserInfoForm}/>}
             {showAddToOrderForm && <AddToOrderForm showForm={setShowAddToOrderForm}/>}
-            <div className="row data-bs-backdrop">
-                <div className="col-md-8 col-sm-12">
+            <div className="row data-bs-backdrop border-bottom">
+                <div className="col-md-8 col-sm-12 ">
                         <Header icon={<AiOutlineShoppingCart/>} 
                         title={"Orders - " + new Date().toLocaleDateString("en-us")}/>
                 </div>
@@ -52,7 +52,7 @@ function OrdersV2(props) {
             </div>
 
             <div className="row">
-                <div className="col-md-3 col-sm-12 d-flex flex-column align-items-center">
+                <div className="col-md-3 col-sm-12 d-flex flex-column align-items-center border-end">
                     <div className="section-title ">
                         <h2>Completed Orders
                         
