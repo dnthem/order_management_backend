@@ -1,5 +1,5 @@
 import MenuTable from "../../Orders/MenuTable";
-function Menu({menu, selectOrder}) {
+function Menu(props) {
     return ( 
         <div className="col-8 px-4 h-100 position-relative overflow-auto">
             <div className="section-title text-center">
@@ -7,7 +7,7 @@ function Menu({menu, selectOrder}) {
             </div>
             <div className="row overflow-auto h-100">
                 <div className="col-12">
-                    <MenuTable menu={menu} select={selectOrder}/>
+                    <MenuTable menu={props.menu} select={props.updateOrder}/>
                 </div>
             </div>
         </div>

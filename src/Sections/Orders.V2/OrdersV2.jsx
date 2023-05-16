@@ -13,9 +13,10 @@ function OrdersV2(props) {
         index: 'date',
         keyPath: new Date().toLocaleDateString("en-us")
     });
+    const [customer, setCustomer] = useState(null);
 
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
-    const [showAddToOrderForm, setShowAddToOrderForm] = useState(true);
+    const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
     
@@ -31,10 +32,34 @@ function OrdersV2(props) {
     const onEdit = (id, newVal) => {
         setOrders({type: 'update', indexField: 'orderID',keyPath: id, newVal: newVal});
     }
+
+    const onAddNewOrder = (newVal) => {
+        setOrders({type: 'add', indexField: 'orderID', newVal: newVal});
+    }
+
+    const onAddCustomerSubmit = (customer) => {
+        setShowUserInfoForm(false);
+        setShowAddToOrderForm(true);
+        setCustomer(customer);
+    }
+
     return ( 
         <>
-            {showUserInfoForm && <UserInfoForm showForm={setShowUserInfoForm}/>}
-            {showAddToOrderForm && <AddToOrderForm showForm={setShowAddToOrderForm}/>}
+            {
+                showUserInfoForm && 
+                <UserInfoForm showForm={setShowUserInfoForm} onAddCustomerSubmit={onAddCustomerSubmit}/>
+            }
+
+            {
+                showAddToOrderForm && 
+                <AddToOrderForm 
+                    showForm={setShowAddToOrderForm} 
+                    customer={customer} 
+                    updateCustomer={setCustomer}
+                    onAddNewOrder={onAddNewOrder}
+                />
+            }
+
             <div className="row data-bs-backdrop border-bottom">
                 <div className="col-md-8 col-sm-12 ">
                         <Header icon={<AiOutlineShoppingCart/>} 

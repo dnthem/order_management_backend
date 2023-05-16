@@ -107,10 +107,8 @@ function UserInfoForm(props) {
         newCustomer.customerID = newCustomerID; 
         setCustomerName("");
         setPhone("");
-        // submit form
         
-        //props.showForm(false);
-        
+        props.onAddCustomerSubmit(newCustomer);
     }
 
     function handleSelectSuggestion(suggestion) {

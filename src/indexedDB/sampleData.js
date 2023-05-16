@@ -109,119 +109,31 @@ const sampleData = {
     ],
     OrdersV2: [
       {
-      "orderID": 1,
-      "customer": {
-        "customerID": 1,
-        "customerName": "John Doe",
-        "phone": "123-456-7890"
+        date: new Date().toLocaleDateString("en-us"),
+        order: [
+          {
+            name: "Bánh Tráng Trộn",
+            price: 12,
+            quantity: 1,
+            id: 1,
+          },
+          {
+            name: "Bánh Tráng Cuộn",
+            price: 12,
+            quantity: 1,
+            id: 2,
+          }
+        ],
+        customer: {
+          customerID: 1,
+          customerName: "John Doe",
+          phone: "123-456-7890",
+        },
+        total: 24,
+        paymentType: "",
+        notes: "",
+        status: false,
       },
-      "date": new Date().toLocaleDateString('en-us'),
-      "order": [
-        ["Item A", 1],
-        ["Item B", 2],
-        ["Item C", 3]
-      ],
-      "total": 150.25,
-      "paymentType": "Credit Card",
-      "notes": "Delivery address: 123 Main St, Anytown, USA",
-      "status": false
-    },
-    {
-      "orderID": 2,
-      "customer": {
-        "customerID": 2,
-        "customerName": "Jane Smith",
-        "phone": "555-123-4567"
-      },
-      "date": new Date().toLocaleDateString('en-us'),
-      "order": [
-        ["Item A", 2],
-        ["Item C", 1],
-        ["Item D", 4]
-      ],
-      "total": 225.75,
-      "paymentType": "PayPal",
-      "notes": "Delivery address: 456 Oak St, Anytown, USA",
-      "status": false
-    },
-    {
-      "orderID": 3,
-      "customer": {
-        "customerID": 3,
-        "customerName": "Bob Johnson",
-        "phone": "555-555-1212"
-      },
-      "date": new Date().toLocaleDateString('en-us'),
-      "order": [
-        ["Item B", 3],
-        ["Item C", 2],
-        ["Item E", 2],
-        ["Item C", 2],
-        ["Item C", 2],
-      ],
-      "total": 175.50,
-      "paymentType": "Credit Card",
-      "notes": "Delivery address: 789 Maple St, Anytown, USA",
-      "status": false
-    },
-    {
-      "orderID": 4,
-      "customer": {
-        "customerID": 1,
-        "customerName": "Alice Smith",
-        "phone": "555-555-1212"
-      },
-      "date": new Date().toLocaleDateString('en-us'),
-      "order": [
-        ["Item A", 2],
-        ["Item B", 1],
-        ["Item D", 1],
-        ["Item F", 3]
-      ],
-      "total": 97.25,
-      "paymentType": "Cash",
-      "notes": "Delivery address: 123 Main St, Anytown, USA",
-      "status": false
-    },
-    {
-      "orderID": 5,
-      "customer": {
-        "customerID": 2,
-        "customerName": "John Doe",
-        "phone": "555-555-1212"
-      },
-      "date": new Date().toLocaleDateString('en-us'),
-      "order": [
-        ["Item C", 2],
-        ["Item E", 1],
-        ["Item F", 1]
-      ],
-      "total": 45.75,
-      "paymentType": "Credit Card",
-      "notes": "Delivery address: 456 Oak St, Anytown, USA",
-      "status": false
-    },
-    {
-      "orderID": 6,
-      "customer": {
-        "customerID": 3,
-        "customerName": "Jane Smith",
-        "phone": "555-555-1212"
-      },
-      "date": new Date().toLocaleDateString('en-us'), 
-      "order": [
-        ["Item A", 1],
-        ["Item B", 1],
-        ["Item C", 1],
-        ["Item D", 1],
-        ["Item E", 1],
-      ],
-      "total": 75.25,
-      "paymentType": "PayPal",
-      "notes": "Delivery address: 789 Maple St, Anytown, USA",
-      "status": false
-
-    }
   ],
     Customers : [
       {

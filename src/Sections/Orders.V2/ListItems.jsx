@@ -21,7 +21,7 @@ function ListItem(props) {
                         return (
                             <>
                             <li key={index}>
-                                {`${item[1]} x ${item[0]}`}
+                                {`${item.quantity} x ${item.name}`}
                             </li>
                             
                             <li key={index+1}>
@@ -33,7 +33,7 @@ function ListItem(props) {
                     else {
                         return (
                             <li key={index}>
-                                {`${item[1]} x ${item[0]}`}
+                               {`${item.quantity} x ${item.name}`}
                             </li>
                         )
                     }
