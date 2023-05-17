@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import {AiOutlineCheckCircle, AiOutlineShoppingCart, AiOutlinePlusCircle} from "react-icons/ai";
 import DownloadBtn from "../../components/Downloadbtn";
-import OrderCardV2 from "../../components/OrdersCardV2";
+import OrderCardV2 from "./OrdersCardV2";
 import CompleteOrderList from "./CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
@@ -15,7 +15,8 @@ function OrdersV2(props) {
         keyPath: new Date().toLocaleDateString("en-us")
     });
     const [customer, setCustomer] = useState(null);
-
+    const [order, setOrder] = useState([]);
+    const [orderID, setOrderID] = useState(-1);
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);
@@ -30,23 +31,32 @@ function OrdersV2(props) {
     const onComplete = (id, order) => {
         setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true}});
     }
-    const onEdit = (id, newVal) => {
-        setOrders({type: 'update', indexField: 'orderID',keyPath: id, newVal: newVal});
+    const onEdit = (order) => {
+        setShowAddToOrderForm(true);
+        setOrder(order.order);
+        setCustomer(order.customer);
+        setOrderID(order.orderID);
     }
 
     const onAddNewOrder = (newVal) => {
         setOrders({type: 'add', indexField: 'orderID', newVal: newVal});
     }
 
+    const onUpdateOrder = (newVal) => { 
+        setOrders({type: 'update', indexField: 'orderID', keyPath: orderID, newVal: newVal});
+    }
+
     const onAddCustomerSubmit = (customer) => {
         setShowUserInfoForm(false);
         setShowAddToOrderForm(true);
+        setOrderID(-1);
+        setOrder([]);
         setCustomer(customer);
     }
 
     return ( 
         <>
-            <Loader/>
+            
             {
                 showUserInfoForm && 
                 <UserInfoForm showForm={setShowUserInfoForm} onAddCustomerSubmit={onAddCustomerSubmit}/>
@@ -59,6 +69,9 @@ function OrdersV2(props) {
                     customer={customer} 
                     updateCustomer={setCustomer}
                     onAddNewOrder={onAddNewOrder}
+                    order={order}
+                    orderID={orderID}
+                    onUpdateOrder={onUpdateOrder}
                 />
             }
 
@@ -86,7 +99,7 @@ function OrdersV2(props) {
                         </h2>
                         <aside className="text-muted">Total: ${total}</aside>
                     </div>
-                    <div className="section-content">
+                    <div className="section-content w-100">
                         <CompleteOrderList orders={completed}/>
                     </div>
                     
@@ -96,7 +109,7 @@ function OrdersV2(props) {
                     <div className="section-title width-100 text-center">
                         <h2>Pending Orders</h2>
                     </div>
-                    <div className="section-content row d-flex justify-content-center px-1">
+                    <div className="section-content row d-flex justify-content-start px-1">
                         {
                             pending.map((order, index) => {
                                 return <OrderCardV2 

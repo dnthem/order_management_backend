@@ -6,51 +6,6 @@ import {AiOutlineUser, AiOutlinePhone, AiOutlineIdcard} from 'react-icons/ai';
 import { useDebounce } from "./customHooks/useDebouce";
 import { phoneFormat } from '../../utils';
 
-// const customers = [
-//   {
-//     customerID: 1,
-//     customerName: "John Doe",
-//     phone: "123-456-7890",
-//     orderCount: 5,
-//   },
-//   {
-//     customerID: 2,
-//     customerName: "Jane Smith",
-//     phone: "555-123-4567",
-//     orderCount: 2,
-//   },
-//   {
-//     customerID: 3,
-//     customerName: "Bob Johnson",
-//     phone: "555-555-1212",
-//     orderCount: 3,
-//   },
-//   {
-//     customerID: 4,
-//     customerName: "Alice Lee",
-//     phone: "987-654-3210",
-//     orderCount: 1,
-//   },
-//   {
-//     customerID: 5,
-//     customerName: "Tom Green",
-//     phone: "555-888-9999",
-//     orderCount: 7,
-//   },
-//   {
-//     customerID: 6,
-//     customerName: "Sally Brown",
-//     phone: "555-777-1212",
-//     orderCount: 2,
-//   },
-//   {
-//     customerID: 7,
-//     customerName: "Jim Black",
-//     phone: "123-456-7890",
-//     orderCount: 5,
-//   }
-// ];
-
 /**
  * Function to filter the customers array based on the query
  * @param {string} query - The search query

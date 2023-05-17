@@ -11,8 +11,11 @@ function AddToOrderForm(props) {
         index: "id",
         keyPath: '',
     });
-
-    const [order, setOrder] = useState([]);
+    const btnText = props.order ? 'Update Order' : 'Add to Order';
+    const [order, setOrder] = useState(props.order?? []);
+    const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
+    const [paymentType, setPaymentType] = useState('Cash');
+    const [notes, setNotes] = useState('');
     const customer = props.customer;
 
     /**
@@ -21,7 +24,6 @@ function AddToOrderForm(props) {
      * @returns {void}
      */
     const updateOrder = (id) => {
-        console.log('updateOrder: ' + id);
         const updatedOrder = [...order];
         const index = order.findIndex(item => item.id === id);
         if(index === -1) {
@@ -46,7 +48,6 @@ function AddToOrderForm(props) {
      * @returns {void}
     */
     const updateQuantity = (id, quantity) => {
-        console.log('updateQuantity: ' + id + ' ' + quantity);
         const index = order.findIndex(item => item.id === id);
         if(index !== -1) {
             const updatedOrder = [...order];
@@ -61,7 +62,6 @@ function AddToOrderForm(props) {
      * @returns {void}
      * */
     const removeOrder = (id) => {
-        console.log('removeOrder: ' + id);
         const index = order.findIndex(item => item.id === id);
         if(index !== -1) {
             const updatedOrder = [...order];
@@ -72,9 +72,16 @@ function AddToOrderForm(props) {
     }
 
     const handleAddToOrder = () => {
-        console.log('handleAddToOrder');
-        const newOrder = orderFormater({customer, order});
-        props.onAddNewOrder(newOrder);
+        if (order.length === 0) return alert('Please add item to order');
+
+        const newOrder = orderFormater({customer, order, paymentType, notes, orderID});
+
+        if(orderID !== -1) {
+            props.onUpdateOrder(newOrder); 
+        }
+        else 
+            props.onAddNewOrder(newOrder);
+
         props.showForm(false);
     }
     
@@ -98,6 +105,10 @@ function AddToOrderForm(props) {
                     <Customer customer={customer} order={order} 
                         removeOrder={removeOrder} 
                         updateQuantity={updateQuantity}
+                        paymentType={paymentType}
+                        setPaymentType={setPaymentType}
+                        notes={notes}
+                        setNotes={setNotes}
                     />
                     
                     <Menu  menu={menu} updateOrder={updateOrder}/>
@@ -105,7 +116,7 @@ function AddToOrderForm(props) {
                 </div>
                 <div className="row pt-3 border-top bg-">
                     <div className="col-12 d-flex justify-content-end">
-                        <button className="btn btn-primary" onClick={handleAddToOrder}>Add to Order</button>
+                        <button className="btn btn-primary" onClick={handleAddToOrder}>{btnText}</button>
                         <button className="btn btn-danger ms-2" onClick={() => props.showForm(false)}>Cancel</button>
                     </div>
                 </div>

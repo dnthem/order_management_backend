@@ -1,5 +1,5 @@
-import ListItem from "../Sections/Orders.V2/ListItems";
-import CloseBtn from "./CloseBtn";
+import ListItem from "./ListItems";
+import CloseBtn from "../../components/CloseBtn";
 
 /**
  * @param {object} order - order object
@@ -14,7 +14,7 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
   return (
     <div
       className="col-xl-2 col-lg-3 mx-1 my-2"
-      style={{ backgroundColor: "lightblue", borderRadius: "20px", position: "relative", minHeight: "200px", paddingBottom: "2em" }}
+      style={{ backgroundColor: "lightblue", borderRadius: "20px", position: "relative", minHeight: "200px", minWidth: "25ch" }}
     >
       <div className="card-body" style={{ position: "relative" }}>
         <CloseBtn onDoubleClick={() => onDelete(id)} />
@@ -23,15 +23,15 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
           <h6 className="card-subtitle mb-2 text-muted">{order.customer.phone}</h6>
           <h6 className="card-subtitle mb-2 text-muted">{`$${order.total} - ${order.paymentType}`}</h6>
           <h6 className="card-subtitle mb-2 text-muted">{`${order.date}`}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">{`${order.notes}`}</h6>
         </div>
           <ListItem list={order.order} /> 
       </div>
-      <button 
-          style={{
-            position: "absolute", right: "0.5em", bottom : "0.5em"
-          }}
-          onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
-        
+      <div className="d-flex justify-content-end">
+
+        <button onDoubleClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
+        <button onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
+        </div>
     </div>
   );
 }

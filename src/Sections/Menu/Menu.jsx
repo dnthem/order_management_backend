@@ -64,7 +64,7 @@ function Menu(props) {
         );
         setMenu(retrievedMenu);
       } catch (error) {
-        console.error(error.message);
+        alert(error.message);
       }
       setLoading(false);
     };

@@ -1,8 +1,9 @@
 import { dateFormat } from "./dateFormat";
 
-export function orderFormater({customer, order, paymentType = "", notes = ""}) {
+export function orderFormater({customer, order, paymentType = "", notes = "", orderID = -1}) {
+    
     const total = order.reduce((acc, item) => acc + item.price * item.quantity, 0);
-    return {
+    const result = {
         customer: {
             customerID: customer.customerId,
             customerName: customer.customerName,
@@ -15,4 +16,8 @@ export function orderFormater({customer, order, paymentType = "", notes = ""}) {
         notes,
         status: false,
     }
+    if(orderID !== -1) {
+        result['orderID'] = orderID;
+    }
+    return result;
 }
