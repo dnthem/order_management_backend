@@ -1,5 +1,5 @@
 import Backdrop from "../../../components/Backdrop";
-import { orderFormater } from "../../../utils/orderFormat";
+import { orderFormater } from "../../../utils";
 import { useData } from "../customHooks/useData";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
@@ -35,7 +35,6 @@ function AddToOrderForm(props) {
             updatedOrder.push(newOrder);
         } else {
             updatedOrder[index].quantity += 1;
-            console.log(updatedOrder[index].quantity);
         }
         setOrder(updatedOrder);
     }

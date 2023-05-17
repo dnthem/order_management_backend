@@ -7,6 +7,7 @@ import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "./customHooks/useData";
+import Loader from "../../components/Loader";
 function OrdersV2(props) {
     const [orders, setOrders] = useData({
         store: 'OrdersV2',
@@ -45,6 +46,7 @@ function OrdersV2(props) {
 
     return ( 
         <>
+            <Loader/>
             {
                 showUserInfoForm && 
                 <UserInfoForm showForm={setShowUserInfoForm} onAddCustomerSubmit={onAddCustomerSubmit}/>
