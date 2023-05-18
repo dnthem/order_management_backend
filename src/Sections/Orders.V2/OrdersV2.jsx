@@ -8,15 +8,18 @@ import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "./customHooks/useData";
 import Loader from "../../components/Loader";
+import { dateToISO, getCurrentTime } from "../../utils";
 function OrdersV2(props) {
     const [orders, setOrders] = useData({
         store: 'OrdersV2',
-        index: 'date',
+        index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
     const [customer, setCustomer] = useState(null);
-    const [order, setOrder] = useState([]);
+    const [order, setOrder] = useState(null);
     const [orderID, setOrderID] = useState(-1);
+    const [deliverDate, setDeliverDate] = useState(dateToISO());
+    const [orderDate, setOrderDate] = useState(dateToISO());
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);
@@ -29,13 +32,15 @@ function OrdersV2(props) {
         setOrders({type: 'delete', indexField: 'orderID', keyPath: id, newVal: null});
     }
     const onComplete = (id, order) => {
-        setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true}});
+        setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
     }
     const onEdit = (order) => {
         setShowAddToOrderForm(true);
         setOrder(order.order);
         setCustomer(order.customer);
         setOrderID(order.orderID);
+        setDeliverDate(order.deliverDate);
+        setOrderDate(order.orderDate);
     }
 
     const onAddNewOrder = (newVal) => {
@@ -50,7 +55,7 @@ function OrdersV2(props) {
         setShowUserInfoForm(false);
         setShowAddToOrderForm(true);
         setOrderID(-1);
-        setOrder([]);
+        setOrder(null);
         setCustomer(customer);
     }
 
@@ -67,10 +72,14 @@ function OrdersV2(props) {
                 <AddToOrderForm 
                     showForm={setShowAddToOrderForm} 
                     customer={customer} 
-                    updateCustomer={setCustomer}
-                    onAddNewOrder={onAddNewOrder}
                     order={order}
                     orderID={orderID}
+                    deliverDate={deliverDate}
+                    orderDate={orderDate}
+                    setDeliverDate={setDeliverDate}
+                    setOrderDate={setOrderDate}
+                    updateCustomer={setCustomer}
+                    onAddNewOrder={onAddNewOrder}
                     onUpdateOrder={onUpdateOrder}
                 />
             }

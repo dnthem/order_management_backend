@@ -21,7 +21,8 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
       const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
       orderV2.createIndex("customerID", "customer.customerID", { unique: false });
-      orderV2.createIndex("date", "date", { unique: false });
+      orderV2.createIndex("deliverDate", "deliverDate", { unique: false });
+      orderV2.createIndex("orderDate", "orderDate", {unique: false});
       customers.createIndex('customerID', 'customerID', { unique: true });
       menu.createIndex('id', 'id', { unique: true });
       sampleData['OrdersV2'].forEach(e => orderV2.add(e));

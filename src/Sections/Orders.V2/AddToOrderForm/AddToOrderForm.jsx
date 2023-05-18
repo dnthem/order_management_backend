@@ -1,5 +1,5 @@
 import Backdrop from "../../../components/Backdrop";
-import { orderFormater } from "../../../utils";
+import { dateToISO, orderFormater } from "../../../utils";
 import { useData } from "../customHooks/useData";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
@@ -11,11 +11,13 @@ function AddToOrderForm(props) {
         index: "id",
         keyPath: '',
     });
-    const btnText = props.order ? 'Update Order' : 'Add to Order';
+    const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
     const [order, setOrder] = useState(props.order?? []);
     const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
     const [paymentType, setPaymentType] = useState('Cash');
     const [notes, setNotes] = useState('');
+    const [orderDate, setOrderDate] = useState(props.orderDate??dateToISO());
+    const [deliverDate, setDeliverDate] = useState(props.deliverDate??dateToISO());
     const customer = props.customer;
 
     /**
@@ -74,7 +76,15 @@ function AddToOrderForm(props) {
     const handleAddToOrder = () => {
         if (order.length === 0) return alert('Please add item to order');
 
-        const newOrder = orderFormater({customer, order, paymentType, notes, orderID});
+        const newOrder = orderFormater({
+            customer, 
+            order, 
+            paymentType, 
+            notes, 
+            orderID,
+            orderDate,
+            deliverDate
+        });
 
         if(orderID !== -1) {
             props.onUpdateOrder(newOrder); 
@@ -106,9 +116,13 @@ function AddToOrderForm(props) {
                         removeOrder={removeOrder} 
                         updateQuantity={updateQuantity}
                         paymentType={paymentType}
-                        setPaymentType={setPaymentType}
                         notes={notes}
+                        orderDate={orderDate}
+                        deliverDate={deliverDate}
+                        setPaymentType={setPaymentType}
                         setNotes={setNotes}
+                        setOrderDate={setOrderDate}
+                        setDeliverDate={setDeliverDate}
                     />
                     
                     <Menu  menu={menu} updateOrder={updateOrder}/>

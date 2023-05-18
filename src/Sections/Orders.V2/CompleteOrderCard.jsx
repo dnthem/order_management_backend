@@ -5,7 +5,13 @@ function CompleteOrderCard({ order, index }) {
         <div className="fw-bold">
           {index + 1}. {order.customer.customerName}
         </div>
-        {order.customer.phone} - {order.paymentType}
+        Completed at: {order.completedTime}
+        <br/>
+        Phone: {order.customer.phone}
+        <br/>
+        {order.paymentType}
+        <br/>
+        Notes: {order.notes}
       </div>
       <span className="badge bg-primary rounded-pill">${order.total}</span>
     </li>

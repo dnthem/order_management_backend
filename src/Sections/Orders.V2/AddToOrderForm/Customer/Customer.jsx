@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import CustomerOrderList from './CustomerOrderList';
+import { dateFormat, dateToISO } from '../../../../utils';
 function Customer(props) {
     const customer = props.customer;
     const customerName = customer.customerName;
@@ -12,8 +13,7 @@ function Customer(props) {
     return ( 
         <div className="col-4 border-end position-relative overflow-auto h-100">
             <div className="section-title position-sticky top-0 bg-white" style={{zIndex: '9999'}}>
-                <h2 className="w-100 text-center">Customer Infomation</h2>
-
+                <h2 className="w-100 text-center">Order Infomation</h2>
                 <div>
                 
                     <div className="user-info d-flex justify-content-between flex-wrap">
@@ -28,7 +28,14 @@ function Customer(props) {
                         </div>
                     </div>
                     <div className="summary ">
-                            <div className="">Number of Item: {numberOfItem}</div>
+                        <div className='d-flex justify-content-between'>
+                                <span>Order Date: </span>
+                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.orderDate)} onChange={(e) => props.setOrderDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
+                            </div>
+                            <div className='d-flex justify-content-between'>
+                                <span>Deliver Date:</span>
+                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.deliverDate)} onChange={(e) => props.setDeliverDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
+                            </div>
                             <div className="">Total: ${total}</div>
                             <div className="">Payment type: 
                                 <select className="border-0 bg-transparent" value={props.paymentType} onChange={(e) => props.setPaymentType(e.target.value)}>
@@ -45,10 +52,13 @@ function Customer(props) {
                 
                     
                 </div>
-                <div className="section-title">
-                        <h2 className="h2 pb-2">Cart</h2>
-
+                <div className="d-flex justify-content-between">
+                    <h2>Cart</h2>
+                    <div className="d-flex align-items-center">
+                        <div className="me-2">Number of item: </div>
+                        <div className="badge bg-primary">{numberOfItem}</div>
                     </div>
+                </div>
             </div>
 
             

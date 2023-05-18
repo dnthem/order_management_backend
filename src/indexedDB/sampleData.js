@@ -109,7 +109,8 @@ const sampleData = {
     ],
     OrdersV2: [
       {
-        date: new Date().toLocaleDateString("en-us"),
+        orderDate: new Date().toLocaleDateString('en-us'),
+        deliverDate: new Date().toLocaleDateString("en-us"),
         order: [
           {
             name: "Bánh Tráng Trộn",

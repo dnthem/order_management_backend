@@ -22,7 +22,8 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
           <h5 className="card-title">{id} - {order.customer.customerName}</h5>
           <h6 className="card-subtitle mb-2 text-muted">{order.customer.phone}</h6>
           <h6 className="card-subtitle mb-2 text-muted">{`$${order.total} - ${order.paymentType}`}</h6>
-          <h6 className="card-subtitle mb-2 text-muted">{`${order.date}`}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">Order Date: {`${order.orderDate}`}</h6>
+          <h6 className="card-subtitle mb-2 text-muted">Deliver Date: {`${order.deliverDate}`}</h6>
           <h6 className="card-subtitle mb-2 text-muted">{`${order.notes}`}</h6>
         </div>
           <ListItem list={order.order} /> 
