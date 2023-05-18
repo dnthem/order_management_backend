@@ -2,66 +2,6 @@ import { useState, useEffect } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
 
-let sampleData = [
-  {
-    "orderID": 1,
-    "customer": {
-      "customerID": 1,
-      "customerName": "John Doe",
-      "phone": "123-456-7890"
-    },
-    "date": "4/26/2023",
-    "order": [
-      ["Item A", 1],
-      ["Item B", 2],
-      ["Item C", 3]
-    ],
-    "total": 150.25,
-    "paymentType": "Credit Card",
-    "notes": "Delivery address: 123 Main St, Anytown, USA",
-    "status": false
-  },
-  {
-    "orderID": 2,
-    "customer": {
-      "customerID": 2,
-      "customerName": "Jane Smith",
-      "phone": "555-123-4567"
-    },
-    "date": "5/1/2023",
-    "order": [
-      ["Item A", 2],
-      ["Item C", 1],
-      ["Item D", 4]
-    ],
-    "total": 225.75,
-    "paymentType": "PayPal",
-    "notes": "Delivery address: 456 Oak St, Anytown, USA",
-    "status": false
-  },
-  {
-    "orderID": 3,
-    "customer": {
-      "customerID": 3,
-      "customerName": "Bob Johnson",
-      "phone": "555-555-1212"
-    },
-    "date": "5/5/2023",
-    "order": [
-      ["Item B", 3],
-      ["Item C", 2],
-      ["Item E", 2],
-      ["Item C", 2],
-      ["Item C", 2],
-    ],
-    "total": 175.50,
-    "paymentType": "Credit Card",
-    "notes": "Delivery address: 789 Maple St, Anytown, USA",
-    "status": false
-  }
-]
-
-
 /**
  * Get all records from an object store with a particular value index
  * @param {string} store - the name of the object store

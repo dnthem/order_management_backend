@@ -3,6 +3,7 @@ import { phoneFormat } from './phoneFormat';
 import { dateFormat, dateToISO, getCurrentTime, convertISOToDateFormat } from './dateFormat';
 import { orderFormater } from './orderFormat';
 import { downloadOrderFormat } from './downloadOrderFormat';
+import { getRandomColor } from './randomColor';
 // export all utils here
 export {
     phoneFormat,
@@ -11,5 +12,6 @@ export {
     convertISOToDateFormat,
     getCurrentTime,
     orderFormater,
-    downloadOrderFormat
+    downloadOrderFormat,
+    getRandomColor
 };
