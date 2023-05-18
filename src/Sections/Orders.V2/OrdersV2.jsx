@@ -50,12 +50,14 @@ function OrdersV2() {
     const onComplete = (id, order) => {
         setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
 
+        const currentCustomer = customers.find(customer => customer.customerID === order.customer.customerID);
         // update customer order count
-        setCustomers({type: 'update', indexField: 'customerID', keyPath: order.customerID, newVal: {...customer, orderCount: customer.orderCount + 1, totalSpent: customer.totalSpent + order.total}});
+        setCustomers({type: 'update', indexField: 'customerID', keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
         
         // update menu
         order.cart.forEach(item => {
-            setMenu({type: 'update', indexField: 'id', keyPath: item.id, newVal: {...item, Count: item.Count + item.quantity}});
+            const currentItem = menu.find(menuItem => menuItem.id === item.id);
+            setMenu({type: 'update', indexField: 'id', keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
         })
     }
 
