@@ -18,6 +18,16 @@ function autoComplete(customers, query, inputType) {
   );
 }
 
+/**
+ * Function to filter the customers array based on the query, but only returns the first result
+ * @param {object} customers  - The array of customers
+ * @param {string} query  - The search query
+ * @returns {object} - The filtered array of customers
+ */
+function exactMatch(customers, query) {
+    return customers.find((customer) => phoneFormat(customer.phone) === phoneFormat(query));
+}
+
 function UserInfoForm(props) {
     const [customers, setCustomers] = useData({
       store: "Customers",
@@ -31,41 +41,8 @@ function UserInfoForm(props) {
     const [customerID, setCustomerID] = useState(-1);
 
     const nameRef = useRef(null);
-    useEffect(() => {
-        if (debouncedQuery && document.activeElement === nameRef.current) {
-            const results = autoComplete(customers, debouncedQuery, "customerName");
-            setSuggestion(results);
-            if (results.length === 0) setCustomerID(-1);
-            
-        } else {
-            setSuggestion([]);
-        }
-        
-    }, [debouncedQuery]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        let newCustomerID = customerID;
-        const newCustomer = { // create new customer object
-          customerName,
-          phone: phoneFormat(phone),
-          orderCount: 0,
-        };
-        // new customer
-        if (customerID === -1) {
-            newCustomerID = await setCustomers({ // add customer to database     
-                type: "add",
-                indexField: "customerID",
-                newVal: newCustomer,
-            }); 
-        }
-        newCustomer.customerID = newCustomerID; 
-        setCustomerName("");
-        setPhone("");
-        
-        props.onAddCustomerSubmit(newCustomer);
-    }
-
+    let outline = customerID > 0 ? "success" : "primary";
+    
     function handleSelectSuggestion(suggestion) {
         setCustomerName(suggestion.customerName);
         setPhone(suggestion.phone);
@@ -73,7 +50,65 @@ function UserInfoForm(props) {
         setSuggestion([]);
     }
 
-    const outline = customerID > 0 ? "success" : "primary";
+    async function handleSubmit(e) {
+      e.preventDefault();
+      let newCustomerID = customerID;
+      const newCustomer = { // create new customer object
+        customerName,
+        phone: phoneFormat(phone),
+        orderCount: 0,
+      };
+      // new customer
+      if (customerID === -1) {
+          newCustomerID = await setCustomers({ // add customer to database     
+              type: "add",
+              indexField: "customerID",
+              newVal: newCustomer,
+          }); 
+      }
+      newCustomer.customerID = newCustomerID; 
+      setCustomerName("");
+      setPhone("");
+      
+      props.onAddCustomerSubmit(newCustomer);
+    }
+
+    function handleInputPhone(value) {
+        if (value.length <= 10) {
+            setPhone(value);
+        }
+        if (value.length === 10) {
+            const results = exactMatch(customers, value);
+            console.log(results);
+            if (results) {
+                setCustomerName(results.customerName);
+                setPhone(results.phone)
+                setCustomerID(results.customerID);
+                outline = "success";
+            }
+        }
+        else {
+            setCustomerID(-1);
+            outline = "primary";
+        }
+
+    }
+    
+    
+    useEffect(() => {
+      if (debouncedQuery && document.activeElement === nameRef.current) {
+          const results = autoComplete(customers, debouncedQuery, "customerName");
+          setSuggestion(results);
+          if (results.length === 0) setCustomerID(-1);
+          
+      } else {
+          setSuggestion([]);
+      }
+      
+  }, [debouncedQuery]);
+
+  
+
     return (
       <>
       <Backdrop/>
@@ -119,7 +154,7 @@ function UserInfoForm(props) {
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
                     <li
-                      className="list-group-item bg-secondary text-white"
+                      className="list-group-item bg-white text-black"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
@@ -146,7 +181,7 @@ function UserInfoForm(props) {
                 id="phone"
                 placeholder="123-456-7890"
                 value={phone}
-                onChange={e => setPhone(e.target.value.replace(/[^0-9-]/g, ''))}
+                onChange={e => handleInputPhone(e.target.value.replace(/[^0-9]/g, ''))}
               />
             </div>
 

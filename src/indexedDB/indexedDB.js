@@ -24,6 +24,7 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       orderV2.createIndex("deliverDate", "deliverDate", { unique: false });
       orderV2.createIndex("orderDate", "orderDate", {unique: false});
       customers.createIndex('customerID', 'customerID', { unique: true });
+      customers.createIndex('phone', 'phone', { unique: true });
       menu.createIndex('id', 'id', { unique: true });
       sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
