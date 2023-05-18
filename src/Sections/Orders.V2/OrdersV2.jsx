@@ -122,9 +122,8 @@ function OrdersV2() {
                 </div>
 
                 <div className="col-md-4 col-sm-12">
-                    <div className="d-flex justify-content-between">
+                    <div className="d-flex justify-content-evenly">
                         <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
-                        <button className="mt-4 btn" title="Click here when complete today order">Complete <AiOutlineCheckCircle/></button>
                         <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     
