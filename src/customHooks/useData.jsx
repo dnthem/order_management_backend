@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import { GetDataBaseContext } from "../../../App";
-import indexedDBController from "../../../indexedDB/indexedDB";
+import { GetDataBaseContext } from "../App";
+import indexedDBController from "../indexedDB/indexedDB";
 
 let sampleData = [
   {
