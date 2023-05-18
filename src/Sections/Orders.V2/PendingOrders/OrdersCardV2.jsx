@@ -1,5 +1,5 @@
 import ListItem from "./ListItems";
-import CloseBtn from "../../components/CloseBtn";
+import CloseBtn from "../../../components/CloseBtn";
 
 /**
  * @param {object} order - order object
@@ -30,7 +30,7 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
       </div>
       <div className="d-flex justify-content-end">
 
-        <button onDoubleClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
+        <button onClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
         <button onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
         </div>
     </div>

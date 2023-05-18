@@ -1,13 +1,12 @@
 import Header from "../../components/Header";
 import {AiOutlineCheckCircle, AiOutlineShoppingCart, AiOutlinePlusCircle} from "react-icons/ai";
 import DownloadBtn from "../../components/Downloadbtn";
-import OrderCardV2 from "./OrdersCardV2";
-import CompleteOrderList from "./CompleteOrderList";
+import OrderCardV2 from "./PendingOrders/OrdersCardV2";
+import CompleteOrderList from "./CompletedOrders/CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "./customHooks/useData";
-import Loader from "../../components/Loader";
 import { dateToISO, getCurrentTime } from "../../utils";
 function OrdersV2(props) {
     const [orders, setOrders] = useData({
@@ -15,6 +14,7 @@ function OrdersV2(props) {
         index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
+
     const [customer, setCustomer] = useState(null);
     const [order, setOrder] = useState(null);
     const [orderID, setOrderID] = useState(-1);
@@ -108,7 +108,7 @@ function OrdersV2(props) {
                         </h2>
                         <aside className="text-muted">Total: ${total}</aside>
                     </div>
-                    <div className="section-content w-100">
+                    <div className="section-content w-100 position-relative">
                         <CompleteOrderList orders={completed}/>
                     </div>
                     
