@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import indexedDBController from './indexedDB/indexedDB';
+import './style.css';
 
 const DB_NAME = 'ORDER_MANAGEMENT';
 let State = 1;

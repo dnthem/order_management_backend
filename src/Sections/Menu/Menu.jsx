@@ -34,7 +34,6 @@ function Menu(props) {
       Hidden: false,
     };
     const id = await indexedDBController.addData(db, STORE, data);
-    console.log("id:" + id);
     data.id = id;
     setMenu([data, ...menu]);
     //
@@ -65,7 +64,7 @@ function Menu(props) {
         );
         setMenu(retrievedMenu);
       } catch (error) {
-        console.error(error.message);
+        alert(error.message);
       }
       setLoading(false);
     };

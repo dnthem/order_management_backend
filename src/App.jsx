@@ -4,6 +4,7 @@ import History from "./Sections/History/History";
 import Menu from "./Sections/Menu/Menu"
 import Orders from "./Sections/Orders/Orders";
 import Settings from "./Sections/Settings/Settings";
+import OrdersV2 from "./Sections/Orders.V2/OrdersV2";
 
 const ctx = createContext();
 
@@ -20,7 +21,7 @@ function App(props) {
       case 0:
         res = <Menu/>; break;
       case 1:
-        res= <Orders/>; break;
+        res= <OrdersV2/>; break;
       case 2:
         res = <Dashboard/>; break;
       case 3:
@@ -36,6 +37,7 @@ function App(props) {
 
       <main className="container-fluid px-4">
         {RenderOnState()}
+        {/* <OrdersV2/> */}
       </main>
     </ctx.Provider>
   )

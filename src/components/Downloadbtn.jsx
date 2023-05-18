@@ -9,7 +9,7 @@ function DownloadBtn(props) {
     const handleSaveToLocal = () => {
         let content = undefined;
         if (props.contentFormat === null)
-            content = props.data;
+            content = JSON.stringify(props.data);
         else
             content= props.contentFormat(props.data)
         const a = document.createElement("a");

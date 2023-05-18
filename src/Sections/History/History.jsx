@@ -46,7 +46,7 @@ function History(props) {
                         <h2 className="h2">Completed Orders </h2>
             </div>
             <div className="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
+                <div className="d-flex align-items-center">
                         <label className="mx-2">Select Date: </label>
                         <input onChange={handleOnDateChange} type="date" style={{outline: 'none', border: '#c7c7c7 solid 1px', backgroundColor: 'transparent', borderRadius: '5px 5px 5px 5px ', width: '10em', height: '2em'}} />
                 </div>
