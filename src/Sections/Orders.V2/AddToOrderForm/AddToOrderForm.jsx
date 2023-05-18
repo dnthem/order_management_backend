@@ -1,48 +1,41 @@
 import Backdrop from "../../../components/Backdrop";
-import { dateToISO, orderFormater } from "../../../utils";
+import { convertISOToDateFormat, dateToISO, orderFormater } from "../../../utils";
 import { useData } from "../customHooks/useData";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
 import { useState } from "react";
 
 function AddToOrderForm(props) {
-    const [menu, _] = useData({
-        store: "Menu",
-        index: "id",
-        keyPath: '',
-    });
-
-    
-    const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
-    const [order, setOrder] = useState(props.order?? []);
+    const [cart, setCart] = useState(props.cart?? []);
     const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
     const [paymentType, setPaymentType] = useState('Cash');
     const [notes, setNotes] = useState('');
     const [orderDate, setOrderDate] = useState(props.orderDate??dateToISO());
     const [deliverDate, setDeliverDate] = useState(props.deliverDate??dateToISO());
     const customer = props.customer;
-
+    const menu = props.menu;
+    const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
     /**
      * Update order
      * @param {number} id  id of the item
      * @returns {void}
      */
     const updateOrder = (id) => {
-        const updatedOrder = [...order];
-        const index = order.findIndex(item => item.id === id);
+        const updatedCart = [...cart];
+        const index = cart.findIndex(item => item.id === id);
         if(index === -1) {
             const item = menu.find(item => item.id === id);
-            const newOrder = {
+            const newCart = {
                 id: item.id,
                 name: item.Title,
                 price: item.Price,
                 quantity: 1,
             };
-            updatedOrder.push(newOrder);
+            updatedCart.push(newCart);
         } else {
-            updatedOrder[index].quantity += 1;
+            updatedCart[index].quantity += 1;
         }
-        setOrder(updatedOrder);
+        setCart(updatedCart);
     }
 
     /**
@@ -52,11 +45,11 @@ function AddToOrderForm(props) {
      * @returns {void}
     */
     const updateQuantity = (id, quantity) => {
-        const index = order.findIndex(item => item.id === id);
+        const index = cart.findIndex(item => item.id === id);
         if(index !== -1) {
-            const updatedOrder = [...order];
-            updatedOrder[index].quantity = parseInt(quantity);
-            setOrder(updatedOrder);
+            const updatedCart = [...cart];
+            updatedCart[index].quantity = parseInt(quantity);
+            setCart(updatedCart);
         }
     }
 
@@ -66,26 +59,26 @@ function AddToOrderForm(props) {
      * @returns {void}
      * */
     const removeOrder = (id) => {
-        const index = order.findIndex(item => item.id === id);
+        const index = cart.findIndex(item => item.id === id);
         if(index !== -1) {
-            const updatedOrder = [...order];
-            updatedOrder.splice(index, 1);
-            setOrder(updatedOrder);
+            const updatedCart = [...cart];
+            updatedCart.splice(index, 1);
+            setCart(updatedCart);
         }
 
     }
 
     const handleAddToOrder = () => {
-        if (order.length === 0) return alert('Please add item to order');
+        if (cart.length === 0) return alert('Please add item to order');
 
         const newOrder = orderFormater({
             customer, 
-            order, 
+            cart, 
             paymentType, 
             notes, 
             orderID,
-            orderDate,
-            deliverDate
+            orderDate: convertISOToDateFormat(orderDate),
+            deliverDate: convertISOToDateFormat(deliverDate),
         });
 
         if(orderID !== -1) {
@@ -114,7 +107,7 @@ function AddToOrderForm(props) {
                     height: "80dvh",
                     
                 }}>
-                    <Customer customer={customer} order={order} 
+                    <Customer customer={customer} cart={cart} 
                         removeOrder={removeOrder} 
                         updateQuantity={updateQuantity}
                         paymentType={paymentType}

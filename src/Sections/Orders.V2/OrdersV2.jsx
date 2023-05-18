@@ -7,16 +7,29 @@ import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "./customHooks/useData";
-import { dateToISO, getCurrentTime } from "../../utils";
-function OrdersV2(props) {
+import { dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
+function OrdersV2() {
     const [orders, setOrders] = useData({
         store: 'OrdersV2',
         index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
+    console.log(orders);
+    const [customers, setCustomers] = useData({
+        store: "Customers",
+        index: "customerID",
+        keyPath: null,
+    })
+
+    const [menu, setMenu] = useData({
+        store: "Menu",
+        index: "id",
+        keyPath: null,
+    })
+
     const [customer, setCustomer] = useState(null);
-    const [order, setOrder] = useState(null);
+    const [cart, setCart] = useState(null);
     const [orderID, setOrderID] = useState(-1);
     const [deliverDate, setDeliverDate] = useState(dateToISO());
     const [orderDate, setOrderDate] = useState(dateToISO());
@@ -24,19 +37,31 @@ function OrdersV2(props) {
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
-    
     const total = completed.reduce((acc, order) => acc + order.total, 0);
 
     // order CRUD
     const onDelete = (id) => {
         setOrders({type: 'delete', indexField: 'orderID', keyPath: id, newVal: null});
     }
+
+    /**
+     * Complete order, update customer order count, total spent, and update menu
+     */
     const onComplete = (id, order) => {
         setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
+
+        // update customer order count
+        setCustomers({type: 'update', indexField: 'customerID', keyPath: order.customerID, newVal: {...customer, orderCount: customer.orderCount + 1, totalSpent: customer.totalSpent + order.total}});
+        
+        // update menu
+        order.cart.forEach(item => {
+            setMenu({type: 'update', indexField: 'id', keyPath: item.id, newVal: {...item, Count: item.Count + item.quantity}});
+        })
     }
+
     const onEdit = (order) => {
         setShowAddToOrderForm(true);
-        setOrder(order.order);
+        setCart(order.cart);
         setCustomer(order.customer);
         setOrderID(order.orderID);
         setDeliverDate(order.deliverDate);
@@ -55,7 +80,7 @@ function OrdersV2(props) {
         setShowUserInfoForm(false);
         setShowAddToOrderForm(true);
         setOrderID(-1);
-        setOrder(null);
+        setCart(null);
         setCustomer(customer);
     }
 
@@ -64,15 +89,21 @@ function OrdersV2(props) {
             
             {
                 showUserInfoForm && 
-                <UserInfoForm showForm={setShowUserInfoForm} onAddCustomerSubmit={onAddCustomerSubmit}/>
+                <UserInfoForm 
+                showForm={setShowUserInfoForm} 
+                onAddCustomerSubmit={onAddCustomerSubmit}
+                customers={customers}
+                setCustomers={setCustomers}
+                />
             }
 
             {
                 showAddToOrderForm && 
                 <AddToOrderForm 
+                    menu={menu}
                     showForm={setShowAddToOrderForm} 
                     customer={customer} 
-                    order={order}
+                    cart={cart}
                     orderID={orderID}
                     deliverDate={deliverDate}
                     orderDate={orderDate}
@@ -94,7 +125,7 @@ function OrdersV2(props) {
                     <div className="d-flex justify-content-between">
                         <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
                         <button className="mt-4 btn" title="Click here when complete today order">Complete <AiOutlineCheckCircle/></button>
-                        <DownloadBtn data={null} fileName='Order_Date_' contentFormat={null}/>
+                        <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     
                 </div>

@@ -22,3 +22,9 @@ export const getCurrentTime = () => {
     const today = new Date();
     return today.getHours() + ":" + today.getMinutes();
 }
+
+export const convertISOToDateFormat = (date) => {
+    const dateAsNumber = Date.parse(date);
+    const d = new Date(dateAsNumber + 7 * 60 * 60 * 1000);
+    return d.toLocaleDateString('en-US');
+}

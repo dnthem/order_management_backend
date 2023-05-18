@@ -29,11 +29,7 @@ function exactMatch(customers, query) {
 }
 
 function UserInfoForm(props) {
-    const [customers, setCustomers] = useData({
-      store: "Customers",
-      index: "customerID",
-      keyPath: null,
-    })
+    const [customers, setCustomers] = [props.customers, props.setCustomers]
     const [customerName, setCustomerName] = useState("");
     const [phone, setPhone] = useState("");
     const debouncedQuery = useDebounce(customerName);
@@ -57,6 +53,7 @@ function UserInfoForm(props) {
         customerName,
         phone: phoneFormat(phone),
         orderCount: 0,
+        totalSpent: 0,
       };
       // new customer
       if (customerID === -1) {

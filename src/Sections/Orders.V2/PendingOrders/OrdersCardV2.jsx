@@ -26,7 +26,7 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
           <h6 className="card-subtitle mb-2 text-muted">Deliver Date: {`${order.deliverDate}`}</h6>
           <h6 className="card-subtitle mb-2 text-muted">{`${order.notes}`}</h6>
         </div>
-          <ListItem list={order.order} /> 
+          <ListItem list={order.cart} /> 
       </div>
       <div className="d-flex justify-content-end">
 

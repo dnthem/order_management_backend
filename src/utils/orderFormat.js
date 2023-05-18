@@ -2,7 +2,7 @@ import { dateFormat } from "./dateFormat";
 
 export function orderFormater({
     customer,
-    order, 
+    cart, 
     paymentType = "", 
     notes = "", 
     orderID = -1,
@@ -10,17 +10,16 @@ export function orderFormater({
     deliverDate
 }) {
     
-    const total = order.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const result = {
         orderDate: dateFormat(orderDate),
         deliverDate: dateFormat(deliverDate),
         customer: {
-            customerID: customer.customerId,
+            customerID: customer.customerID,
             customerName: customer.customerName,
             phone: customer.phone,
         },
-        order,
-        date: dateFormat(),
+        cart,
         total,
         paymentType,
         notes,

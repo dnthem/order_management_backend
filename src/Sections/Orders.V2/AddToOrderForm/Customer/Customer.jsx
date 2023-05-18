@@ -5,11 +5,11 @@ function Customer(props) {
     const customer = props.customer;
     const customerName = customer.customerName;
     const phone = customer.phone;
-    const order = props.order??[]; 
+    const cart = props.cart??[]; 
     
 
-    const numberOfItem = order.reduce((total, item) => total + item.quantity, 0);
-    const total = order.reduce((total, item) => total + item.quantity * item.price, 0);
+    const numberOfItem = cart.reduce((total, item) => total + item.quantity, 0);
+    const total = cart.reduce((total, item) => total + item.quantity * item.price, 0);
     return ( 
         <div className="col-4 border-end position-relative overflow-auto h-100">
             <div className="section-title position-sticky top-0 bg-white" style={{zIndex: '9999'}}>
@@ -63,7 +63,7 @@ function Customer(props) {
 
             
             <div className="cart mb-3 py-2 ">
-                <CustomerOrderList order={order} 
+                <CustomerOrderList cart={cart} 
                     removeOrder={props.removeOrder}
                     updateQuantity={props.updateQuantity}
                 />
