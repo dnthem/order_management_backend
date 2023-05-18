@@ -73,7 +73,8 @@ function UserInfoForm(props) {
       props.onAddCustomerSubmit(newCustomer);
     }
 
-    function handleInputPhone(value) {
+    function handleInputPhone(e) {
+        const value = e.target.value.replace(/\D/g, "")
         if (value.length <= 10) {
             setPhone(value);
         }
@@ -139,22 +140,30 @@ function UserInfoForm(props) {
                 )}
               </label>
               <input
-                required
-                pattern='[A-Za-z ]+'
                 type="text"
                 className="form-control"
                 id="customerName"
                 placeholder="Customer Name"
                 ref={nameRef}
                 value={customerName}
-                onChange={e => setCustomerName(e.target.value.replace(/[^A-Za-z ]/g, ''))}
+                onChange={(e) => setCustomerName(e.target.value.replace(/[^A-Za-z ]/g, ''))}
                 autoComplete='off'
               />
+              <style>
+                {`
+                  .list-group-item:hover {
+                    cursor: pointer;
+                    background-color: #e9ecef;
+                    color: black;
+                  }
+                `}
+
+              </style>
               <ul className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <li
-                      className="list-group-item bg-white text-black"
+                    <li 
+                      className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
@@ -179,9 +188,9 @@ function UserInfoForm(props) {
                 type="text"
                 className="form-control"
                 id="phone"
-                placeholder="123-456-7890"
+                placeholder="714-456-7890"
                 value={phone}
-                onChange={e => handleInputPhone(e.target.value.replace(/[^0-9]/g, ''))}
+                onChange={handleInputPhone}
               />
             </div>
 
