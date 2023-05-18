@@ -5,6 +5,7 @@ import ItemCardV2 from "../../components/ItemCard_v2";
 import indexedDBController from "../../indexedDB/indexedDB";
 import {GrFormAdd} from 'react-icons/gr';
 import {MdMenuBook} from 'react-icons/md';
+import { dateFormat } from "../../utils";
 const STORE = 'Menu';
 
 function Menu(props) {
@@ -32,6 +33,7 @@ function Menu(props) {
       Count: 0,
       Photo: undefined,
       Hidden: false,
+      DateAdded: dateFormat(),
     };
     const id = await indexedDBController.addData(db, STORE, data);
     data.id = id;

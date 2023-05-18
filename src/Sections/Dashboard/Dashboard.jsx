@@ -7,45 +7,127 @@ import LoadBarChart from "./BarChart";
 import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate, getTotalItemSold } from "./DataConverter";
 import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs';
 import {RiDashboard3Line} from 'react-icons/ri';
+import { useData } from "../../customHooks/useData";
+import {BiAnalyse} from 'react-icons/bi';
+import Loader from "../../components/Loader";
+import { dateFormat } from "../../utils";
 
 function Dashboard(props) {
-    const {db} = GetDataBaseContext();
+    const [menu, ] = useData({
+        store:'Menu',
+        index:'id',
+        keyPath: '',
+    })
+
+    const [orders, ] = useData({
+        store:'OrdersV2',
+        index:'orderID',
+        keyPath: '',
+    })
+
+    const [customers, ] = useData({
+        store:'Customers',
+        index:'customerID',
+        keyPath: '',
+    })
+
+    const [income,] = useData({
+        store:'Income',
+        index:'Date',
+        keyPath: '',
+    })
+
+    const [loader, setLoader] = useState(false);
+    const [customerSortBy, setCustomerSortBy] = useState(0);
+    const [sortedCustomers, setSortedCustomers] = useState([]);
     const incomeChart = useRef();
     const mostOrderedChart = useRef();
-    const [incomeUpToDate, setIncomeUpToDate] = useState(0);
-    const [totalItemsSold, setTotalItemsSold] = useState(0);
+    const incomeUptoDate = getIncomeUpToDate(income);
+    const totalItemsSold =  getTotalItemSold(menu);
+    const totalCustomers = customers.length;
+    const revenueToday = orders.filter(order => order.status && order.deliverDate === dateFormat()).reduce((acc, order) => acc + order.total, 0); 
+
+    const selectOnChange = (e) => {
+        const value = Number(e.target.value);
+        setCustomerSortBy(value);
+        let sortedCustomers = [...customers];
+        if (value === 1) {
+            sortedCustomers.sort((a, b) => b.totalSpent - a.totalSpent);
+        } else if (value === 2) {
+            sortedCustomers.sort((a, b) => b.orderCount - a.orderCount);
+        }
+        setSortedCustomers(sortedCustomers);
+    }
+
     useEffect(() => {
-        const loadChart = async () => {
-            const dataIncome = await dataConverterIncome(db);
-            AreaChart(incomeChart.current, dataIncome);
-            const dataMenu = await dataConverterMenu(db);
+        const loadChart = () => {
+
+            setLoader(true);
+           
+            const dataIncomeChart =  dataConverterIncome(income);
+            AreaChart(incomeChart.current, dataIncomeChart);
+
+            const dataMenu = dataConverterMenu(menu);
             LoadBarChart(mostOrderedChart.current, dataMenu);
 
-            const income = await getIncomeUpToDate(db);
-            setIncomeUpToDate(income);
-
-            const total = await getTotalItemSold(db);
-            setTotalItemsSold(total);
+            setLoader(false);
+            
         }
         loadChart();
-    },[])
+        setSortedCustomers(customers);
+    },[menu, customers, income])
 
 
     const handleIncomeOnChange = async (e) => {
         const dataIncome = await dataConverterIncome(db, Number(e.target.value));
         AreaChart(incomeChart.current, dataIncome); 
     }
+
+    
     return (
         <>
+        {loader && <Loader/>}
         <div className="row">
             <div className="col-8">
                 <Header icon={<RiDashboard3Line/>} title='Dashboard'/>
             </div>
+            <div className="col-4">
+                
+                {/* <div className="d-flex justify-content-evenly align-items-center">
+                <style>
+                    {
+                        `
+                        .spinning {
+                            animation: spin-animation 2s infinite;
+                            animation-timing-function: linear; 
+                            display: inline-block;
+                          }
+                          
+                          @keyframes spin-animation {
+                            0% {
+                              transform: rotate(0deg);
+                            }
+                            100% {
+                              transform: rotate(359deg);
+                            }
+                          }
+                          `
+                    }
+                </style>
+                    <button className="btn mt-4">Run Analysis <span className="spinning"><BiAnalyse/></span></button>
+                </div> */}
+            </div>
                 
         </div>
         <div className="row">
-            <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate)} icon={<BsCurrencyDollar size={30}/>}/>
+            <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUptoDate)} icon={<BsCurrencyDollar size={30}/>}/>
+
+            <CardInfoDB title='Revenue Today' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
+
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
+
+            
         </div>
         <div className="row">
             <div className="col-xl-6">
@@ -85,6 +167,43 @@ function Dashboard(props) {
                     <div className="card-body"><canvas ref={mostOrderedChart} width="100%" height="40"></canvas></div>
                 </div>
             </div>
+        </div>
+        
+        <div className="row">
+        <h3>Customers</h3>
+        <div className="col-12">
+            sort by:
+            
+                <select className="btn btn-outline-primary" value={customerSortBy} onChange={selectOnChange}>
+                    <option value="0">Customer Name</option>
+                    <option value="1">Total Orders</option>
+                    <option value="2">Total Spent</option>
+                    
+                </select>
+        </div>
+            <table className="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Customer Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Total Orders</th>
+                        <th scope="col">Total Spent</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        sortedCustomers.map(customer => (
+                            <tr key={customer.id}>
+                                <td>{customer.customerName}</td>
+                                <td>{customer.phone}</td>
+                                <td>{customer.orderCount}</td>
+                                <td>{Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(customer.totalSpent)}</td>
+                            </tr>
+                        ))
+                    }
+                </tbody>
+            </table>
+
         </div>
         </> 
         

@@ -1,13 +1,14 @@
 import Header from "../../components/Header";
-import {AiOutlineCheckCircle, AiOutlineShoppingCart, AiOutlinePlusCircle} from "react-icons/ai";
+import {AiOutlineShoppingCart, AiOutlinePlusCircle, AiOutlineSave} from "react-icons/ai";
 import DownloadBtn from "../../components/Downloadbtn";
 import OrderCardV2 from "./PendingOrders/OrdersCardV2";
 import CompleteOrderList from "./CompletedOrders/CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
-import { useData } from "./customHooks/useData";
+import { useData } from "../../customHooks/useData";
 import { dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
+
 function OrdersV2() {
     const [orders, setOrders] = useData({
         store: 'OrdersV2',
@@ -25,6 +26,12 @@ function OrdersV2() {
     const [menu, setMenu] = useData({
         store: "Menu",
         index: "id",
+        keyPath: null,
+    })
+
+    const [income, setIncome] = useData({
+        store: "Income",
+        index: "Date",
         keyPath: null,
     })
 
@@ -86,6 +93,18 @@ function OrdersV2() {
         setCustomer(customer);
     }
 
+    const onSave = () => {
+        const incomeData = {
+            Date: new Date().toLocaleDateString("en-us"),
+            Total: total
+        }
+        setIncome({type: 'add', indexField: 'Date', newVal: incomeData});
+    }
+
+    setTimeout(() => {
+        onSave();
+    }, 15 * 60 * 1000);
+
     return ( 
         <>
             
@@ -126,6 +145,9 @@ function OrdersV2() {
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-evenly">
                         <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
+                        <button className="mt-4 btn" title="Save" onClick={onSave}>
+                            Save <AiOutlineSave/>
+                        </button>
                         <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     

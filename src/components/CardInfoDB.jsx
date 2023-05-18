@@ -1,6 +1,6 @@
 function CardInfoDB(props) {
     return ( 
-        <div className="col-xl-3 col-md-6 mb-4">
+        <div className="col-xl-3 col-md-6 mb-4 bg-" >
             <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body">
                     <div className="row no-gutters align-items-center">

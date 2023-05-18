@@ -45,6 +45,13 @@ async function registerIndexedDB () {
   }
 }
 
+
+function closeDB (db) {
+  window.addEventListener('beforeunload', () => {
+    db.close();
+  })
+}
+
 async function init () {
   const DB = await registerIndexedDB();
   State = localStorage.getItem('State')? JSON.parse(localStorage.getItem('State')): 1;
@@ -55,6 +62,7 @@ async function init () {
   document.querySelector('#Dashboard').addEventListener('click', () => {localStorage.setItem('State', 2) ;Render(DB, 2)})
   document.querySelector('#History').addEventListener('click', () => {localStorage.setItem('State', 3) ;Render(DB, 3)})
   document.querySelector('#Setting').addEventListener('click', () => {localStorage.setItem('State', 4) ;Render(DB, 4)})
+  closeDB (DB);
 }
 
 window.addEventListener('DOMContentLoaded', init);
