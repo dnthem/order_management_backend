@@ -1,5 +1,5 @@
 import Backdrop from "../../../components/Backdrop";
-import { convertISOToDateFormat, orderFormater } from "../../../utils";
+import { convertISOToUSA, orderFormater } from "../../../utils";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
 import { useState } from "react";
@@ -76,8 +76,8 @@ function AddToOrderForm(props) {
             paymentType, 
             notes, 
             orderID,
-            orderDate: convertISOToDateFormat(orderDate),
-            deliverDate: convertISOToDateFormat(deliverDate),
+            orderDate: convertISOToUSA(orderDate),
+            deliverDate: convertISOToUSA(deliverDate),
         });
 
         if(orderID !== -1) {
