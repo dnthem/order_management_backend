@@ -33,11 +33,10 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      // sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      // sampleData['Customers'].forEach(e => customers.add(e));
-      // sampleData['Orders'].forEach(e => order.add(e))
-      // sampleData['Income'].forEach(e => income.add(e))
+      sampleData['Customers'].forEach(e => customers.add(e));
+      sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
 
