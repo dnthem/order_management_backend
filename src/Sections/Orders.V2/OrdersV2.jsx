@@ -32,7 +32,7 @@ function OrdersV2() {
     const [income, setIncome] = useData({
         store: "Income",
         index: "Date",
-        keyPath: null,
+        keyPath: new Date().toLocaleDateString("en-us"),
     })
 
     const [customer, setCustomer] = useState(null);
@@ -66,6 +66,14 @@ function OrdersV2() {
             const currentItem = menu.find(menuItem => menuItem.id === item.id);
             setMenu({type: 'update', indexField: 'id', keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
         })
+
+        // update income
+        const incomeData = {
+            Date: new Date().toLocaleDateString("en-us"),
+            Total: income.Total + order.total,
+        }
+        setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
+
     }
 
     const onEdit = (order) => {
@@ -100,11 +108,6 @@ function OrdersV2() {
         }
         setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
     }
-
-    setTimeout(() => {
-        onSave();
-    }, 15 * 60 * 1000);
-
     return ( 
         <>
             
