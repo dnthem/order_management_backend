@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react"
 import Dashboard from "./Sections/Dashboard/Dashboard";
 import History from "./Sections/History/History";
 import Menu from "./Sections/Menu/Menu"
-import Orders from "./Sections/Orders/Orders";
 import Settings from "./Sections/Settings/Settings";
 import OrdersV2 from "./Sections/Orders.V2/OrdersV2";
 
@@ -37,7 +36,6 @@ function App(props) {
 
       <main className="container-fluid px-4">
         {RenderOnState()}
-        {/* <OrdersV2/> */}
       </main>
     </ctx.Provider>
   )
