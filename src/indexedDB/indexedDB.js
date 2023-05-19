@@ -174,7 +174,6 @@ indexedDBController.updateARecord = function (db, store, newVal) {
         const request = objStore.put(newVal);
         request.onsuccess = function (event) {
             console.log('Successfully update the ' + store)
-            console.log(event.target )
             res(event.target.result)
         }
         request.onerror = (event) => {
