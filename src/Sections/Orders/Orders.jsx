@@ -4,7 +4,7 @@ import {AiOutlineCheckCircle, AiOutlineShoppingCart} from "react-icons/ai";
 
 import {FiSave} from "react-icons/fi";
 import { useEffect, useState } from "react";
-import MenuTable from "./MenuTable";
+import MenuTable from "../../components/MenuTable";
 import OrderTable from "./OrderTable";
 import indexedDBController from "../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../App";
