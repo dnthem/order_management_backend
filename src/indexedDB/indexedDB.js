@@ -19,8 +19,10 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
       const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
       const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
-
+      const itemCount = db.createObjectStore("ItemCount", { keyPath: "Date" });
       income.createIndex("Date", "Date", { unique: true });
+
+      itemCount.createIndex("Date", "Date", { unique: true });
 
       orderV2.createIndex("orderID", "orderID", { unique: true });
       orderV2.createIndex("customerID", "customer.customerID", { unique: false });
@@ -31,11 +33,11 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+      // sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      sampleData['Customers'].forEach(e => customers.add(e));
+      // sampleData['Customers'].forEach(e => customers.add(e));
       // sampleData['Orders'].forEach(e => order.add(e))
-      sampleData['Income'].forEach(e => income.add(e))
+      // sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
 
