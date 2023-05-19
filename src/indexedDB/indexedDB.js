@@ -19,8 +19,10 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
       const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
       const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
-
+      const itemCount = db.createObjectStore("ItemCount", { keyPath: "Date" });
       income.createIndex("Date", "Date", { unique: true });
+
+      itemCount.createIndex("Date", "Date", { unique: true });
 
       orderV2.createIndex("orderID", "orderID", { unique: true });
       orderV2.createIndex("customerID", "customer.customerID", { unique: false });
