@@ -4,7 +4,7 @@ import CloseBtn from '../../components/CloseBtn';
 import { useData } from '../../customHooks/useData';
 import {AiOutlineUser, AiOutlinePhone, AiOutlineIdcard} from 'react-icons/ai';
 import { useDebounce } from "./customHooks/useDebouce";
-import { phoneFormat } from '../../utils';
+import { dateFormat, phoneFormat } from '../../utils';
 
 /**
  * Function to filter the customers array based on the query
@@ -54,6 +54,7 @@ function UserInfoForm(props) {
         phone: phoneFormat(phone),
         orderCount: 0,
         totalSpent: 0,
+        dateAdded: dateFormat(),
       };
       // new customer
       if (customerID === -1) {
