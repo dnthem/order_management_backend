@@ -98,7 +98,7 @@ function OrdersV2() {
             Date: new Date().toLocaleDateString("en-us"),
             Total: total
         }
-        setIncome({type: 'add', indexField: 'Date', newVal: incomeData});
+        setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
     }
 
     setTimeout(() => {
