@@ -2,6 +2,12 @@ import ListItem from "../ListItem";
 import DownloadBtn from "../../../components/Downloadbtn";
 
 function DownloadSection(props) {
+    const allData = {
+        menu: props.menu,
+        orders: props.orders,
+        income: props.income,
+        customers: props.customers,
+    }
     return ( 
         <div className="list-group mb-5 shadow my-2 py-2">
                 <h2 className="ms-4">Download </h2>
@@ -10,7 +16,7 @@ function DownloadSection(props) {
                     title='Save all data' 
                     detail='Take a snapshot of all your data into a single file so you can save it wherever you want'
                 >
-                    <DownloadBtn data={JSON.stringify(props.allData)} contentFormat={null} fileName='All_Data_'/>
+                    <DownloadBtn data={JSON.stringify(allData)} contentFormat={null} fileName='All_Data_'/>
                 </ListItem>
                 <ListItem
                     title='Save all your Income information'
@@ -31,6 +37,13 @@ function DownloadSection(props) {
                     detail="Take a snapshot of all your orders into a single file"
                 >
                     <DownloadBtn data={JSON.stringify(props.orders)} contentFormat={null} fileName='Orders_'/>
+                </ListItem>
+
+                <ListItem
+                    title='Save all your Customer information'
+                    detail="Take a snapshot of all your customers into a single file"
+                >
+                    <DownloadBtn data={JSON.stringify(props.customers)} contentFormat={null} fileName='Customers_'/>
                 </ListItem>
                 </div>
             </div>

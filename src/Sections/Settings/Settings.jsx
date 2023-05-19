@@ -6,26 +6,32 @@ import indexedDBController from "../../indexedDB/indexedDB";
 import DownloadSection from "./Download/DownloadSection";
 import UploadSection from "./Upload/UploadSection";
 import DeleteSection from "./Delete/DeleteSection";
+import { useData } from "../../customHooks/useData";
 function Settings(props) {
-    const {db} = GetDataBaseContext();
-    const [allData, setAllData] = useState(null);
-    const [menu, setMenu] = useState(null);
-    const [income, setIncome] = useState(null);
-    const [orders, setOrders] = useState(null);
+    const [menu, ] = useData({
+        store:'Menu',
+        index:'id',
+        keyPath: '',
+    })
 
-    useEffect (() => {
-        const getAllData  = async () => {
-            // Can't not convert Photo
-            const menu = (await indexedDBController.getAllDataFromStore(db, 'Menu')).map(e =>{ delete e.Photo; return e});
-            const income = await indexedDBController.getAllDataFromStore(db, 'Income');
-            const orders = await indexedDBController.getAllDataFromStore(db, 'Orders');
-            setAllData({Menu:menu, Income: income, Orders: orders});
-            setMenu(menu);
-            setIncome(income);
-            setOrders(orders);
-        }
-        getAllData();
-    }, [])
+    const [orders, ] = useData({
+        store:'OrdersV2',
+        index:'orderID',
+        keyPath: '',
+    })
+
+    const [customers, ] = useData({
+        store:'Customers',
+        index:'customerID',
+        keyPath: '',
+    })
+
+    const [income,] = useData({
+        store:'Income',
+        index:'Date',
+        keyPath: '',
+    })
+
     return ( 
         <>
         <div className="row">
@@ -35,7 +41,7 @@ function Settings(props) {
             </aside>
         </div>
         <div className="row">
-            <DownloadSection allData={allData} orders={orders} menu={menu} income={income}/>
+            <DownloadSection orders={orders} menu={menu} income={income} customers={customers}/>
 
             <UploadSection/>
 

@@ -2,8 +2,8 @@ import { GetDataBaseContext } from "../../../App";
 import indexedDBController from "../../../indexedDB/indexedDB";
 import ListItem from "../ListItem";
 
-const MENU = 'Menu', INCOME = 'Income', ORDERS = 'Orders', ALL = 'All';
-
+const DB_LIST = ['Menu', 'Income', 'OrdersV2', 'Customers'];
+const DB_NAME = 'ORDER_MANAGEMENT';
 function DeleteSection(props) {
     const {db} = GetDataBaseContext();
     
@@ -13,9 +13,10 @@ function DeleteSection(props) {
         const answer = prompt(`Please, enter the following number to confirm: ${randomNumber}`);
         if (Number(answer) === randomNumber) {
             try {
-                indexedDBController.deleteAllRecord(db, MENU);
-                indexedDBController.deleteAllRecord(db, INCOME);
-                indexedDBController.deleteAllRecord(db, ORDERS);
+                DB_LIST.forEach(async (db_name) => {
+                    await indexedDBController.deleteAllRecord(db, db_name);
+                });
+                window.indexedDB.deleteDatabase(DB_NAME);
                 alert('All data has been deleted!');
             } catch (error) {
                 alert('Error occured: ' + error);

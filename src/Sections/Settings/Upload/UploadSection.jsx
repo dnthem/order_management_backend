@@ -3,7 +3,7 @@ import InputFile from "../InputFile";
 import indexedDBController from "../../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../../App";
 
-const MENU = 'Menu', INCOME = 'Income', ORDERS = 'Orders', ALL = 'All Data';
+const MENU = 'Menu', INCOME = 'Income', ORDERS = 'OrdersV2', ALL = 'All Data';
 
 function UploadSection(props) {
     const {db} = GetDataBaseContext();
@@ -38,6 +38,7 @@ function UploadSection(props) {
                 saveData(db, INCOME, data[INCOME]);
                 saveData(db, MENU, data[MENU]);
                 saveData(db, ORDERS, data[ORDERS]);
+                saveData(db, 'Customers', data['Customers'])
             }
             else 
                 saveData(db, store, data);
@@ -77,7 +78,13 @@ function UploadSection(props) {
                     title='Orders'
                     detail="Load Orders from a file"
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, 'Orders')} />
+                    <InputFile onChange={(e) => handleOnChange(e, 'OrdersV2')} />
+                </ListItem>
+                <ListItem
+                    title='Customers'
+                    detail="Load Customers from a file"
+                >
+                    <InputFile onChange={(e) => handleOnChange(e, 'Customers')} />
                 </ListItem>
             </div>
         </div>
