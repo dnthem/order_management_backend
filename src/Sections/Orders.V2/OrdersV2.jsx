@@ -7,7 +7,7 @@ import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "../../customHooks/useData";
-import { dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
+import { dateFormat, dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
 
 function OrdersV2() {
     const [orders, setOrders] = useData({
@@ -38,8 +38,8 @@ function OrdersV2() {
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
     const [orderID, setOrderID] = useState(-1);
-    const [deliverDate, setDeliverDate] = useState(dateToISO());
-    const [orderDate, setOrderDate] = useState(dateToISO());
+    const [deliverDate, setDeliverDate] = useState(dateFormat());
+    const [orderDate, setOrderDate] = useState(dateFormat());
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);

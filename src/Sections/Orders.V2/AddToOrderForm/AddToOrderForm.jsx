@@ -10,8 +10,8 @@ function AddToOrderForm(props) {
     const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
     const [paymentType, setPaymentType] = useState('Cash');
     const [notes, setNotes] = useState('');
-    const [orderDate, setOrderDate] = useState(props.orderDate??dateToISO());
-    const [deliverDate, setDeliverDate] = useState(props.deliverDate??dateToISO());
+    const [orderDate, setOrderDate] = useState(props.orderDate);
+    const [deliverDate, setDeliverDate] = useState(props.deliverDate);
     const customer = props.customer;
     const menu = props.menu;
     const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
