@@ -6,8 +6,9 @@ import indexedDBController from "../../indexedDB/indexedDB";
 import convertReadable from "../Orders/FormatFile";
 import OrderTable from "../Orders/OrderTable";
 import {FaHistory} from 'react-icons/fa';
+import { downloadOrderFormat } from "../../utils";
 function History(props) {
-    const [order, setOrder] = useState(null);
+    const [orders, setOrders] = useState([]);
     const [date, setDate] = useState('');
     const [total, setTotal] = useState(0);
     const {db} = GetDataBaseContext();
@@ -16,13 +17,13 @@ function History(props) {
         // The conversion below will lose 1 day, thus adding a whole day to it => 8.64e+7 ms = 1 day
         const date = new Date(e.target.valueAsNumber + 8.64e+7).toLocaleDateString('en-us');
         try {
-            const data = await indexedDBController.getARecord(db, 'Orders', date);
-            setOrder(data);
+            const data = await indexedDBController.getListOfRecords(db, 'OrdersV2', 'deliverDate', date);
+            setOrders(data);
             setDate(date);
             if (typeof data === 'undefined')
                 setTotal(0);
             else
-                setTotal(data.Totals.reduce((acc, curr) => acc + curr, 0));
+                setTotal(data.reduce((acc, curr) => acc + curr.total, 0));
         } catch(error) {
             alert('Error: ' + error);
         }
@@ -35,7 +36,7 @@ function History(props) {
             </div>
             <div className="col">
                 <div className="d-flex justify-content-center">
-                    <DownloadBtn data={order} contentFormat={convertReadable} fileName='Order_Date' disabled={typeof order === 'undefined'? true:false}/>
+                    <DownloadBtn data={orders} contentFormat={downloadOrderFormat} fileName='Order_Date' disabled={typeof orders === 'undefined'? true:false}/>
                 </div>
             </div>
             
@@ -53,7 +54,41 @@ function History(props) {
                 <div>Total: ${total}</div>
             </div>
             <div className="d-flex justify-content-center align-items-center">
-                <OrderTable order={order} recentChange={() => {}} setRecentChange={() => {}}/>
+                <table className="table">
+                    <thead>
+                        <tr>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Cart</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    {
+                        orders.map((order, idx) => {
+                            return (
+                                <tr key={idx}>
+                                    <td>{order.customer.customerName}</td>
+                                    <td>{order.customer.phone}</td>
+                                    <td>
+                                        {order.cart.map((item, idx) => {
+                                            return (
+                                                <div key={idx}>
+                                                    {item.name} x {item.quantity}
+                                                </div>
+                                            )})
+                                        }
+                                    </td>
+                                    <td>${order.total}</td>
+                                    <td>{order.status? 'Completed':'Pending'}</td>
+                                </tr>
+                            )
+                        })
+                    }
+                    </tbody>
+                </table>
             </div>
         </div>
         </>
