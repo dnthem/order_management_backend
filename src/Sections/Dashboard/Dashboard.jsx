@@ -1,40 +1,34 @@
 import { useEffect, useRef, useState } from "react";
-import { GetDataBaseContext } from "../../App";
 import CardInfoDB from "../../components/CardInfoDB";
 import Header from "../../components/Header";
 import AreaChart from "./AreaChart";
 import LoadBarChart from "./BarChart";
-import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate, getTotalItemSold } from "./DataConverter";
+import { dataConverterIncome, dataConverterMenu, getIncomeUpToDate, getTotalItemSold, getIncomeTrending } from "./DataConverter";
 import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs';
 import {RiDashboard3Line} from 'react-icons/ri';
 import { useData } from "../../customHooks/useData";
-import {BiAnalyse} from 'react-icons/bi';
 import Loader from "../../components/Loader";
 import { dateFormat } from "../../utils";
-
+import {BiTrendingUp ,BiTrendingDown} from 'react-icons/bi';
 function Dashboard(props) {
     const [menu, ] = useData({
         store:'Menu',
         index:'id',
-        keyPath: '',
     })
 
     const [orders, ] = useData({
         store:'OrdersV2',
         index:'orderID',
-        keyPath: '',
     })
 
     const [customers, ] = useData({
         store:'Customers',
-        index:'customerID',
-        keyPath: '',
+        index:'customerID'
     })
 
-    const [income,] = useData({
+    const [income, ] = useData({
         store:'Income',
-        index:'Date',
-        keyPath: '',
+        index:'Date'
     })
 
     const [loader, setLoader] = useState(false);
@@ -42,22 +36,27 @@ function Dashboard(props) {
     const [sortedCustomers, setSortedCustomers] = useState([]);
     const incomeChart = useRef();
     const mostOrderedChart = useRef();
+
     const incomeUptoDate = getIncomeUpToDate(income);
+    const incomeTrending = getIncomeTrending(income);  
     const totalItemsSold =  getTotalItemSold(menu);
     const totalCustomers = customers.length;
-    const revenueToday = orders.filter(order => order.status && order.deliverDate === dateFormat()).reduce((acc, order) => acc + order.total, 0); 
+    const revenueToday = orders.filter(order => order.status && order.deliverDate === dateFormat()).reduce((acc, order) => acc + order.total??0, 0); 
+      
 
     const selectOnChange = (e) => {
         const value = Number(e.target.value);
         setCustomerSortBy(value);
         let sortedCustomers = [...customers];
+        
         if (value === 1) {
-            sortedCustomers.sort((a, b) => b.totalSpent - a.totalSpent);
-        } else if (value === 2) {
             sortedCustomers.sort((a, b) => b.orderCount - a.orderCount);
+        } else if (value === 2) {
+            sortedCustomers.sort((a, b) => b.totalSpent - a.totalSpent);
         }
         setSortedCustomers(sortedCustomers);
     }
+
 
     useEffect(() => {
         const loadChart = () => {
@@ -66,20 +65,21 @@ function Dashboard(props) {
            
             const dataIncomeChart =  dataConverterIncome(income);
             AreaChart(incomeChart.current, dataIncomeChart);
-
+        
             const dataMenu = dataConverterMenu(menu);
             LoadBarChart(mostOrderedChart.current, dataMenu);
+            
 
             setLoader(false);
             
         }
         loadChart();
-        setSortedCustomers(customers);
-    },[menu, customers, income])
+        setSortedCustomers(customers); 
+    },[menu, customers])
 
 
-    const handleIncomeOnChange = async (e) => {
-        const dataIncome = await dataConverterIncome(db, Number(e.target.value));
+    const handleIncomeOnChange = (e) => {
+        const dataIncome = dataConverterIncome(income, Number(e.target.value));
         AreaChart(incomeChart.current, dataIncome); 
     }
 
@@ -122,12 +122,13 @@ function Dashboard(props) {
         <div className="row">
             <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUptoDate)} icon={<BsCurrencyDollar size={30}/>}/>
 
-            <CardInfoDB title='Revenue Today' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
+            <CardInfoDB title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
 
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
             <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
 
-            
+            <CardInfoDB title='Trending' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
+
         </div>
         <div className="row">
             <div className="col-xl-6">
@@ -175,7 +176,7 @@ function Dashboard(props) {
             sort by:
             
                 <select className="btn btn-outline-primary" value={customerSortBy} onChange={selectOnChange}>
-                    <option value="0">Customer Name</option>
+                    <option value="0">Default</option>
                     <option value="1">Total Orders</option>
                     <option value="2">Total Spent</option>
                     

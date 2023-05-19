@@ -17,6 +17,7 @@ function dataConverterIncome(data, time = 0) {
     res.labels = sortedData.map(e => e.Date).slice(maxLen-NUMBERS_TO_DISPLAY);
     res.data = sortedData.map(e => e.Total).slice(maxLen-NUMBERS_TO_DISPLAY);
     res.max = Math.max(...res.data);
+    console.log(res);
     return res;
 }
 
@@ -29,6 +30,7 @@ function dataConverterIncome(data, time = 0) {
  */
 
 function dataConverterMenu(data, number = 7) {
+
     const NUMBERS_TO_DISPLAY = number===0? 5:number===1? 10: data.length;
     const sortedData = data.sort((a,b) =>  b.Count - a.Count).slice(0, NUMBERS_TO_DISPLAY);
     const res = {};
@@ -41,7 +43,7 @@ function dataConverterMenu(data, number = 7) {
 }
 
 function getIncomeUpToDate(data) {
-
+    console.log(data);
     return data.reduce((acc, curr) => acc + curr.Total, 0);
 }
 
@@ -58,9 +60,19 @@ function getTotalIncomeOfSingleDateOrder(data) {
     return data.reduce((acc, curr) => acc + curr.total, 0);
 }
 
+function getIncomeTrending(data) {
+    const sortedData = data.sort((a,b) =>  new Date(b.Date) - new Date(a.Date));
+    console.log(sortedData);
+    const currentDate = sortedData[0]?.Total??0;
+    const previousDate = sortedData[1]?.Total??1;
+    const res = ((currentDate - previousDate) / currentDate) * 100;
+    return res.toFixed(2);
+}
+
 export {
     dataConverterIncome,
     dataConverterMenu,
     getIncomeUpToDate,
-    getTotalItemSold
+    getTotalItemSold,
+    getIncomeTrending,
 }

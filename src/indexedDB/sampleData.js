@@ -49,62 +49,50 @@ const sampleData = {
         
       },
     ],
-    Orders: [
-      {
-        Date: new Date().toLocaleDateString("en-us"),
-        ItemKeys: [1, 2],
-        ItemNames: ["Banh Trang Tron", "Banh Trang Nuong"],
-        Prices: [12, 12],
-        Quantities: [1, 1],
-        Totals: [12, 12],
-        IsComplete: false,
-        
-      },
-    ],
     Income: [
       {
         Date: new Date(2022,11,31).toLocaleDateString('en-us'),
-        Income: 128
+        Total: 128
       },
       {
         Date: new Date(2023,0,1).toLocaleDateString('en-us'),
-        Income: 128
+        Total: 128
       },
       {
         Date: new Date(2023,0,2).toLocaleDateString('en-us'),
-        Income: 80
+        Total: 80
       },
       {
         Date: new Date(2023,0,3).toLocaleDateString('en-us'),
-        Income: 140
+        Total: 140
       },
       {
         Date: new Date(2023,0,4).toLocaleDateString('en-us'),
-        Income: 180
+        Total: 180
       },
       {
         Date: new Date(2023,0,5).toLocaleDateString('en-us'),
-        Income: 350
+        Total: 350
       },
       {
         Date: new Date(2023,0,6).toLocaleDateString('en-us'),
-        Income: 145
+        Total: 145
       },
       {
         Date: new Date(2023,0,7).toLocaleDateString('en-us'),
-        Income: 100
+        Total: 100
       },
       {
         Date: new Date(2023,0,8).toLocaleDateString('en-us'),
-        Income: 250
+        Total: 250
       },
       {
         Date: new Date(2023,0,9).toLocaleDateString('en-us'),
-        Income: 175
+        Total: 175
       },
       {
         Date: new Date(2023,0,10).toLocaleDateString('en-us'),
-        Income: 270
+        Total: 270
       },
     ],
     OrdersV2: [

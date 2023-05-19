@@ -31,11 +31,11 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      // sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      // sampleData['Customers'].forEach(e => customers.add(e));
+      sampleData['Customers'].forEach(e => customers.add(e));
       // sampleData['Orders'].forEach(e => order.add(e))
-      // sampleData['Income'].forEach(e => income.add(e))
+      sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
 
@@ -174,7 +174,6 @@ indexedDBController.updateARecord = function (db, store, newVal) {
         const request = objStore.put(newVal);
         request.onsuccess = function (event) {
             console.log('Successfully update the ' + store)
-            console.log(event.target )
             res(event.target.result)
         }
         request.onerror = (event) => {

@@ -1,5 +1,5 @@
 import Header from "../../components/Header";
-import {AiOutlineShoppingCart, AiOutlinePlusCircle, AiOutlineSave} from "react-icons/ai";
+import {AiOutlineShoppingCart, AiOutlinePlusCircle} from "react-icons/ai";
 import DownloadBtn from "../../components/Downloadbtn";
 import OrderCardV2 from "./PendingOrders/OrdersCardV2";
 import CompleteOrderList from "./CompletedOrders/CompleteOrderList";
@@ -70,7 +70,7 @@ function OrdersV2() {
         // update income
         const incomeData = {
             Date: new Date().toLocaleDateString("en-us"),
-            Total: income.Total + order.total,
+            Total: income.Total??0 + order.total,
         }
         setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
 
@@ -101,13 +101,6 @@ function OrdersV2() {
         setCustomer(customer);
     }
 
-    const onSave = () => {
-        const incomeData = {
-            Date: new Date().toLocaleDateString("en-us"),
-            Total: total
-        }
-        setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
-    }
     return ( 
         <>
             
@@ -148,9 +141,6 @@ function OrdersV2() {
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-evenly">
                         <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
-                        <button className="mt-4 btn" title="Save" onClick={onSave}>
-                            Save <AiOutlineSave/>
-                        </button>
                         <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     
