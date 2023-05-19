@@ -35,6 +35,12 @@ function OrdersV2() {
         keyPath: new Date().toLocaleDateString("en-us"),
     })
 
+    const [itemCount, setItemCount] = useData({
+        store: "ItemCount",
+        index: "Date",
+        keyPath: new Date().toLocaleDateString("en-us"),
+    })
+
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
     const [orderID, setOrderID] = useState(-1);
@@ -74,6 +80,12 @@ function OrdersV2() {
         }
         setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
 
+        // update item count
+        const itemCountData = {
+            Date: new Date().toLocaleDateString("en-us"),
+            Count: itemCount.Count??0 + order.cart.reduce((acc, item) => acc + item.quantity, 0),
+        }
+        setItemCount({type: 'update', indexField: 'Date', newVal: itemCountData});
     }
 
     const onEdit = (order) => {

@@ -31,6 +31,12 @@ function Dashboard(props) {
         index:'Date'
     })
 
+    const [itemCount, ] = useData({
+        store:'ItemCount',
+        index:'Date',
+        keyPath: new Date().toLocaleDateString("en-us"),
+    })
+
     const [loader, setLoader] = useState(false);
     const [customerSortBy, setCustomerSortBy] = useState(0);
     const [sortedCustomers, setSortedCustomers] = useState([]);
@@ -42,8 +48,6 @@ function Dashboard(props) {
     const totalItemsSold =  getTotalItemSold(menu);
     const totalCustomers = customers.length;
     const revenueToday = orders.filter(order => order.status && order.deliverDate === dateFormat()).reduce((acc, order) => acc + order.total??0, 0); 
-      
-
     const selectOnChange = (e) => {
         const value = Number(e.target.value);
         setCustomerSortBy(value);
@@ -127,7 +131,9 @@ function Dashboard(props) {
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
             <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
 
-            <CardInfoDB title='Trending' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
+            <CardInfoDB title='Trending (compared to the prior day)' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
+
+            <CardInfoDB title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
 
         </div>
         <div className="row">
