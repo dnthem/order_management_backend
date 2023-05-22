@@ -7,36 +7,37 @@ import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "../../customHooks/useData";
-import { dateFormat, dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
+import { dateFormat, downloadOrderFormat, getCurrentTime } from "../../utils";
+import { STORES } from "../../indexedDB/indexedDB";
 
 function OrdersV2() {
     const [orders, setOrders] = useData({
-        store: 'OrdersV2',
+        store: STORES.ORDERSV2.name,
         index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
     console.log(orders);
     const [customers, setCustomers] = useData({
-        store: "Customers",
+        store: STORES.CUSTOMERS.name,
         index: "customerID",
         keyPath: null,
     })
 
     const [menu, setMenu] = useData({
-        store: "Menu",
+        store: STORES.MENU.name,
         index: "id",
         keyPath: null,
     })
 
     const [income, setIncome] = useData({
-        store: "Income",
+        store: STORES.INCOME.name,
         index: "Date",
         keyPath: new Date().toLocaleDateString("en-us"),
     })
 
     const [itemCount, setItemCount] = useData({
-        store: "ItemCount",
+        store: STORES.ITEMCOUNT.name,
         index: "Date",
         keyPath: new Date().toLocaleDateString("en-us"),
     })

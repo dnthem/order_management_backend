@@ -95,32 +95,6 @@ function Dashboard(props) {
             <div className="col-8">
                 <Header icon={<RiDashboard3Line/>} title='Dashboard'/>
             </div>
-            <div className="col-4">
-                
-                {/* <div className="d-flex justify-content-evenly align-items-center">
-                <style>
-                    {
-                        `
-                        .spinning {
-                            animation: spin-animation 2s infinite;
-                            animation-timing-function: linear; 
-                            display: inline-block;
-                          }
-                          
-                          @keyframes spin-animation {
-                            0% {
-                              transform: rotate(0deg);
-                            }
-                            100% {
-                              transform: rotate(359deg);
-                            }
-                          }
-                          `
-                    }
-                </style>
-                    <button className="btn mt-4">Run Analysis <span className="spinning"><BiAnalyse/></span></button>
-                </div> */}
-            </div>
                 
         </div>
         <div className="row">
@@ -129,12 +103,10 @@ function Dashboard(props) {
             <CardInfoDB title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
 
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
             <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
 
             <CardInfoDB title='Trending (compared to the prior day)' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
-
-            <CardInfoDB title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
-
         </div>
         <div className="row">
             <div className="col-xl-6">
