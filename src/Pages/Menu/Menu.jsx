@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
-import { GetDataBaseContext } from "../../App";
+import { useState } from "react";
+
 import Header from "../../components/Header";
 import ItemCardV2 from "../../components/ItemCard_v2";
-import indexedDBController from "../../indexedDB/indexedDB";
 import {GrFormAdd} from 'react-icons/gr';
 import {MdMenuBook} from 'react-icons/md';
 import { dateFormat } from "../../utils";
-const STORE = 'Menu';
+import { useData } from "../../customHooks/useData";
+const DB = {
+  MENU: 'Menu'
+};
 
 function Menu(props) {
-  const [menu, setMenu] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { db } = GetDataBaseContext();
+  const [menu, setMenu] = useData({ store: DB.MENU, index: "id"});
 
   /**
    * Callback function passed to itemCard, and is called from item card
@@ -19,9 +19,15 @@ function Menu(props) {
    */
   const removeItemFromMenu = (key) => {
     //remove item from menu
-    setMenu(menu.filter((e) => e.id !== key));
-    // remove item from indexedDB
-    indexedDBController.deleteARecord(db, STORE, key);
+    // setMenu(menu.filter((e) => e.id !== key));
+    // // remove item from indexedDB
+    // indexedDBController.deleteARecord(db, STORE, key);
+
+    setMenu({
+      type: "delete",
+      indexField: "id",
+      keyPath: key,
+    })
   };
 
   const addNewItem = async () => {
@@ -35,43 +41,22 @@ function Menu(props) {
       Hidden: false,
       DateAdded: dateFormat(),
     };
-    const id = await indexedDBController.addData(db, STORE, data);
-    data.id = id;
-    setMenu([data, ...menu]);
-    //
+    setMenu({
+      type: "add",
+      indexField: "id",
+      newVal: data,
+    });
+    
   };
 
   const updateMenu = (newItem) => {
-    const temp = menu.map(e => e.id != newItem.id? e: 
-      {
-        id: newItem.id,
-        Title: newItem.Title,
-        Price: newItem.Price,
-        Content: newItem.Content,
-        Photo: newItem.Photo, 
-        Count: newItem.Count,
-        DateAdded: newItem.DateAdded,
-        Hidden: newItem.Hidden
-      })
-      setMenu(temp);
-  }
-
-  useEffect(() => {
-    const getMenu = async () => {
-      setLoading(true);
-      try {
-        const retrievedMenu = await indexedDBController.getAllDataFromStore(
-          db,
-          STORE
-        );
-        setMenu(retrievedMenu);
-      } catch (error) {
-        alert(error.message);
-      }
-      setLoading(false);
-    };
-    getMenu();
-  }, []);
+    console.log(newItem);
+    setMenu({
+      type: "update",
+      indexField: "id",
+      newVal: newItem,
+    });
+  };
 
   return (
     <>
@@ -89,21 +74,22 @@ function Menu(props) {
         </div>
       </div>
       <div className="row">
-        {loading && <div>Loading...</div>}
-        {menu.map((e) => (
-          <ItemCardV2
-            remove={removeItemFromMenu}
-            key={e.id}
-            cardID={e.id}
-            Title={e.Title}
-            Price={e.Price}
-            Content={e.Content}
-            Photo={e.Photo}
-            updateMenu={updateMenu}
-            Count={e.Count}
-            Hidden={e.Hidden}
-          />
-        ))}
+        {
+          menu.map((e) => (
+            <ItemCardV2
+              remove={removeItemFromMenu}
+              key={e.id}
+              cardID={e.id}
+              Title={e.Title}
+              Price={e.Price}
+              Content={e.Content}
+              Photo={e.Photo}
+              updateMenu={updateMenu}
+              Count={e.Count}
+              Hidden={e.Hidden}
+            />
+          )).reverse()
+        }
       </div>
     </>
   );

@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import Dashboard from "./Sections/Dashboard/Dashboard";
-import History from "./Sections/History/History";
-import Menu from "./Sections/Menu/Menu"
-import Settings from "./Sections/Settings/Settings";
-import OrdersV2 from "./Sections/Orders.V2/OrdersV2";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import History from "./Pages/History/History";
+import Menu from "./Pages/Menu/Menu"
+import Settings from "./Pages/Settings/Settings";
+import OrdersV2 from "./Pages/Orders.V2/OrdersV2";
 
 const ctx = createContext();
 
