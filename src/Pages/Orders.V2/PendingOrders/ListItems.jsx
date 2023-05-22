@@ -3,13 +3,13 @@ function ListItem(props) {
     const [showMore, setShowMore] = useState(false);
     
     return ( 
-        <ul className="list-group" style={{ listStyle: "none" }}>
+        <ul className="list-group" style={{ listStyle: "none" }} onClick={() => setShowMore(!showMore)}>
             {
                 props.list.map((item, index, arr) => {
                     if (index === 3 && !showMore) {
                         return (
                             <li key={index}>
-                                <button className='btn' onClick={() => setShowMore(true)}>...show more</button>
+                               ...show more
                             </li>
                         )
                         
@@ -25,7 +25,7 @@ function ListItem(props) {
                             </li>
                             
                             <li key={index+1}>
-                                <button className='btn' onClick={() => setShowMore(false)}>Show less</button>
+                                show less
                             </li>
                             </>
                         )
