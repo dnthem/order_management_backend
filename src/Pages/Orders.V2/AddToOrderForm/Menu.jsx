@@ -1,4 +1,4 @@
-import MenuTable from "../../Orders/MenuTable";
+import MenuTable from "../../../components/MenuTable";
 function Menu(props) {
     return ( 
         <div className="col-8 px-4 h-100 position-relative overflow-auto">        

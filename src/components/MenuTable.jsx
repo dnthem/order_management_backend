@@ -1,4 +1,4 @@
-import MenuTableCard from "../../components/MenuTableCard";
+import MenuTableCard from "./MenuTableCard";
 
 function MenuTable(props) {
     

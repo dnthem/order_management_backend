@@ -3,8 +3,6 @@ import { GetDataBaseContext } from "../../App";
 import DownloadBtn from "../../components/Downloadbtn";
 import Header from "../../components/Header";
 import indexedDBController from "../../indexedDB/indexedDB";
-import convertReadable from "../Orders/FormatFile";
-import OrderTable from "../Orders/OrderTable";
 import {FaHistory} from 'react-icons/fa';
 import { downloadOrderFormat } from "../../utils";
 function History(props) {
