@@ -1,8 +1,5 @@
 import Header from "../../components/Header";
 import {RiSettings5Line} from 'react-icons/ri'
-import { GetDataBaseContext } from "../../App";
-import { useEffect, useState } from "react";
-import indexedDBController from "../../indexedDB/indexedDB";
 import DownloadSection from "./Download/DownloadSection";
 import UploadSection from "./Upload/UploadSection";
 import DeleteSection from "./Delete/DeleteSection";

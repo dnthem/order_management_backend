@@ -6,7 +6,7 @@ import indexedDBController from "../indexedDB/indexedDB";
  * Get all records from an object store with a particular value index
  * @param {string} store - the name of the object store
  * @param {string} index - the name of the index
- * @param {string} keyPath - the keyPath of the index
+ * @param {string} keyPath - the value of the index, if null, then all records are returned
  * @returns [data, updateData] - the data from the object store and a function to update the data in the object store
  * 
  */

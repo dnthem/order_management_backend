@@ -2,6 +2,30 @@ import sampleData from './sampleData'
 
 const indexedDBController = {};
 
+export const STORES = {
+  INCOME: {
+    name: 'Income',
+    keyPath: 'Date',
+  },
+  MENU: {
+    name: 'Menu',
+    keyPath: 'id',
+  },
+  CUSTOMERS: {
+    name: 'Customers',
+    keyPath: 'customerID',
+  },
+  ORDERSV2: {
+    name: 'OrdersV2',
+    keyPath: 'orderID',
+  },
+  ITEMCOUNT: {
+    name: 'ItemCount',
+    keyPath: 'Date',
+  }
+}
+
+
 /**
  * Creates indexedDB and return a db reference
  * @param {string} dbName Data name
@@ -15,11 +39,11 @@ indexedDBController.createDB = function (dbName, version = undefined) {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
       
-      const income = db.createObjectStore("Income", { keyPath: "Date" });
-      const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
-      const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
-      const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
-      const itemCount = db.createObjectStore("ItemCount", { keyPath: "Date" });
+      const income = db.createObjectStore( STORES.INCOME.name , { keyPath: STORES.INCOME.keyPath });
+      const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });
+      const customers = db.createObjectStore(STORES.CUSTOMERS.name, { keyPath: STORES.CUSTOMERS.keyPath, autoIncrement: true });
+      const orderV2 = db.createObjectStore(STORES.ORDERSV2.name, { keyPath: STORES.ORDERSV2.keyPath, autoIncrement: true });
+      const itemCount = db.createObjectStore(STORES.ITEMCOUNT.name, { keyPath: STORES.ITEMCOUNT.keyPath });
       income.createIndex("Date", "Date", { unique: true });
 
       itemCount.createIndex("Date", "Date", { unique: true });
