@@ -8,6 +8,15 @@ const DB_NAME = 'ORDER_MANAGEMENT';
 let State = 1;
 const root = ReactDOM.createRoot(document.getElementById('layoutSidenav_content'));
 
+export const STORES = {
+  MENU: "Menu",
+  INCOME: "Income",
+  CUSTOMERS: "Customers",
+  ORDERSV2: "OrdersV2",
+  ITEMCOUNT: "ItemCount",
+}
+
+
 function Render (db, state = 1) {
   root.render(
     <React.StrictMode>
@@ -37,7 +46,7 @@ async function registerIndexedDB () {
   } else {
     console.log('initialize indexedDB...')
     try {
-      return await indexedDBController.createDB(DB_NAME, 1)
+      return await indexedDBController.createDB(window.indexedDB, DB_NAME, 1)
     } catch (error) {
       alert('Error has occured: \n' + error)
     }
