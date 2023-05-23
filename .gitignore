@@ -25,3 +25,4 @@ dist-ssr
 *Hello
 *__tests__
 *__test__
+.env
