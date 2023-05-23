@@ -22,6 +22,10 @@ export const STORES = {
   ITEMCOUNT: {
     name: 'ItemCount',
     keyPath: 'Date',
+  },
+  INCOMEUPTODATE: {
+    name: 'IncomeUpToDate',
+    keyPath: 'id',
   }
 }
 
@@ -38,12 +42,17 @@ indexedDBController.createDB = function (dbName, version = undefined) {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
+
+      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath });
       
       const income = db.createObjectStore( STORES.INCOME.name , { keyPath: STORES.INCOME.keyPath });
       const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });
       const customers = db.createObjectStore(STORES.CUSTOMERS.name, { keyPath: STORES.CUSTOMERS.keyPath, autoIncrement: true });
       const orderV2 = db.createObjectStore(STORES.ORDERSV2.name, { keyPath: STORES.ORDERSV2.keyPath, autoIncrement: true });
       const itemCount = db.createObjectStore(STORES.ITEMCOUNT.name, { keyPath: STORES.ITEMCOUNT.keyPath });
+
+      incomeUpToDate.createIndex("id", "id", { unique: true });
+
       income.createIndex("Date", "Date", { unique: true });
 
       itemCount.createIndex("Date", "Date", { unique: true });
@@ -57,10 +66,11 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      // sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      // sampleData['Customers'].forEach(e => customers.add(e));
-      // sampleData['Income'].forEach(e => income.add(e))
+      sampleData['Customers'].forEach(e => customers.add(e));
+      sampleData['Income'].forEach(e => income.add(e))
+      sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e))
     };
     request.onerror = (event) => reject(event.error);
 
@@ -258,7 +268,7 @@ indexedDBController.getLimitRecords = function (db, store, keyPath, limit) {
         res(result);
       }
     }
-    request.onerror = (event) => {
+    requestCursor.onerror = (event) => {
       alert('failed to retreive all data')
       rej(event.target.error);
     }

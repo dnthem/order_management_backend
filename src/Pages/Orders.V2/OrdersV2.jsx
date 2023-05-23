@@ -17,7 +17,6 @@ function OrdersV2() {
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
-    console.log(orders);
     const [customers, setCustomers] = useData({
         store: STORES.CUSTOMERS.name,
         index: "customerID",
@@ -41,6 +40,12 @@ function OrdersV2() {
         index: "Date",
         keyPath: new Date().toLocaleDateString("en-us"),
     })
+
+    const [incomeUpToDate, setIncomeUpToDate] = useData({
+        store: STORES.INCOMEUPTODATE.name,
+        index: STORES.INCOMEUPTODATE.keyPath,
+        keyPath: 1,
+    });
 
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
@@ -77,16 +82,25 @@ function OrdersV2() {
         // update income
         const incomeData = {
             Date: new Date().toLocaleDateString("en-us"),
-            Total: income.Total??0 + order.total,
+            Total: (income[0]?.Total??0) + order.total,
         }
         setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
 
         // update item count
         const itemCountData = {
             Date: new Date().toLocaleDateString("en-us"),
-            Count: itemCount.Count??0 + order.cart.reduce((acc, item) => acc + item.quantity, 0),
+            Count: (itemCount[0]?.Count??0) + order.cart.reduce((acc, item) => acc + item.quantity, 0),
         }
         setItemCount({type: 'update', indexField: 'Date', newVal: itemCountData});
+
+        // update income up to date
+        const incomeUpToDateData = {
+            id: 1,
+            Date: dateFormat(),
+            Total: incomeUpToDate[0]?.Total??0 + order.total,
+            UpdateTime: new Date().getUTCMilliseconds(),
+        }
+        setIncomeUpToDate({type: 'update', indexField: 'Date', newVal: incomeUpToDateData});
     }
 
     const onEdit = (order) => {

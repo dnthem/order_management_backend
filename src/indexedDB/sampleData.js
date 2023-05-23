@@ -1,4 +1,12 @@
 const sampleData = {
+    IncomeUpToDate: [
+      {
+        id: 1,
+        Total: 1946,
+        Date: new Date().toLocaleDateString('en-us'),
+        UpdateTime: new Date().getUTCMilliseconds(),
+      },
+    ],
     Menu: [
       {
         Title: "Bánh Tráng Trộn",
@@ -119,6 +127,34 @@ const sampleData = {
           phone: "123-456-7890",
         },
         total: 24,
+        paymentType: "Cash",
+        notes: "nothing",
+        status: false,
+      },
+      {
+        orderDate: new Date().toLocaleDateString('en-us'),
+        deliverDate: new Date().toLocaleDateString("en-us"),
+        cart: [
+          {
+            name: "Bánh Tráng Trộn",
+            price: 12,
+            quantity: 1,
+            id: 1,
+          },
+          {
+            name: "Trứng Nướng",
+            price: 7,
+
+            quantity: 10,
+            id: 3,
+          },
+        ],
+        customer: {
+          customerID: 1,
+          customerName: "John Doe",
+          phone: "123-456-7890",
+        },
+        total: 82,
         paymentType: "Cash",
         notes: "nothing",
         status: false,
