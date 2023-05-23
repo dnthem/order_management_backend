@@ -1,4 +1,12 @@
 const sampleData = {
+  IncomUpToDate: [
+    {
+      Date: new Date(2022, 11, 31).toLocaleDateString("en-us"),
+      Total: 128,
+      UpdatedTime: new Date().getUTCMilliseconds(),
+      id: 1,
+    },
+  ],
   Menu: [
     {
       Title: "Orange chicken bowl",

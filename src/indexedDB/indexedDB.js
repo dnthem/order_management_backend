@@ -69,7 +69,8 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
       sampleData['Customers'].forEach(e => customers.add(e));
-      sampleData['Income'].forEach(e => income.add(e))
+      sampleData['Income'].forEach(e => income.add(e));
+      sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e));
     };
     request.onerror = (event) => reject(event.error);
 
