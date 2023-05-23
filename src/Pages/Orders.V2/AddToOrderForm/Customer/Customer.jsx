@@ -58,7 +58,7 @@ function Customer(props) {
                 <div className="d-flex justify-content-between">
                     <h2>Cart</h2>
                     <div className="d-flex align-items-center">
-                        <div className="me-2">Number of item: </div>
+                        <div className="me-2">Number of items: </div>
                         <div className="badge bg-primary">{numberOfItem}</div>
                     </div>
                 </div>
