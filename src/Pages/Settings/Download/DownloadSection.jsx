@@ -17,14 +17,12 @@ function DownloadSection(props) {
         const orders = await getData(STORES.ORDERSV2.name);
         const customers = await getData(STORES.CUSTOMERS.name);
         const incomeUpToDate = await getData(STORES.INCOMEUPTODATE.name);
-        const itemCount = await getData(STORES.ITEMCOUNT.name);
         const data = {
-            income: income,
-            menu: menu,
-            orders: orders,
-            customers: customers,
-            incomeUpToDate: incomeUpToDate,
-            itemCount: itemCount
+            [STORES.INCOME.name]: income,
+            [STORES.MENU.name]: menu,
+            [STORES.ORDERSV2.name]: orders,
+            [STORES.CUSTOMERS.name]: customers,
+            [STORES.INCOMEUPTODATE.name]: incomeUpToDate
         }
         return data;
     }

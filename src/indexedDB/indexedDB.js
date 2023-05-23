@@ -104,6 +104,32 @@ indexedDBController.addData = function (db, store, data) {
   })
 }
 
+
+/**
+ * Adds list of data to a particular object store
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @param {any} data data needed to be store to object store
+ * @returns true if successful otherwise error message
+ **/
+indexedDBController.addListDataToStore = function (db, store, data) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readwrite')
+    const objStore = trans.objectStore(store);
+    data.forEach(e => {
+      const request = objStore.add(e);
+      request.onsuccess = function (e) {
+        console.log('Added new data to ' + store + ' successful')
+      }
+      request.onerror = function (e) {
+        console.log('Failed to add new data')
+        rej(e.target.error)
+      }
+    })
+    res(true);
+  });
+}
+
 /**
  * Retrieves all records from an object store
  * @param {indexedDBRef} db db reference

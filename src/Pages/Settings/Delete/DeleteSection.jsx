@@ -16,7 +16,6 @@ function DeleteSection(props) {
                 DB_LIST.forEach(async (db_name) => {
                     await indexedDBController.deleteAllRecord(db, db_name);
                 });
-                window.indexedDB.deleteDatabase(DB_NAME);
                 alert('All data has been deleted!');
             } catch (error) {
                 alert('Error occured: ' + error);
