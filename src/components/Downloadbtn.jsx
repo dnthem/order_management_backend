@@ -6,12 +6,14 @@ import {BiDownload} from "react-icons/bi";
  * @returns 
  */
 function DownloadBtn(props) {
-    const handleSaveToLocal = () => {
+    const handleSaveToLocal = async () => {
         let content = undefined;
-        if (props.contentFormat === null)
-            content = JSON.stringify(props.data);
+        if (props.contentFormat === null) {
+            content = JSON.stringify(await props.data());
+        }
+            
         else
-            content= props.contentFormat(props.data)
+            content= props.contentFormat(await props.data())
         const a = document.createElement("a");
         const file = new Blob([content], {type: 'text/plain'});
         a.href = URL.createObjectURL(file);
