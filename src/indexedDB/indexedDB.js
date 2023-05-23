@@ -43,7 +43,7 @@ indexedDBController.createDB = function (dbName, version = undefined) {
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
 
-      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath });
+      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath, autoIncrement: true });
       
       const income = db.createObjectStore( STORES.INCOME.name , { keyPath: STORES.INCOME.keyPath });
       const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });

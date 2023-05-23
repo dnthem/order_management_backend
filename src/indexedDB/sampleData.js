@@ -1,10 +1,9 @@
 const sampleData = {
-  IncomUpToDate: [
+  IncomeUpToDate: [
     {
       Date: new Date(2022, 11, 31).toLocaleDateString("en-us"),
-      Total: 128,
+      Total: 1928,
       UpdatedTime: new Date().getUTCMilliseconds(),
-      id: 1,
     },
   ],
   Menu: [
