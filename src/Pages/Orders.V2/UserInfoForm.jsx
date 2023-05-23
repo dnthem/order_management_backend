@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Backdrop from '../../components/Backdrop';
 import CloseBtn from '../../components/CloseBtn';
-import { useData } from '../../customHooks/useData';
 import {AiOutlineUser, AiOutlinePhone, AiOutlineIdcard} from 'react-icons/ai';
 import { useDebounce } from "./customHooks/useDebouce";
 import { dateFormat, phoneFormat } from '../../utils';

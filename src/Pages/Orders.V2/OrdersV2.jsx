@@ -7,39 +7,45 @@ import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
 import { useState } from "react";
 import { useData } from "../../customHooks/useData";
-import { dateFormat, dateToISO, downloadOrderFormat, getCurrentTime } from "../../utils";
+import { dateFormat, downloadOrderFormat, getCurrentTime } from "../../utils";
+import { STORES } from "../../indexedDB/indexedDB";
 
 function OrdersV2() {
     const [orders, setOrders] = useData({
-        store: 'OrdersV2',
+        store: STORES.ORDERSV2.name,
         index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
-    console.log(orders);
     const [customers, setCustomers] = useData({
-        store: "Customers",
+        store: STORES.CUSTOMERS.name,
         index: "customerID",
         keyPath: null,
     })
 
     const [menu, setMenu] = useData({
-        store: "Menu",
+        store: STORES.MENU.name,
         index: "id",
         keyPath: null,
     })
 
     const [income, setIncome] = useData({
-        store: "Income",
+        store: STORES.INCOME.name,
         index: "Date",
         keyPath: new Date().toLocaleDateString("en-us"),
     })
 
     const [itemCount, setItemCount] = useData({
-        store: "ItemCount",
+        store: STORES.ITEMCOUNT.name,
         index: "Date",
         keyPath: new Date().toLocaleDateString("en-us"),
     })
+
+    const [incomeUpToDate, setIncomeUpToDate] = useData({
+        store: STORES.INCOMEUPTODATE.name,
+        index: STORES.INCOMEUPTODATE.keyPath,
+        keyPath: 1,
+    });
 
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
@@ -76,16 +82,25 @@ function OrdersV2() {
         // update income
         const incomeData = {
             Date: new Date().toLocaleDateString("en-us"),
-            Total: income.Total??0 + order.total,
+            Total: (income[0]?.Total??0) + order.total,
         }
         setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
 
         // update item count
         const itemCountData = {
             Date: new Date().toLocaleDateString("en-us"),
-            Count: itemCount.Count??0 + order.cart.reduce((acc, item) => acc + item.quantity, 0),
+            Count: (itemCount[0]?.Count??0) + order.cart.reduce((acc, item) => acc + item.quantity, 0),
         }
         setItemCount({type: 'update', indexField: 'Date', newVal: itemCountData});
+
+        // update income up to date
+        const incomeUpToDateData = {
+            id: 1,
+            Date: dateFormat(),
+            Total: incomeUpToDate[0]?.Total??0 + order.total,
+            UpdateTime: new Date().getUTCMilliseconds(),
+        }
+        setIncomeUpToDate({type: 'update', indexField: 'Date', newVal: incomeUpToDateData});
     }
 
     const onEdit = (order) => {

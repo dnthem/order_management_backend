@@ -78,13 +78,12 @@ function ItemCardV2(props) {
   return (
     <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2" style={itemHidden? {opacity: 0.5}:{}}>
     <div className={cardClass}>
-
       <img src={itemPhoto !== undefined? URL.createObjectURL(itemPhoto):IMAGE_TEMPLATE} className="card-img-top" alt={cardProps.Title} />
       {edit && <input type='file' accept="image" onChange={(e) => setItemPhoto(e.target.files[0])}/>}
 
       <div className="card-body">
      
-        <input type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize fs-5" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>
+        <input type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize fs-5 text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>
 
         <h6 className="card-subtitle mb-2" >
             

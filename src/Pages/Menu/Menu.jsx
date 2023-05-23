@@ -6,23 +6,16 @@ import {GrFormAdd} from 'react-icons/gr';
 import {MdMenuBook} from 'react-icons/md';
 import { dateFormat } from "../../utils";
 import { useData } from "../../customHooks/useData";
-const DB = {
-  MENU: 'Menu'
-};
+import { STORES } from "../../indexedDB/indexedDB";
 
 function Menu(props) {
-  const [menu, setMenu] = useData({ store: DB.MENU, index: "id"});
+  const [menu, setMenu] = useData({ store: STORES.MENU.name, index: STORES.MENU.keyPath });
 
   /**
    * Callback function passed to itemCard, and is called from item card
    * @param {Number} key item identifier, it is uneque to each item
    */
   const removeItemFromMenu = (key) => {
-    //remove item from menu
-    // setMenu(menu.filter((e) => e.id !== key));
-    // // remove item from indexedDB
-    // indexedDBController.deleteARecord(db, STORE, key);
-
     setMenu({
       type: "delete",
       indexField: "id",

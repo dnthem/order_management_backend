@@ -3,23 +3,23 @@ import InputFile from "../InputFile";
 import indexedDBController from "../../../indexedDB/indexedDB";
 import { GetDataBaseContext } from "../../../App";
 
-const MENU = 'Menu', INCOME = 'Income', ORDERS = 'OrdersV2', ALL = 'All Data';
+import { STORES } from "../../../indexedDB/indexedDB";
 
 function UploadSection(props) {
     const {db} = GetDataBaseContext();
 
     const saveData = async (db, store, data) => {
         try {
-            data.forEach(async e => {
-                await indexedDBController.updateARecord(db, store, e);
-            })
+            await indexedDBController.addListDataToStore(db, store, data);
+            return true;
         } catch(error) {
-            alert (error);
+            alert ('Failed to add to ' + store + '\nError: ' + error);
+            return false;
         }
     }
 
-    const handleOnChange = (e, store) => {
-        if (!confirm('Are you sure to load ' + store + ' from this file')) return;
+    const handleOnChange = async (e, store = undefined) => {
+        if (!confirm('Are you sure to load ' + (store??'all stores' )+ ' from this file')) return;
 
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -33,15 +33,31 @@ function UploadSection(props) {
             else 
                 var res = str.slice(0, str.length);
             const data = JSON.parse(res);
-            if (store === ALL)
+
+            const promises = [];
+            if (store??true)
             {
-                saveData(db, INCOME, data[INCOME]);
-                saveData(db, MENU, data[MENU]);
-                saveData(db, ORDERS, data[ORDERS]);
-                saveData(db, 'Customers', data['Customers'])
+                for (const store in STORES) {
+                    if (STORES[store].name === STORES.ITEMCOUNT.name) continue;
+                    
+                    const promise = saveData(db, STORES[store].name, data[STORES[store].name]);
+
+                    promises.push(promise);
+                }
             }
-            else 
-                saveData(db, store, data);
+            else {
+                const promise = saveData(db, store, data);
+                promises.push(promise);
+            }
+
+            Promise.all(promises).then((values) => {
+                let result = true;
+                for (const value of values) {
+                    result = result && value;
+                }
+                if (result) alert ('Load successfully');
+                else alert ('Failed to load');
+            });
         };
 
         if (file) {
@@ -60,31 +76,31 @@ function UploadSection(props) {
                     title='All'
                     detail="Load all data from a file "
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, ALL)} />
+                    <InputFile onChange={(e) => handleOnChange(e)} />
                 </ListItem>
                 <ListItem
                     title='Menu'
                     detail="Load menu from a file"
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, MENU)} />
+                    <InputFile onChange={(e) => handleOnChange(e, STORES.MENU.name)} />
                 </ListItem>
                 <ListItem
                     title='Income'
                     detail="Load Income from a file"
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, INCOME)} />
+                    <InputFile onChange={(e) => handleOnChange(e, STORES.INCOME.name)} />
                 </ListItem>
                 <ListItem
                     title='Orders'
                     detail="Load Orders from a file"
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, 'OrdersV2')} />
+                    <InputFile onChange={(e) => handleOnChange(e, STORES.ORDERSV2.name)} />
                 </ListItem>
                 <ListItem
                     title='Customers'
                     detail="Load Customers from a file"
                 >
-                    <InputFile onChange={(e) => handleOnChange(e, 'Customers')} />
+                    <InputFile onChange={(e) => handleOnChange(e, STORES.CUSTOMERS.name)} />
                 </ListItem>
             </div>
         </div>

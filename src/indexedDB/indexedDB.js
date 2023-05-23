@@ -2,6 +2,34 @@ import sampleData from './sampleData'
 
 const indexedDBController = {};
 
+export const STORES = {
+  INCOME: {
+    name: 'Income',
+    keyPath: 'Date',
+  },
+  MENU: {
+    name: 'Menu',
+    keyPath: 'id',
+  },
+  CUSTOMERS: {
+    name: 'Customers',
+    keyPath: 'customerID',
+  },
+  ORDERSV2: {
+    name: 'OrdersV2',
+    keyPath: 'orderID',
+  },
+  ITEMCOUNT: {
+    name: 'ItemCount',
+    keyPath: 'Date',
+  },
+  INCOMEUPTODATE: {
+    name: 'IncomeUpToDate',
+    keyPath: 'id',
+  }
+}
+
+
 /**
  * Creates indexedDB and return a db reference
  * @param {indexedDBRef} indexedDB indexedDB reference
@@ -15,12 +43,17 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
+
+      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath });
       
-      const income = db.createObjectStore("Income", { keyPath: "Date" });
-      const menu  = db.createObjectStore("Menu", { keyPath: "id", autoIncrement: true });
-      const customers = db.createObjectStore("Customers", { keyPath: "customerID", autoIncrement: true });
-      const orderV2 = db.createObjectStore("OrdersV2", { keyPath: "orderID", autoIncrement: true });
-      const itemCount = db.createObjectStore("ItemCount", { keyPath: "Date" });
+      const income = db.createObjectStore( STORES.INCOME.name , { keyPath: STORES.INCOME.keyPath });
+      const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });
+      const customers = db.createObjectStore(STORES.CUSTOMERS.name, { keyPath: STORES.CUSTOMERS.keyPath, autoIncrement: true });
+      const orderV2 = db.createObjectStore(STORES.ORDERSV2.name, { keyPath: STORES.ORDERSV2.keyPath, autoIncrement: true });
+      const itemCount = db.createObjectStore(STORES.ITEMCOUNT.name, { keyPath: STORES.ITEMCOUNT.keyPath });
+
+      incomeUpToDate.createIndex("id", "id", { unique: true });
+
       income.createIndex("Date", "Date", { unique: true });
 
       itemCount.createIndex("Date", "Date", { unique: true });
@@ -34,10 +67,10 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      // sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      // sampleData['Customers'].forEach(e => customers.add(e));
-      // sampleData['Income'].forEach(e => income.add(e))
+      sampleData['Customers'].forEach(e => customers.add(e));
+      sampleData['Income'].forEach(e => income.add(e))
     };
     request.onerror = (event) => reject(event.error);
 
@@ -69,6 +102,32 @@ indexedDBController.addData = function (db, store, data) {
       rej(e.target.error)
     }
   })
+}
+
+
+/**
+ * Adds list of data to a particular object store
+ * @param {indexedDBRef} db db reference
+ * @param {string} store object store
+ * @param {any} data data needed to be store to object store
+ * @returns true if successful otherwise error message
+ **/
+indexedDBController.addListDataToStore = function (db, store, data) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readwrite')
+    const objStore = trans.objectStore(store);
+    data.forEach(e => {
+      const request = objStore.add(e);
+      request.onsuccess = function (e) {
+        console.log('Added new data to ' + store + ' successful')
+      }
+      request.onerror = function (e) {
+        console.log('Failed to add new data')
+        rej(e.target.error)
+      }
+    })
+    res(true);
+  });
 }
 
 /**
