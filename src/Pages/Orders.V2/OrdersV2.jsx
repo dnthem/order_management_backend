@@ -13,31 +13,31 @@ import { STORES } from "../../indexedDB/indexedDB";
 function OrdersV2() {
     const [orders, setOrders] = useData({
         store: STORES.ORDERSV2.name,
-        index: 'deliverDate',
+        index: STORES.ORDERSV2.keyPath,
         keyPath: new Date().toLocaleDateString("en-us")
     });
 
     const [customers, setCustomers] = useData({
         store: STORES.CUSTOMERS.name,
-        index: "customerID",
+        index: STORES.CUSTOMERS.keyPath,
         keyPath: null,
     })
 
     const [menu, setMenu] = useData({
         store: STORES.MENU.name,
-        index: "id",
+        index: STORES.MENU.keyPath,
         keyPath: null,
     })
 
     const [income, setIncome] = useData({
         store: STORES.INCOME.name,
-        index: "Date",
+        index: STORES.INCOME.keyPath,
         keyPath: new Date().toLocaleDateString("en-us"),
     })
 
     const [itemCount, setItemCount] = useData({
         store: STORES.ITEMCOUNT.name,
-        index: "Date",
+        index: STORES.ITEMCOUNT.keyPath,
         keyPath: new Date().toLocaleDateString("en-us"),
     })
 
@@ -60,23 +60,23 @@ function OrdersV2() {
 
     // order CRUD
     const onDelete = (id) => {
-        setOrders({type: 'delete', indexField: 'orderID', keyPath: id, newVal: null});
+        setOrders({type: 'delete', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: null});
     }
 
     /**
      * Complete order, update customer order count, total spent, and update menu
      */
     const onComplete = (id, order) => {
-        setOrders({type: 'update', indexField: 'orderID', keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
+        setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
 
         const currentCustomer = customers.find(customer => customer.customerID === order.customer.customerID);
         // update customer order count
-        setCustomers({type: 'update', indexField: 'customerID', keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
+        setCustomers({type: 'update', indexField: STORES.CUSTOMERS.keyPath, keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
         
         // update menu
         order.cart.forEach(item => {
             const currentItem = menu.find(menuItem => menuItem.id === item.id);
-            setMenu({type: 'update', indexField: 'id', keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
+            setMenu({type: 'update', indexField: STORES.MENU.keyPath, keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
         })
 
         // update income
@@ -84,23 +84,23 @@ function OrdersV2() {
             Date: new Date().toLocaleDateString("en-us"),
             Total: (income[0]?.Total??0) + order.total,
         }
-        setIncome({type: 'update', indexField: 'Date', newVal: incomeData});
+        setIncome({type: 'update', indexField: STORES.INCOME.keyPath, newVal: incomeData});
 
         // update item count
         const itemCountData = {
             Date: new Date().toLocaleDateString("en-us"),
             Count: (itemCount[0]?.Count??0) + order.cart.reduce((acc, item) => acc + item.quantity, 0),
         }
-        setItemCount({type: 'update', indexField: 'Date', newVal: itemCountData});
+        setItemCount({type: 'update', indexField: STORES.ITEMCOUNT.keyPath, newVal: itemCountData});
 
         // update income up to date
-        const incomeUpToDateData = {
+        const newIncomeUpToDateData = {
             id: 1,
             Date: dateFormat(),
-            Total: incomeUpToDate[0]?.Total??0 + order.total,
-            UpdateTime: new Date().getUTCMilliseconds(),
+            Total: (incomeUpToDate[0]?.Total??0) + order.total,
+            UpdateTime: new Date().getTime(),
         }
-        setIncomeUpToDate({type: 'update', indexField: 'Date', newVal: incomeUpToDateData});
+        setIncomeUpToDate({type: 'update', indexField: STORES.INCOMEUPTODATE.keyPath, newVal: newIncomeUpToDateData});
     }
 
     const onEdit = (order) => {
@@ -113,11 +113,11 @@ function OrdersV2() {
     }
 
     const onAddNewOrder = (newVal) => {
-        setOrders({type: 'add', indexField: 'orderID', newVal: newVal});
+        setOrders({type: 'add', indexField: STORES.ORDERSV2.keyPath, newVal: newVal});
     }
 
     const onUpdateOrder = (newVal) => { 
-        setOrders({type: 'update', indexField: 'orderID', keyPath: orderID, newVal: newVal});
+        setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: orderID, newVal: newVal});
     }
 
     const onAddCustomerSubmit = (customer) => {
@@ -159,7 +159,7 @@ function OrdersV2() {
                 />
             }
 
-            <div className="row data-bs-backdrop border-bottom">
+            <div className="row data-bs-backdrop border-bottom ">
                 <div className="col-md-8 col-sm-12 ">
                         <Header icon={<AiOutlineShoppingCart/>} 
                         title={"Orders - " + new Date().toLocaleDateString("en-us")}/>
@@ -188,11 +188,11 @@ function OrdersV2() {
                     
                 </div>
 
-                <div className="col-md-9 px-2 col-sm-12" >
+                <div className="col-md-9 px-2 col-sm-12" style={{height: "100%"}}>
                     <div className="section-title width-100 text-center">
                         <h2>Pending Orders</h2>
                     </div>
-                    <div className="section-content row d-flex justify-content-start px-1">
+                    <div className="section-content row d-flex justify-content-start px-1 overflow-auto" style={{height: "78dvh"}}>
                         {
                             pending.map((order, index) => {
                                 return <OrderCardV2 
@@ -206,6 +206,7 @@ function OrdersV2() {
                             }).reverse()
                         }
                     </div>
+                 
                 </div>
             </div>
         </>

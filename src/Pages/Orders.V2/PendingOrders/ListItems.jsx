@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 function ListItem(props) {
     const [showMore, setShowMore] = useState(false);
-    
+    const list = props.list;
     return ( 
-        <ul className="list-group" style={{ listStyle: "none" }} onClick={() => setShowMore(!showMore)}>
+        <ul className="list-group" style={{ listStyle: "none" }} onClick={() => list.length > 3 && setShowMore(!showMore)}>
             {
-                props.list.map((item, index, arr) => {
+                list.map((item, index, arr) => {
                     if (index === 3 && !showMore) {
                         return (
                             <li key={index}>
