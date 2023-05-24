@@ -7,7 +7,6 @@ function CompleteOrderList({orders}) {
                     return <CompleteOrderCard 
                     key={index} 
                     order={order}
-                    index={index}
                     />
                 })
             }
