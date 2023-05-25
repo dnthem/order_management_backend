@@ -50,11 +50,7 @@ async function registerIndexedDB() {
   } else {
     console.log("initialize indexedDB...");
     try {
-<<<<<<< HEAD
       return await indexedDBController.createDB(window.indexedDB, DB_NAME, 1)
-=======
-      return await indexedDBController.createDB(DB_NAME, 1);
->>>>>>> a4f058aaed65ad182cf1eb32dc56084c1576c852
     } catch (error) {
       alert("Error has occured: \n" + error);
     }
