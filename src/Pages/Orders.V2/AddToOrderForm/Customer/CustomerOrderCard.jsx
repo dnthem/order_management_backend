@@ -3,7 +3,9 @@ import {FaRegTrashAlt} from 'react-icons/fa';
 function CustomerOrderCard(props) {
     const item = props.item;
   return (
-    <li className="list-group-item">
+    <li 
+      data-test-id="customer-cart-card"
+      className="list-group-item">
       <div className="d-flex justify-content-between align-items-center">
         <span style={{ width: "15ch", whiteSpace: "nowrap", overflow: "auto" }}>
           {props.id + 1}. {item.name}
@@ -33,7 +35,9 @@ function CustomerOrderCard(props) {
             <option value="20">20</option>
           </select>
         </div>
-        <button type="button" onClick={() => props.removeOrder(item.id)} className="btn btn-sm">
+        <button 
+          data-test-id="remove-item-from-cart-btn"
+          type="button" onClick={() => props.removeOrder(item.id)} className="btn btn-sm">
           <FaRegTrashAlt />
         </button>
       </div>

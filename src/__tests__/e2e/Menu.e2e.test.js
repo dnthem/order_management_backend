@@ -11,7 +11,6 @@ function delay(time) {
 describe("IndexedDB Pre-checks", () => {
     let browser;
     let page;
-    let db;
     beforeAll(async () => {
       browser = await puppeteer.launch({
         headless: false,
@@ -19,28 +18,8 @@ describe("IndexedDB Pre-checks", () => {
         defaultViewport: false
       }); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
       page = await browser.newPage();
-      // await page.goto('chrome://indexeddb-internals');
-      // await page.evaluate(() => {
-      //   try {
-      //       indexedDB.deleteDatabase('ORDER_MANAGEMENT');
-      //   } catch (e)
-      //   {
-      //       console.log(e);
-      //   }
-      // });
 
       await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
-
-      db = await page.evaluate((databaseName, ver) => new Promise((resolve, reject) => {
-        const request = window.indexedDB.open(databaseName, ver);
-        request.onsuccess = (e) => {
-          resolve(e.target.result);
-        }
-        request.onerror = () => {
-          reject(null);
-        }
-    }), databaseName, version);
-      
     });
 
     afterAll(() => browser.close());
@@ -141,8 +120,6 @@ describe("Menu", () => {
       await (await page.waitForSelector('input[data-test-id="new-card-item-name"]')).type('Test');
       await (await page.waitForSelector('input[data-test-id="new-card-item-price"]')).type('10');
       await (await page.waitForSelector('button[data-test-id="new-item-save"]')).click();
-      console.log('Item added to menu');
-      
       
       const after = await page.$$('div[data-test-id="menu-item-card"]');
       expect(after.length).toBe(before.length + 1);
@@ -195,8 +172,6 @@ describe("Menu", () => {
 
     // confirm delete
     page.on('dialog', async dialog => {
-      console.log(dialog.message());
-
       await dialog.accept();
     });
 
@@ -215,7 +190,6 @@ describe("Menu", () => {
     const item = cards[randomItem];
     const cardBody = await item.$('div.card-body');
     const hideBtn = await cardBody.$('input[data-test-id="hide"]');
-    console.log('hideBtn', hideBtn)
     await hideBtn.click();
 
     // check if item is hidden by checking item css 

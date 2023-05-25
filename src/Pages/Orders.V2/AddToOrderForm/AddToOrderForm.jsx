@@ -93,6 +93,7 @@ function AddToOrderForm(props) {
         <>
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
             <div
+                data-test-id="add-to-order-form"
                 className={`col-md-12 col-xl-10 p-3 bg-white border rounded-3 shadow-lg`}
                 style={{
                     position: "fixed",
@@ -124,8 +125,12 @@ function AddToOrderForm(props) {
                 </div>
                 <div className="row pt-3 border-top bg-">
                     <div className="col-12 d-flex justify-content-end">
-                        <button className="btn btn-primary" onClick={handleAddToOrder}>{btnText}</button>
-                        <button className="btn btn-danger ms-2" onClick={() => props.showForm(false)}>Cancel</button>
+                        <button
+                            data-test-id="add-to-order-form-btn"
+                         className="btn btn-primary" onClick={handleAddToOrder}>{btnText}</button>
+                        <button
+                            data-test-id="add-to-order-form-cancel-btn"
+                         className="btn btn-danger ms-2" onClick={() => props.showForm(false)}>Cancel</button>
                     </div>
                 </div>
             </div>

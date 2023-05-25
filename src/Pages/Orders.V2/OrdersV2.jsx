@@ -167,7 +167,13 @@ function OrdersV2() {
 
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-evenly">
-                        <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
+                        <button 
+                            data-test-id='add-new-order-btn' 
+                            className="mt-4 btn fw-bold text-primary" 
+                            title="Add new order" 
+                            onClick={() => setShowUserInfoForm(true)}
+                        >New order <AiOutlinePlusCircle/>
+                        </button>
                         <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     

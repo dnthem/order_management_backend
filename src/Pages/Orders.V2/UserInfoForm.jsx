@@ -111,6 +111,7 @@ function UserInfoForm(props) {
       <>
       <Backdrop/>
       <div
+        data-test-id='add-customer-form'
         className={`col-md-5 col-xl-3 p-3 border border-5 border-` + outline}
         style={{
           borderRadius: "5px",
@@ -123,7 +124,8 @@ function UserInfoForm(props) {
           boxShadow: "0 0 10px rgba(0,0,0,.5)",
         }}
       >
-        <div className="section-title text-center" style={{position: 'relative'}}>
+        <div 
+          className="section-title text-center" style={{position: 'relative'}}>
           <h2><AiOutlineIdcard/> Customer Infomation</h2>
           <CloseBtn onClick={() => props.showForm(false)}/>
         </div>
@@ -137,6 +139,7 @@ function UserInfoForm(props) {
                 )}
               </label>
               <input
+                data-test-id='customer-name-input'
                 type="text"
                 className="form-control"
                 id="customerName"
@@ -156,7 +159,9 @@ function UserInfoForm(props) {
                 `}
 
               </style>
-              <ul className="list-group">
+              <ul 
+                data-test-id='suggestions-list'
+                className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
                     <li 
@@ -180,6 +185,7 @@ function UserInfoForm(props) {
               <AiOutlinePhone/> Phone
               </label>
               <input
+                data-test-id='phone-input'
                 inputMode="numeric"
                 autoComplete='off'
                 type="text"
@@ -192,6 +198,7 @@ function UserInfoForm(props) {
             </div>
 
             <button
+              data-test-id='confirm-btn'
               type="submit"
               className={`btn btn-` + outline}
               onClick={handleSubmit}
