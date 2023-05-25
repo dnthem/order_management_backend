@@ -186,7 +186,9 @@ function OrdersV2() {
                         <h2>Completed Orders
                         
                         </h2>
-                        <aside className="text-muted">Total: ${total}</aside>
+                        <aside 
+                        data-test-id='total-completed-orders'
+                        className="text-muted">Total: ${total}</aside>
                     </div>
                     <div className="section-content w-100 position-relative">
                         <CompleteOrderList orders={completed}/>

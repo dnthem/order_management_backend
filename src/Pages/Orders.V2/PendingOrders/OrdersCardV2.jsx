@@ -32,8 +32,8 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
       <div className="position-absolute end-0 bottom-0">
       <div className="d-flex justify-content-end">
 
-        <button data-test-id="order-edit-btn"  onClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
-        <button data-test-id="order-complete-btn" onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
+        <button data-test-id="edit-order-btn"  onClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
+        <button data-test-id="complete-order-btn" onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
         </div>
         </div>
     </div>
