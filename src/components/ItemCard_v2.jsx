@@ -96,7 +96,7 @@ function ItemCardV2(props) {
           <div className="d-flex justify-content-between">
             <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Hide from menu</label>
             <div className="form-check form-switch">
-              <input data-test-id='hidden' className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={hideHandler} checked={itemHidden}/>
+              <input data-test-id='hide' className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={hideHandler} checked={itemHidden}/>
               
             </div>
           </div>
