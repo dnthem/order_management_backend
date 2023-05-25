@@ -2,11 +2,16 @@
     "plugins": ["@babel/plugin-syntax-jsx"],
     "presets": [
         "@babel/preset-env",
-        ["@babel/preset-react", {"runtime": "automatic"}],
+        ["@babel/preset-react", {"runtime": "automatic"}]
       ],
     "env": {
       "test": {
         "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      },
+      "production": {
+        "plugins": [
+          ["babel-plugin-react-remove-properties", { "properties": ["data-test-id"] }]
+        ]
       }
     }
 }
