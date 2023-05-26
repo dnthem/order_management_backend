@@ -18,6 +18,15 @@ export const STORES = {
   ITEMCOUNT: "ItemCount",
 }
 
+if (import.meta.env.MODE??false === "development") {
+  console.log("Development Mode");
+  console.log(import.meta.env.VITE_NODE_ENV);
+}
+else {
+  // nulltify console.log in production mode
+  console.log = () => { };
+}
+
 
 function Render (db, state = 1) {
   root.render(
@@ -97,6 +106,8 @@ async function init() {
     Render(DB, 0);
   });
   closeDB(DB);
+
+
 }
 
 window.addEventListener("DOMContentLoaded", init);

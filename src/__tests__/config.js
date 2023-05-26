@@ -1,6 +1,6 @@
 export const databaseName = "ORDER_MANAGEMENT";
 export const version = 1;
-export const pageUrl = "https://deploy-preview-16--order-management-app.netlify.app";
+export const pageUrl = import.meta.env.PREVIEW_URL || "https://localhost:5173/";
 export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
