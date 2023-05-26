@@ -145,7 +145,7 @@ describe('Order - Dashboard', () => {
         const revenueValue = await revenueText.evaluate(el => parseFloat(el.innerText.slice(1)));
 
         // total items sold info
-        const totalItemsSold = await page.$('[data-test-id="total-items-sold"]');
+        const totalItemsSold = await page.$('[data-test-id="total-items-sold-today"]');
         const totalItemsSoldText = await totalItemsSold.$('[data-test-id="card-info-value"]');
         const totalItemsSoldValue = await totalItemsSoldText.evaluate(el => parseInt(el.innerText));
 
