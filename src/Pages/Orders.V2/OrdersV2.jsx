@@ -13,9 +13,10 @@ import { STORES } from "../../indexedDB/indexedDB";
 function OrdersV2() {
     const [orders, setOrders] = useData({
         store: STORES.ORDERSV2.name,
-        index: STORES.ORDERSV2.keyPath,
+        index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
+
 
     const [customers, setCustomers] = useData({
         store: STORES.CUSTOMERS.name,

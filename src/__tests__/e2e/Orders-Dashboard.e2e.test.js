@@ -14,7 +14,7 @@ describe('Order - Dashboard', () => {
     let browser;
     let page;
     let totalIncome = 0;
-
+    let totalItems = 0;
     beforeAll(async () => {
         browser = await puppeteer.launch({
             headless: false,
@@ -93,6 +93,7 @@ describe('Order - Dashboard', () => {
             const indxedList = [1,1,2,3,4];
             for (let j = 0; j < numberOfItems; j++) {
                 totalIncome += await addItemsToOrder(indxedList[j]);
+                totalItems++;
             }
             await addToOrder();
             await page.waitForTimeout(100);
@@ -100,7 +101,7 @@ describe('Order - Dashboard', () => {
 
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(10);
-    }, 6000);
+    }, 10000);
 
 
     test('2. Complete 10 orders', async () => {
@@ -108,7 +109,7 @@ describe('Order - Dashboard', () => {
         const completeOrderBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         for (let i = 0; i < completeOrderBtns.length; i++) {
             await completeOrderBtns[i].click({clickCount: 2, delay: 100});
-            await page.waitForTimeout(200);
+            await page.waitForTimeout(100);
         }
 
         const cards = await page.$$('div[data-test-id="order-card"]');
@@ -128,9 +129,35 @@ describe('Order - Dashboard', () => {
         expect(total).toBe(totalIncome);
     });
 
-    test('5. Navigate to orders dashboard', async () => {
+    test('5. Check dashboard info matches testing', async () => {
         await NavigateTo('#Dashboard');
-        await page.waitForTimeout(10000);
+        await page.waitForTimeout(100);
         
-    },12000);
+        // Get dashboard info
+        // income up to date info
+        const incomeUpToDate = await page.$('[data-test-id="income-up-to-date"]');
+        const incomeUpToDateText = await incomeUpToDate.$('[data-test-id="card-info-value"]');
+        const incomeUpToDateValue = await incomeUpToDateText.evaluate(el => parseFloat(el.innerText.slice(1)));
+
+        // revenue today info
+        const revenue = await page.$('[data-test-id="revenue-today"]');
+        const revenueText = await revenue.$('[data-test-id="card-info-value"]');
+        const revenueValue = await revenueText.evaluate(el => parseFloat(el.innerText.slice(1)));
+
+        // total items sold info
+        const totalItemsSold = await page.$('[data-test-id="total-items-sold"]');
+        const totalItemsSoldText = await totalItemsSold.$('[data-test-id="card-info-value"]');
+        const totalItemsSoldValue = await totalItemsSoldText.evaluate(el => parseInt(el.innerText));
+
+        // Total customers info
+
+        const totalCustomers = await page.$('[data-test-id="total-customers"]');
+        const totalCustomersText = await totalCustomers.$('[data-test-id="card-info-value"]');
+        const totalCustomersValue = await totalCustomersText.evaluate(el => parseInt(el.innerText));
+
+        expect(totalCustomersValue).toBe(10);
+        expect(totalItemsSoldValue).toBe(totalItems);
+        expect(revenueValue).toBe(totalIncome);
+        expect(incomeUpToDateValue).toBe(totalIncome); 
+    });
 });

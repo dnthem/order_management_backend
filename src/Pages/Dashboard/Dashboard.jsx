@@ -99,8 +99,13 @@ function Dashboard(props) {
             title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
 
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
-            <CardInfoDB title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
-            <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB
+             dataTestId='total-items-sold-today'
+             title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
+
+            <CardInfoDB
+             dataTestId='total-customers'
+             title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
 
             <CardInfoDB title='Trending (compared to the prior day)' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
         </div>

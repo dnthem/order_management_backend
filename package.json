@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand",
     "teste2e": "jest src/__tests__/e2e/*",
     "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",
     "dev": "vite",
