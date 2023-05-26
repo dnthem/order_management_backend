@@ -67,10 +67,15 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       customers.createIndex('phone', 'phone', { unique: true });
 
       menu.createIndex('id', 'id', { unique: true });
-      //sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+
       sampleData['Menu'].forEach(e => menu.add(e));
-      //sampleData['Customers'].forEach(e => customers.add(e));
-      //sampleData['Income'].forEach(e => income.add(e))
+
+      if (import.meta.env.MODE !== 'development') {
+        console.log('Creating sample data');
+        sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+        sampleData['Customers'].forEach(e => customers.add(e));
+        sampleData['Income'].forEach(e => income.add(e))
+      }
     };
     request.onerror = (event) => reject(event.error);
 
