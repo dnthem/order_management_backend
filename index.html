@@ -2,12 +2,53 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+    <link rel="icon" type="image/x+icon" href="/favicon.ico"/>
+    <link rel="apple-touch-icon" href="/src/assets/icon_180x180.png" sizes="180x180">
+    <link rel="mask-icon" href="/src/assets/icon_512x512.png" color="#242424">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="theme-color" content="#212529">
+    <meta name="description" content="Order Management Application">
+    <meta name="HandheldFriendly" content="true" />
+    <title>Order Management</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
   </head>
-  <body>
-    <div id="root"></div>
+  <body class="sb-nav-fixed">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+      <!-- Sidebar Toggle-->
+      <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0 mx-2" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+      <!-- Navbar Brand-->
+      <a class="navbar-brand ps-3" href="index.html">Order Management</a>
+      
+      
+      
+  </nav>
+  <div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+      <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+          <div class="sb-sidenav-menu">
+              <div class="nav">
+                  <div class="sb-sidenav-menu-heading">Core</div>
+                  <button class="btn nav-link" id="Dashboard">
+                      <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                      Dashboard
+                  </button>
+                  <div class="sb-sidenav-menu-heading">Main</div>
+                  <button id="Menu" class="nav-link btn">
+                    Menu
+                  </button>
+                  <button id="Orders" class="btn nav-link">Orders</button>
+                  <button id="History" class="btn nav-link">History</button>
+                  <button id="Setting" class="btn nav-link">Setting</button>
+              </div>
+          </div>
+      </nav>
+    </div>
+    <div id="layoutSidenav_content">
+
+    </div>
+  </div>
+  
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
