@@ -55,8 +55,11 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
           break;
         case "update":
           await indexedDBController.updateARecord(db, store, newVal);
-          if (newData.length === 0)
+          if (newData.length === 0) {
             newData.push(newVal);
+            break;
+          }
+            
           newData = newData.map((item) =>item[indexField] === newVal[indexField] ? newVal : item)
           break;
         case "delete":
