@@ -17,7 +17,7 @@ describe('Order - Dashboard', () => {
     let totalItems = 0;
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             devtools: false,
             defaultViewport: null
         }); // error if not headless : 'old not used :
@@ -87,7 +87,7 @@ describe('Order - Dashboard', () => {
 
         for (let i = 0; i < 10; i++) {
             await AddCustomer(`Test${i}`, (9000000000 + i).toString()); 
-            await page.waitForTimeout(100);
+            await page.waitForTimeout(200);
             
             const numberOfItems = 5 
             const indxedList = [1,1,2,3,4];

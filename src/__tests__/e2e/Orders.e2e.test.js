@@ -15,7 +15,7 @@ describe('Orders - basic checks', () => {
 
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: false,
+            headless: true,
             devtools: false,
             defaultViewport: null
         }); // error if not headless : 'old not used :
@@ -179,7 +179,7 @@ describe('Orders - basic checks', () => {
 
     test('12. Edit order and expect to at most 2 items in the order', async () => {
         // edit order
-        const editOrderBtn = await page.$('button[data-test-id="edit-order-btn"]');
+        const editOrderBtn = await page.waitForSelector('button[data-test-id="edit-order-btn"]');
         await editOrderBtn.click();
 
         // remove all items except 2
@@ -188,6 +188,7 @@ describe('Orders - basic checks', () => {
         for(let i = cartItems.length-1; i > 1; i--) {
             const removeBtn = await cartItems[i].$('button[data-test-id="remove-item-from-cart-btn"]');
             await removeBtn.click();
+            await page.waitForTimeout(100);
         }
         // confirm order
         const confirmBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
