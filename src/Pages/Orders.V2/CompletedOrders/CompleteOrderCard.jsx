@@ -1,6 +1,8 @@
 function CompleteOrderCard({ order }) {
   return (
-    <li className="list-group-item d-flex justify-content-between align-items-start">
+    <li
+      data-test-id="completed-order-card"
+      className="list-group-item d-flex justify-content-between align-items-start">
       <div className="ms-2 me-auto">
         <div className="fw-bold">
           {order.orderID + 1}. {order.customer.customerName}

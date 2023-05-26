@@ -4,7 +4,9 @@ function MenuTable(props) {
     
 
     return ( 
-        <table className="table">
+        <table
+            data-test-id="menu-table"
+            className="table">
             <thead className="position-sticky top-0 bg-light">
                 <tr >
                     <th>Item Name</th>

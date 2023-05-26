@@ -90,13 +90,22 @@ function Dashboard(props) {
                 
         </div>
         <div className="row">
-            <CardInfoDB title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate[0]?.Total??0)} icon={<BsCurrencyDollar size={30}/>}/>
+            <CardInfoDB 
+            dataTestId='income-up-to-date'
+            title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate[0]?.Total??0)} icon={<BsCurrencyDollar size={30}/>}/>
 
-            <CardInfoDB title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
+            <CardInfoDB
+            dataTestId='revenue-today'
+            title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
 
             <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
-            <CardInfoDB title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
-            <CardInfoDB title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB
+             dataTestId='total-items-sold-today'
+             title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
+
+            <CardInfoDB
+             dataTestId='total-customers'
+             title='Total Customers' value={Intl.NumberFormat('en-us').format(totalCustomers)} icon={<BsFillBarChartFill size={30}/>}/>
 
             <CardInfoDB title='Trending (compared to the prior day)' value={incomeTrending + '%'} icon={incomeTrending >= 0? <BiTrendingUp/> : <BiTrendingDown/>}/>
         </div>

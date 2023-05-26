@@ -13,11 +13,12 @@ import CloseBtn from "../../../components/CloseBtn";
 function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
   return (
     <div
+      data-test-id="order-card"
       className="col-xl-2 col-lg-3 mx-1 my-2 overflow-hidden position-relative"
       style={{ backgroundColor: "lightblue", borderRadius: "20px", width: "fit-content", height: "fit-content", minWidth: "2", minHeight: "18em"} }
     >
       <div className="card-body" style={{ position: "relative", paddingBottom: '2.5em'}}>
-        <CloseBtn onDoubleClick={() => onDelete(id)} />
+        <CloseBtn dataTestId="delete-order-btn" onDoubleClick={() => onDelete(id)} />
         <div className="header">
           <h5 className="card-title">{id} - {order.customer.customerName}</h5>
           <h6 className="card-subtitle mb-2 text-muted">{order.customer.phone}</h6>
@@ -31,8 +32,8 @@ function OrderCardV2({id, order, onDelete, onComplete, onEdit }) {
       <div className="position-absolute end-0 bottom-0">
       <div className="d-flex justify-content-end">
 
-        <button onClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
-        <button onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
+        <button data-test-id="edit-order-btn"  onClick={() => onEdit(order)} className="btn text-muted" title="Edit order">Edit</button>
+        <button data-test-id="complete-order-btn" onDoubleClick={() => onComplete(id, order)} className="btn text-primary">Complete</button>
         </div>
         </div>
     </div>

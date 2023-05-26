@@ -32,13 +32,14 @@ export const STORES = {
 
 /**
  * Creates indexedDB and return a db reference
+ * @param {indexedDBRef} indexedDB indexedDB reference
  * @param {string} dbName Data name
  * @param {Number} version 
  * @returns indexedDB reference
  */
-indexedDBController.createDB = function (dbName, version = undefined) {
+indexedDBController.createDB = function (indexedDB,  dbName, version = undefined) {
   return new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(dbName, version);
+    const request = indexedDB.open(dbName, version);
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
@@ -65,12 +66,15 @@ indexedDBController.createDB = function (dbName, version = undefined) {
       customers.createIndex('customerID', 'customerID', { unique: true });
       customers.createIndex('phone', 'phone', { unique: true });
 
+
       menu.createIndex('id', 'id', { unique: true });
-      sampleData['OrdersV2'].forEach(e => orderV2.add(e));
       sampleData['Menu'].forEach(e => menu.add(e));
-      sampleData['Customers'].forEach(e => customers.add(e));
-      sampleData['Income'].forEach(e => income.add(e));
-      sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e));
+
+      if (import.meta.env.MODE === 'development') {
+        sampleData['OrdersV2'].forEach(e => orderV2.add(e));
+        sampleData['Customers'].forEach(e => customers.add(e));
+        sampleData['Income'].forEach(e => income.add(e))
+      }
     };
     request.onerror = (event) => reject(event.error);
 

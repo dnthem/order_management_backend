@@ -39,7 +39,11 @@ function Customer(props) {
                                 <span>Deliver Date:</span>
                                 <input type="date" className="border-0 bg-transparent" value={dateToISO(props.deliverDate)} onChange={(e) => props.setDeliverDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
                             </div>
-                            <div className="">Total: <span className='fw-bold'>${total}</span></div>
+                            <div className="">Total: 
+                                <span  
+                                    data-test-id='order-total'
+                                    className='fw-bold'>${total}</span>
+                            </div>
                             <div className="">Payment type: 
                                 <select className="border-0 bg-transparent" value={props.paymentType} onChange={(e) => props.setPaymentType(e.target.value)}>
                                     <option value="Cash">Cash</option>

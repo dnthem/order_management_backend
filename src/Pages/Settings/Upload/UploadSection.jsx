@@ -35,7 +35,7 @@ function UploadSection(props) {
             const data = JSON.parse(res);
 
             const promises = [];
-            if (store??true)
+            if (!store)
             {
                 for (const store in STORES) {
                     if (STORES[store].name === STORES.ITEMCOUNT.name) continue;

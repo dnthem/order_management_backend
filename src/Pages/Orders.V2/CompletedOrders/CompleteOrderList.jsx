@@ -1,7 +1,10 @@
 import CompleteOrderCard from "./CompleteOrderCard";
 function CompleteOrderList({orders}) {
     return ( 
-        <ul className="list-group position-relative overflow-auto" style={{height: "75dvh"}}>
+        <ul 
+            data-test-id="completed-order-list"
+            className="list-group position-relative overflow-auto" 
+            style={{height: "75dvh"}}>
             {
                 orders.map((order, index) => {
                     return <CompleteOrderCard 

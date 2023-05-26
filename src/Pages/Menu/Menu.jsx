@@ -33,6 +33,7 @@ function Menu(props) {
       Photo: undefined,
       Hidden: false,
       DateAdded: dateFormat(),
+      new: true,
     };
     setMenu({
       type: "add",
@@ -44,6 +45,7 @@ function Menu(props) {
 
   const updateMenu = (newItem) => {
     console.log(newItem);
+    newItem.new = false;
     setMenu({
       type: "update",
       indexField: "id",
@@ -59,7 +61,7 @@ function Menu(props) {
         </div>
         <div className="col">
           <div className="d-flex justify-content-center">
-            <button className="mt-4 btn border-black" onClick={addNewItem}>
+            <button data-test-id='add-new-item' className="mt-4 btn border-black" onClick={addNewItem}>
             <GrFormAdd/>Add new item 
             </button>
           </div>
@@ -80,6 +82,7 @@ function Menu(props) {
               updateMenu={updateMenu}
               Count={e.Count}
               Hidden={e.Hidden}
+              isNew={e.new}
             />
           )).reverse()
         }

@@ -3,7 +3,7 @@ function ListItem(props) {
     const [showMore, setShowMore] = useState(false);
     const list = props.list;
     return ( 
-        <ul className="list-group" style={{ listStyle: "none" }} onClick={() => list.length > 3 && setShowMore(!showMore)}>
+        <ul data-test-id="order-cart-list" className="list-group" style={{ listStyle: "none" }} onClick={() => list.length > 3 && setShowMore(!showMore)}>
             {
                 list.map((item, index, arr) => {
                     if (index === 3 && !showMore) {

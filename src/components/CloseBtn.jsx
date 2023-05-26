@@ -1,6 +1,6 @@
-function CloseBtn({onClick, onDoubleClick}) {
+function CloseBtn({onClick, onDoubleClick, dataTestId}) {
     return ( 
-        <button
+        <button data-test-id={dataTestId}
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className="btn"

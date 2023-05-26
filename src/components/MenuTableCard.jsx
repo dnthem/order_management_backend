@@ -15,12 +15,20 @@ function MenuTableCard(props) {
     }
 
     return ( 
-        <tr ref={trRef}>
+        <tr 
+            data-test-id="menu-table-card"
+            ref={trRef}>
             <td style={{verticalAlign:'middle'}}>
                 <img src={props.Photo !== undefined? URL.createObjectURL(props.Photo):'/template.jpg'} alt="" width={'100vw'} /> {props.Title}
             </td>
-            <td style={{verticalAlign:'middle'}}>${props.Price}</td>
-            <td colSpan={2}  style={{verticalAlign:'middle'}}><button className="btn" onClick={handleOnclick}>select</button></td>
+            <td
+                data-test-id="menu-table-card-price"
+             style={{verticalAlign:'middle'}}>${props.Price}</td>
+            <td colSpan={2}  style={{verticalAlign:'middle'}}>
+                <button 
+                    data-test-id="add-to-order-btn"
+                    className="btn" onClick={handleOnclick}>select</button>
+                </td>
         </tr>
      );
 }

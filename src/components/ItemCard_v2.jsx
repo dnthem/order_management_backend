@@ -73,21 +73,20 @@ function ItemCardV2(props) {
 
     }
 
-    const cardClass = edit? 'card border-danger border-2': 'card';
-
+    const cardClass = edit? 'card border-danger border-2 overflow-hidden': 'card overflow-hidden';
   return (
-    <div className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2" style={itemHidden? {opacity: 0.5}:{}}>
+    <div data-test-id="menu-item-card" className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2 " style={itemHidden? {opacity: 0.5}:{}}>
     <div className={cardClass}>
       <img src={itemPhoto !== undefined? URL.createObjectURL(itemPhoto):IMAGE_TEMPLATE} className="card-img-top" alt={cardProps.Title} />
       {edit && <input type='file' accept="image" onChange={(e) => setItemPhoto(e.target.files[0])}/>}
 
       <div className="card-body">
      
-        <input type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize fs-5 text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>
+        <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>
 
         <h6 className="card-subtitle mb-2" >
             
-            Prices: $<input type='number' inputMode="numeric" disabled={!edit} className="card-title bg-transparent border-0" onFocus={handleOnFocus}  onChange={(e) => setItemPrice(e.target.value)} value={itemPrice} style={{maxWidth: '6ch'}} min={0} max={100}/>
+            Prices: $<input data-test-id={props.isNew?'new-card-item-price':'item-price'} type='number' inputMode="numeric" disabled={!edit} className="card-title bg-transparent border-0" onFocus={handleOnFocus}  onChange={(e) => setItemPrice(e.target.value)} value={itemPrice} style={{maxWidth: '6ch'}} min={0} max={100}/>
 
         </h6>
 
@@ -97,18 +96,30 @@ function ItemCardV2(props) {
           <div className="d-flex justify-content-between">
             <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Hide from menu</label>
             <div className="form-check form-switch">
-              <input className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={hideHandler} checked={itemHidden}/>
+              <input data-test-id='hide' className="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={hideHandler} checked={itemHidden}/>
               
             </div>
           </div>
 
 
 
-          {!edit && <button className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>}
-          {edit && <button className="btn btn-primary "  type="button"onClick={saveHandler}>Save</button>}
+          {
+            !edit && 
+            <button data-test-id={props.isNew?'new-card-edit':'edit'}  className="btn btn-primary" type="button" onClick={() => {setEdit(true)}}>Edit</button>
+          }
 
-          {!edit && <button onClick={removeHandler} className="btn btn-danger" type="button">Remove</button>}
-          {edit && <button onClick={cancleHandler} className="btn btn-danger" type="button">Cancel</button>}
+          {
+            edit && 
+            <button data-test-id={props.isNew?'new-item-save':'save'}  className="btn btn-primary "  type="button"onClick={saveHandler}>Save</button>
+          }
+
+          {
+            !edit && <button data-test-id={props.isNew?'new-item-remove':'remove'}  onClick={removeHandler} className="btn btn-danger" type="button">Remove</button>
+          }
+
+          {
+            edit && <button data-test-id={props.isNew?'new-item-cancel':'cancle'}  onClick={cancleHandler} className="btn btn-danger" type="button">Cancel</button>
+          }
 
           
         </div>

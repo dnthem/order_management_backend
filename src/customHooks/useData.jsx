@@ -21,7 +21,8 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
           var response = await indexedDBController.getListOfRecords(db, store, index, keyPath);
         else
           var response = await indexedDBController.getLimitRecords(db, store, index, limit);
-
+        if (response === undefined || response === null)
+          response = [];
         setData(response);
       } catch (error) {
         alert(error);
@@ -54,9 +55,16 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
           break;
         case "update":
           await indexedDBController.updateARecord(db, store, newVal);
+          if (newData.length === 0) {
+            newData.push(newVal);
+            break;
+          }
+            
           newData = newData.map((item) =>item[indexField] === newVal[indexField] ? newVal : item)
           break;
         case "delete":
+          if (newData.length === 0)
+            break;
           await indexedDBController.deleteARecord(db, store, keyPath);
           newData = newData.filter((item) => item[indexField] !== keyPath);
           break;
