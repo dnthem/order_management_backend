@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Backdrop should render Backdrop component 1`] = `
+<div
+  className="backdrop"
+  style={
+    {
+      "backgroundColor": "rgba(0,0,0,.5)",
+      "height": "100%",
+      "left": "0",
+      "position": "fixed",
+      "top": "0",
+      "width": "100%",
+      "zIndex": "999",
+    }
+  }
+/>
+`;

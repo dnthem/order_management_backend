@@ -13,9 +13,10 @@ import { STORES } from "../../indexedDB/indexedDB";
 function OrdersV2() {
     const [orders, setOrders] = useData({
         store: STORES.ORDERSV2.name,
-        index: STORES.ORDERSV2.keyPath,
+        index: 'deliverDate',
         keyPath: new Date().toLocaleDateString("en-us")
     });
+
 
     const [customers, setCustomers] = useData({
         store: STORES.CUSTOMERS.name,
@@ -167,7 +168,13 @@ function OrdersV2() {
 
                 <div className="col-md-4 col-sm-12">
                     <div className="d-flex justify-content-evenly">
-                        <button className="mt-4 btn fw-bold text-primary" title="Add new order" onClick={() => setShowUserInfoForm(true)}>New order <AiOutlinePlusCircle/></button>
+                        <button 
+                            data-test-id='add-new-order-btn' 
+                            className="mt-4 btn fw-bold text-primary" 
+                            title="Add new order" 
+                            onClick={() => setShowUserInfoForm(true)}
+                        >New order <AiOutlinePlusCircle/>
+                        </button>
                         <DownloadBtn data={orders} fileName='Order_Date_' contentFormat={downloadOrderFormat}/>
                     </div>
                     
@@ -180,7 +187,9 @@ function OrdersV2() {
                         <h2>Completed Orders
                         
                         </h2>
-                        <aside className="text-muted">Total: ${total}</aside>
+                        <aside 
+                        data-test-id='total-completed-orders'
+                        className="text-muted">Total: ${total}</aside>
                     </div>
                     <div className="section-content w-100 position-relative">
                         <CompleteOrderList orders={completed}/>

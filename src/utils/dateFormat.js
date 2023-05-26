@@ -23,10 +23,16 @@ export const getCurrentTime = () => {
     return today.getHours() + ":" + today.getMinutes();
 }
 
-export const convertISOToDateFormat = (date) => {
+export const convertISOToUSA = (date) => {
     const dateAsNumber = Date.parse(date);
     const d = new Date(dateAsNumber + 7 * 60 * 60 * 1000);
     return d.toLocaleDateString('en-US');
+}
+
+export const convertUSAtoISO = (date) => {
+    const dateAsNumber = Date.parse(date);
+    const d = new Date(dateAsNumber - 7 * 60 * 60 * 1000);
+    return d.toISOString().substring(0,10);
 }
 
 /**
