@@ -41,49 +41,47 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
    * @returns the new ID of the record added
    * @throws error if the type is invalid
    */
-  async function updateData ({ type, indexField, newVal = null, keyPath = "", limit }) {
-    let newData = [...data];
-    let newID = -1;
+  async function updateData({ type, indexField, newVal = null, keyPath = "", limit }) {
+    /*
+      explaination of the callback function in useData:
+      By using the callback form of setData, we ensure that the state is updated correctly, even when multiple updateData calls are made in quick succession.
+    */
+
     try {
       switch (type) {
         case "add":
           const res = await indexedDBController.addData(db, store, newVal);
-          newData.push({
-            ...newVal, [indexField]: res
-          });
-          newID = res;
-          break;
+          setData(prevData => [...prevData, { ...newVal, [indexField]: res }]);
+          return res;
+  
         case "update":
           await indexedDBController.updateARecord(db, store, newVal);
-          if (newData.length === 0) {
-            newData.push(newVal);
-            break;
+          if (data.length === 0) {
+            setData([newVal]);
+            return null;
           }
-            
-          newData = newData.map((item) =>item[indexField] === newVal[indexField] ? newVal : item)
-          break;
+          setData(prevData =>
+            prevData.map(item => (item[indexField] === newVal[indexField] ? newVal : item))
+          );
+          return null;
+  
         case "delete":
-          if (newData.length === 0)
-            break;
           await indexedDBController.deleteARecord(db, store, keyPath);
-          newData = newData.filter((item) => item[indexField] !== keyPath);
-          break;
-
+          setData(prevData => prevData.filter(item => item[indexField] !== keyPath));
+          return null;
+  
         case "getlimit":
           const response = await indexedDBController.getLimitRecords(db, store, index, limit);
-          newData = response;
-          break;
-
+          setData(response);
+          return null;
+  
         default:
           throw new Error("Invalid type");
       }
-      setData(newData);
     } catch (error) {
       alert(error);
-    } finally {
-      return newID;
     }
-  };
+  }
 
   return [data, updateData];
 }

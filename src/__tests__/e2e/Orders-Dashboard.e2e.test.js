@@ -28,12 +28,7 @@ describe('Order - Dashboard', () => {
         // Clear indexedDB
         await page.goto('chrome://indexeddb-internals');
         await page.evaluate(() => {
-            try {
                 indexedDB.deleteDatabase('ORDER_MANAGEMENT');
-            } catch (e)
-            {
-                console.log(e);
-            }
         });
         
         await page.goto(pageUrl, { waitUntil: 'networkidle0' });
@@ -125,8 +120,6 @@ describe('Order - Dashboard', () => {
         const totalIncomeElement = await page.$('[data-test-id="total-completed-orders"]');
         const totalIncomeText = await totalIncomeElement.evaluate(el => el.innerText);
         const total = parseFloat(totalIncomeText.replace('Total: $', ''));
-        console.log('Total income: ', total);
-        console.log('Total income: ', totalIncome);
         expect(total).toBe(totalIncome);
     });
 
@@ -166,3 +159,5 @@ describe('Order - Dashboard', () => {
         expect(totalItemsSoldValue).toBeGreaterThan(totalItems); 
     },120000);
 });
+
+
