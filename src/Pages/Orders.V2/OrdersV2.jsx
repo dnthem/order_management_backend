@@ -67,7 +67,7 @@ function OrdersV2() {
     /**
      * Complete order, update customer order count, total spent, and update menu
      */
-    const onComplete = (id, order) => {
+    const onComplete = async (id, order) => {
         setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
 
         const currentCustomer = customers.find(customer => customer.customerID === order.customer.customerID);
@@ -75,10 +75,14 @@ function OrdersV2() {
         setCustomers({type: 'update', indexField: STORES.CUSTOMERS.keyPath, keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
         
         // update menu
-        order.cart.forEach(item => {
-            const currentItem = menu.find(menuItem => menuItem.id === item.id);
-            setMenu({type: 'update', indexField: STORES.MENU.keyPath, keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
-        })
+        for (let i = 0; i < order.cart.length; i++) {
+            const currentItem = menu.find(item => item.id === order.cart[i].id);
+            const newVal = {
+                ...currentItem,
+                Count: currentItem.Count + order.cart[i].quantity,
+            };
+            await setMenu({type: 'update', indexField: STORES.MENU.keyPath, keyPath: currentItem.id, newVal: newVal});
+        }
 
         // update income
         const incomeData = {
