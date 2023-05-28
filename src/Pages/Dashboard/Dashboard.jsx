@@ -92,7 +92,7 @@ function Dashboard(props) {
         <div className="row">
             <CardInfoDB 
             dataTestId='income-up-to-date'
-            title='Income Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate[0]?.Total??0)} icon={<BsCurrencyDollar size={30}/>}/>
+            title='Total Revenue Up to Date' value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(incomeUpToDate[0]?.Total??0)} icon={<BsCurrencyDollar size={30}/>}/>
 
             <CardInfoDB
             dataTestId='revenue-today'
@@ -135,7 +135,7 @@ function Dashboard(props) {
                 <div className="card mb-4">
                     <div className="card-header">
                         <i className="fas fa-chart-area me-1"></i>
-                        Income Chart
+                        Revenue over time
                     </div>
                     
                     <div className="card-body">

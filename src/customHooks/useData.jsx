@@ -21,9 +21,7 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
           var response = await indexedDBController.getListOfRecords(db, store, index, keyPath);
         else
           var response = await indexedDBController.getLimitRecords(db, store, index, limit);
-        if (response === undefined || response === null)
-          response = [];
-        setData(response);
+        setData(response??[]);
       } catch (error) {
         alert(error);
       }
@@ -34,6 +32,10 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
   /**
    * Update data in the object store
    * @param {string} type - add, update, delete, getlimit
+   * - add: add a new record to the object store
+   * - update: update an existing record in the object store or if the record does not exist, add a new record
+   * - delete: delete a record from the object store
+   * - getlimit: get a number of records from the object store
    * @param {string} indexField - the field that is used as the index
    * @param {Object} newVal - the new value to be added or updated
    * @param {string} keyPath - the keyPath of the record to be deleted
