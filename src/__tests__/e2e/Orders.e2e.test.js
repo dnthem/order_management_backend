@@ -178,7 +178,7 @@ describe('Orders - basic checks', () => {
 
         const completeOrderBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         await completeOrderBtns[0].click({clickCount: 2, delay: 100});
-
+        await page.waitForTimeout(100);
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(1);
     });
