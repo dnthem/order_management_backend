@@ -1,4 +1,10 @@
 const sampleData = {
+  IncomeUpToDate: [{
+    Total: 128,
+    Date: new Date().toLocaleDateString("en-us"),
+    id: 1,
+    UpdatedTime: new Date().getTime(),
+  }],
   Menu: [
     {
       Title: "Orange chicken bowl",
@@ -178,7 +184,7 @@ const sampleData = {
       total: 109,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 3,
       completedTime: "17:24",
     },
@@ -200,7 +206,7 @@ const sampleData = {
       total: 144,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 4,
       completedTime: "17:23",
     },
@@ -219,7 +225,7 @@ const sampleData = {
       total: 120,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 5,
       completedTime: "17:24",
     },

@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useData } from "../../customHooks/useData";
 import { dateFormat, downloadOrderFormat, getCurrentTime } from "../../utils";
 import { STORES } from "../../indexedDB/indexedDB";
+import Loader from "../../components/Loaders/Loader";
 
 function OrdersV2() {
     const [orders, setOrders] = useData({
@@ -55,9 +56,12 @@ function OrdersV2() {
     const [orderDate, setOrderDate] = useState(dateFormat());
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
+    const [loading, setLoading] = useState(false);
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
     const total = completed.reduce((acc, order) => acc + order.total, 0);
+
+    const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
 
     // order CRUD
     const onDelete = (id) => {
@@ -67,32 +71,38 @@ function OrdersV2() {
     /**
      * Complete order, update customer order count, total spent, and update menu
      */
-    const onComplete = (id, order) => {
-        setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
+    const onComplete = async (id, order) => {
+        setLoading(true);
+
+        await setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
 
         const currentCustomer = customers.find(customer => customer.customerID === order.customer.customerID);
         // update customer order count
-        setCustomers({type: 'update', indexField: STORES.CUSTOMERS.keyPath, keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
+        await setCustomers({type: 'update', indexField: STORES.CUSTOMERS.keyPath, keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
         
         // update menu
-        order.cart.forEach(item => {
-            const currentItem = menu.find(menuItem => menuItem.id === item.id);
-            setMenu({type: 'update', indexField: STORES.MENU.keyPath, keyPath: item.id, newVal: {...currentItem, Count: currentItem.Count + item.quantity}});
-        })
+        for (let i = 0; i < order.cart.length; i++) {
+            const currentItem = menu.find(item => item.id === order.cart[i].id);
+            const newVal = {
+                ...currentItem,
+                Count: currentItem.Count + order.cart[i].quantity,
+            };
+            await setMenu({type: 'update', indexField: STORES.MENU.keyPath, keyPath: currentItem.id, newVal: newVal});
+        }
 
         // update income
         const incomeData = {
             Date: new Date().toLocaleDateString("en-us"),
             Total: (income[0]?.Total??0) + order.total,
         }
-        setIncome({type: 'update', indexField: STORES.INCOME.keyPath, newVal: incomeData});
+        await setIncome({type: 'update', indexField: STORES.INCOME.keyPath, newVal: incomeData});
 
         // update item count
         const itemCountData = {
             Date: new Date().toLocaleDateString("en-us"),
             Count: (itemCount[0]?.Count??0) + order.cart.reduce((acc, item) => acc + item.quantity, 0),
         }
-        setItemCount({type: 'update', indexField: STORES.ITEMCOUNT.keyPath, newVal: itemCountData});
+        await setItemCount({type: 'update', indexField: STORES.ITEMCOUNT.keyPath, newVal: itemCountData});
 
         // update income up to date
         const newIncomeUpToDateData = {
@@ -101,7 +111,12 @@ function OrdersV2() {
             Total: (incomeUpToDate[0]?.Total??0) + order.total,
             UpdateTime: new Date().getTime(),
         }
-        setIncomeUpToDate({type: 'update', indexField: STORES.INCOMEUPTODATE.keyPath, newVal: newIncomeUpToDateData});
+        await setIncomeUpToDate({type: 'update', indexField: STORES.INCOMEUPTODATE.keyPath, newVal: newIncomeUpToDateData});
+
+        // fake loading
+        await waitFor(0);
+
+        setLoading(false);
     }
 
     const onEdit = (order) => {
@@ -131,7 +146,7 @@ function OrdersV2() {
 
     return ( 
         <>
-            
+            {loading && <Loader/>}
             {
                 showUserInfoForm && 
                 <UserInfoForm 

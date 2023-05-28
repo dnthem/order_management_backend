@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, version, store, NUMBEROFSTORES } from "../config";
+import { pageUrl, databaseName, version, store, NUMBEROFSTORES, parseCurrency } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 // Delay function
 function delay(time) {
@@ -13,11 +13,12 @@ describe('Order - Dashboard', () => {
 
     let browser;
     let page;
-    let totalIncome = 0;
+    let totalIncome = sampleData.OrdersV2.reduce((total, order) => total + order.total, 0);
+    const totalOrders = sampleData.OrdersV2.length;
     let totalItems = 0;
     beforeAll(async () => {
         browser = await puppeteer.launch({
-            headless: true,
+            headless: false,
             devtools: false,
             defaultViewport: null
         }); // error if not headless : 'old not used :
@@ -27,12 +28,7 @@ describe('Order - Dashboard', () => {
         // Clear indexedDB
         await page.goto('chrome://indexeddb-internals');
         await page.evaluate(() => {
-            try {
                 indexedDB.deleteDatabase('ORDER_MANAGEMENT');
-            } catch (e)
-            {
-                console.log(e);
-            }
         });
         
         await page.goto(pageUrl, { waitUntil: 'networkidle0' });
@@ -100,11 +96,11 @@ describe('Order - Dashboard', () => {
         }
 
         const cards = await page.$$('div[data-test-id="order-card"]');
-        expect(cards.length).toBe(10);
+        expect(cards.length).toBe(10 + totalOrders);
     }, 10000);
 
 
-    test('2. Complete 10 orders', async () => {
+    test('2. Complete all orders', async () => {
 
         const completeOrderBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         for (let i = 0; i < completeOrderBtns.length; i++) {
@@ -114,7 +110,7 @@ describe('Order - Dashboard', () => {
 
         const cards = await page.$$('div[data-test-id="order-card"]');
         const completedCards = await page.$$('li[data-test-id="completed-order-card"]');
-        expect(completedCards.length).toBe(10);
+        expect(completedCards.length).toBe(10 + totalOrders);
         expect(cards.length).toBe(0);
 
     });
@@ -124,8 +120,6 @@ describe('Order - Dashboard', () => {
         const totalIncomeElement = await page.$('[data-test-id="total-completed-orders"]');
         const totalIncomeText = await totalIncomeElement.evaluate(el => el.innerText);
         const total = parseFloat(totalIncomeText.replace('Total: $', ''));
-        console.log('Total income: ', total);
-        console.log('Total income: ', totalIncome);
         expect(total).toBe(totalIncome);
     });
 
@@ -137,12 +131,12 @@ describe('Order - Dashboard', () => {
         // income up to date info
         const incomeUpToDate = await page.$('[data-test-id="income-up-to-date"]');
         const incomeUpToDateText = await incomeUpToDate.$('[data-test-id="card-info-value"]');
-        const incomeUpToDateValue = await incomeUpToDateText.evaluate(el => parseFloat(el.innerText.slice(1)));
+        const incomeUpToDateValue = parseCurrency(await incomeUpToDateText.evaluate(el => (el.innerText)));
 
         // revenue today info
         const revenue = await page.$('[data-test-id="revenue-today"]');
         const revenueText = await revenue.$('[data-test-id="card-info-value"]');
-        const revenueValue = await revenueText.evaluate(el => parseFloat(el.innerText.slice(1)));
+        const revenueValue = parseCurrency(await revenueText.evaluate(el => (el.innerText)));
 
         // total items sold info
         const totalItemsSold = await page.$('[data-test-id="total-items-sold-today"]');
@@ -155,9 +149,15 @@ describe('Order - Dashboard', () => {
         const totalCustomersText = await totalCustomers.$('[data-test-id="card-info-value"]');
         const totalCustomersValue = await totalCustomersText.evaluate(el => parseInt(el.innerText));
 
-        expect(totalCustomersValue).toBe(10);
-        expect(totalItemsSoldValue).toBe(totalItems);
+
+        expect(totalCustomersValue).toBe(10 + sampleData.Customers.length);
         expect(revenueValue).toBe(totalIncome);
-        expect(incomeUpToDateValue).toBe(totalIncome); 
-    });
+        expect(incomeUpToDateValue).toBe(sampleData.IncomeUpToDate[0].Total + totalIncome);
+
+        // Total items sold should be greater than total items because we added 10 orders with 5 items each
+        // and there exists some orders in the sample data
+        expect(totalItemsSoldValue).toBeGreaterThan(totalItems); 
+    },120000);
 });
+
+

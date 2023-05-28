@@ -7,7 +7,7 @@ import { getTotalItemSold, getIncomeTrending, incomeChartConverter, dataConverte
 import {BsCurrencyDollar, BsFillBarChartFill} from 'react-icons/bs';
 import {RiDashboard3Line} from 'react-icons/ri';
 import { useData } from "../../customHooks/useData";
-import Loader from "../../components/Loader";
+import Loader from "../../components/Loaders/Loader";
 import { dateFormat } from "../../utils";
 import {BiTrendingUp ,BiTrendingDown} from 'react-icons/bi';
 import { STORES } from "../../indexedDB/indexedDB";
@@ -98,7 +98,9 @@ function Dashboard(props) {
             dataTestId='revenue-today'
             title={`Revenue Today ` + dateFormat()} value={Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(revenueToday)} icon={<BsCurrencyDollar size={30}/>}/>
 
-            <CardInfoDB title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
+            <CardInfoDB
+             dataTestId='total-items-sold'
+             title='Total items sold' value={Intl.NumberFormat('en-us').format(totalItemsSold)} icon={<BsFillBarChartFill size={30}/>}/>
             <CardInfoDB
              dataTestId='total-items-sold-today'
              title='Total items sold today' value={itemCount[0]?.Count??0} icon={<BsFillBarChartFill size={30}/>}/>
