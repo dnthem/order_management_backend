@@ -161,27 +161,21 @@ function UserInfoForm(props) {
                 `}
 
               </style>
-              <ul 
+              <datalist 
                 data-test-id='suggestions-list'
                 className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <li 
+                    <option 
                       className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
-                      <div className="row">
-                        <div className="col-6">
-                          <span>{suggestion.customerName}</span>
-                        </div>
-                        <div className="col-6">
-                          <span>{suggestion.phone}</span>
-                        </div>
-                      </div>
-                    </li>
+                      {suggestion.customerName} &nbsp;
+                      {suggestion.phone}
+                    </option>
                   ))}
-              </ul>
+              </datalist>
 
               <label htmlFor="phone" className="form-label">
               <AiOutlinePhone/> Phone

@@ -5,7 +5,7 @@ import OrderCardV2 from "./PendingOrders/OrdersCardV2";
 import CompleteOrderList from "./CompletedOrders/CompleteOrderList";
 import UserInfoForm from "./UserInfoForm";
 import AddToOrderForm from "./AddToOrderForm/AddToOrderForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useData } from "../../customHooks/useData";
 import { dateFormat, downloadOrderFormat, getCurrentTime } from "../../utils";
 import { STORES } from "../../indexedDB/indexedDB";
@@ -155,6 +155,31 @@ function OrdersV2() {
         setCart(null);
         setCustomer(customer);
     }
+
+    useEffect(() => {
+        let timeOut;
+        function refreshPageAtTime(hour, minute, second) {
+            const now = new Date();
+            const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, second);
+            let delay = targetTime - now;
+          
+            if (delay < 0) {
+              targetTime.setDate(targetTime.getDate() + 1);
+              delay = targetTime - now;
+            }
+          
+            timeOut = setTimeout(() => {
+              location.reload();
+            }, delay);
+        }
+          
+        
+        refreshPageAtTime(0, 0, 0);
+
+        return () => {
+            clearTimeout(timeOut);
+        }
+    },[]);
 
     return ( 
         <>
