@@ -82,11 +82,14 @@ function ItemCardV2(props) {
 
       <div className="card-body">
      
-        <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>
+        {!edit && <span className="card-title border-0 fw-bold text-capitalize text-dark text-truncate">{itemName}</span>}
+        {edit && <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>}
 
         <h6 className="card-subtitle mb-2" >
             
-            Prices: $<input data-test-id={props.isNew?'new-card-item-price':'item-price'} type='number' inputMode="numeric" disabled={!edit} className="card-title bg-transparent border-0" onFocus={handleOnFocus}  onChange={(e) => setItemPrice(e.target.value)} value={itemPrice} style={{maxWidth: '6ch'}} min={0} max={100}/>
+            Prices: $
+            
+            <input data-test-id={props.isNew?'new-card-item-price':'item-price'} type='number' inputMode="numeric" disabled={!edit} className="card-title bg-transparent border-0" onFocus={handleOnFocus}  onChange={(e) => setItemPrice(e.target.value)} value={itemPrice} style={{maxWidth: '6ch'}} min={0} max={100}/>
 
         </h6>
 

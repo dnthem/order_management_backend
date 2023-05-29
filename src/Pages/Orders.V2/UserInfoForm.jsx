@@ -8,12 +8,12 @@ import { dateFormat, phoneFormat } from '../../utils';
 /**
  * Function to filter the customers array based on the query
  * @param {string} query - The search query
- * @param {string} inputType - The input type to search on
+ * @param {string} searchField - The input type to search on
  * @returns {array} - The filtered array of customers
  */
-function autoComplete(customers, query, inputType) {
+function autoComplete(customers, query, searchField) {
   return customers.filter((customer) =>
-    customer[inputType].toLowerCase().includes(query.toLowerCase())
+    customer[searchField].toLowerCase().includes(query.toLowerCase())
   );
 }
 
