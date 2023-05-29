@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, parseCurrency } from "../config";
+import { pageUrl, parseCurrency, NavigateTo } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 
 
@@ -33,12 +33,6 @@ describe('Order Dashboard suite 2', () => {
     });
 
     afterAll(() => browser.close());
-
-    async function NavigateTo(tag) {
-        page.$eval(tag, el => el.click());
-        const sidebar = await page.waitForSelector('#sidebarToggle');
-        await sidebar.click();
-    }
 
     // Click add order button and add a customer 
     // and confirm
@@ -80,7 +74,7 @@ describe('Order Dashboard suite 2', () => {
     // Remove All orders
     test('1. Remove all orders', async () => {
         // navigate to orders
-        await NavigateTo('#Orders');
+        await NavigateTo(page, '#Orders');
         await page.waitForTimeout(200);
 
         // Remove all orders
@@ -141,7 +135,7 @@ describe('Order Dashboard suite 2', () => {
     // navigate to dashboard and check if the data is correct
     test('4. Check revenue today', async () => {
         // navigate to dashboard
-        await NavigateTo('#Dashboard');
+        await NavigateTo(page, '#Dashboard');
         await page.waitForTimeout(100);
 
         // get revenue today

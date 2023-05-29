@@ -36,12 +36,6 @@ describe('Order - Dashboard', () => {
 
     afterAll(() => browser.close());
 
-    async function NavigateTo(tag) {
-        page.$eval(tag, el => el.click());
-        const sidebar = await page.waitForSelector('#sidebarToggle');
-        await sidebar.click();
-    }
-
     // Click add order button and add a customer 
     // and confirm
     async function AddCustomer(customerName, phone) {
@@ -125,7 +119,7 @@ describe('Order - Dashboard', () => {
     });
 
     test('5. Check dashboard info matches testing', async () => {
-        await NavigateTo('#Dashboard');
+        await NavigateTo(page, '#Dashboard');
         await page.waitForTimeout(200);
         
         // Get dashboard info
