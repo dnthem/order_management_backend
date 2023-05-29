@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, version, store, NUMBEROFSTORES, parseCurrency } from "../config";
+import { pageUrl, NavigateTo, parseCurrency } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 // Delay function
 function delay(time) {

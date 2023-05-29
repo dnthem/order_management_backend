@@ -146,8 +146,10 @@ const sampleData = {
       notes: "I don't like spicy",
       status: false,
       orderID: 1,
+      nthOrderOfDay: 1,
     },
     {
+      nthOrderOfDay: 2,
       orderDate: "5/17/2023",
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -168,6 +170,7 @@ const sampleData = {
       orderID: 2,
     },
     {
+      nthOrderOfDay: 3,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -189,6 +192,7 @@ const sampleData = {
       completedTime: "17:24",
     },
     {
+      nthOrderOfDay: 4,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -211,6 +215,7 @@ const sampleData = {
       completedTime: "17:23",
     },
     {
+      nthOrderOfDay: 5,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -230,6 +235,7 @@ const sampleData = {
       completedTime: "17:24",
     },
     {
+      nthOrderOfDay: 6,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {

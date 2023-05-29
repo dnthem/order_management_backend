@@ -5,7 +5,7 @@ function CompleteOrderCard({ order }) {
       className="list-group-item d-flex justify-content-between align-items-start">
       <div className="ms-2 me-auto">
         <div className="fw-bold">
-          {order.orderID + 1}. {order.customer.customerName}
+          {order.nthOrderOfDay}. {order.customer.customerName}
         </div>
         Completed at: {order.completedTime}
         <br/>

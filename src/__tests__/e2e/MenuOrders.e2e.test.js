@@ -112,7 +112,6 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
             await page.waitForTimeout(200);
         }
 
-        console.log(listItems)
         // Go to order page
         await NavigateTo(page, "#Orders");
         await AddCustomer("test", "1234567890");

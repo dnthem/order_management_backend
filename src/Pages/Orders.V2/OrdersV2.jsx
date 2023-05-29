@@ -10,6 +10,7 @@ import { useData } from "../../customHooks/useData";
 import { dateFormat, downloadOrderFormat, getCurrentTime } from "../../utils";
 import { STORES } from "../../indexedDB/indexedDB";
 import Loader from "../../components/Loaders/Loader";
+import useLocalStorage  from "../../customHooks/useLocalStorage";
 
 function OrdersV2() {
     const [orders, setOrders] = useData({
@@ -48,6 +49,9 @@ function OrdersV2() {
         index: STORES.INCOMEUPTODATE.keyPath,
         keyPath: 1,
     });
+
+    // the n-th order of the day
+    const [nthOrderOfDay, setNthOrderOfDay] = useLocalStorage('nthOrderOfDay', 0);
 
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
@@ -147,7 +151,8 @@ function OrdersV2() {
     }
 
     const onAddNewOrder = (newVal) => {
-        setOrders({type: 'add', indexField: STORES.ORDERSV2.keyPath, newVal: newVal});
+        setOrders({type: 'add', indexField: STORES.ORDERSV2.keyPath, newVal: {...newVal, nthOrderOfDay: nthOrderOfDay + 1}});
+        setNthOrderOfDay(nthOrderOfDay + 1);
     }
 
     const onUpdateOrder = (newVal) => { 
@@ -164,6 +169,8 @@ function OrdersV2() {
 
     useEffect(() => {
         let timeOut;
+
+
         function refreshPageAtTime(hour, minute, second) {
             const now = new Date();
             const targetTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hour, minute, second);
@@ -175,6 +182,7 @@ function OrdersV2() {
             }
           
             timeOut = setTimeout(() => {
+              localStorage.setItem('nthOrderOfDay', 0);
               location.reload();
             }, delay);
         }
@@ -265,7 +273,7 @@ function OrdersV2() {
                             pending.map((order, index) => {
                                 return <OrderCardV2 
                                 key={index} 
-                                id={order.orderID}
+                                nthOrderOfDay={order.nthOrderOfDay}
                                 order={order}
                                 onDelete={onDelete}
                                 onComplete={onComplete}
