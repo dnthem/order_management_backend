@@ -54,6 +54,10 @@ function OrdersV2() {
     const [orderID, setOrderID] = useState(-1);
     const [deliverDate, setDeliverDate] = useState(dateFormat());
     const [orderDate, setOrderDate] = useState(dateFormat());
+    const [notes, setNotes] = useState('');
+    const [paymentType, setPaymentType] = useState('Cash');
+
+
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
     const pending = orders.filter(order => !order.status);
@@ -138,6 +142,8 @@ function OrdersV2() {
         setOrderID(order.orderID);
         setDeliverDate(order.deliverDate);
         setOrderDate(order.orderDate);
+        setNotes(order.notes);
+        setPaymentType(order.paymentType);
     }
 
     const onAddNewOrder = (newVal) => {
@@ -203,6 +209,8 @@ function OrdersV2() {
                     orderID={orderID}
                     deliverDate={deliverDate}
                     orderDate={orderDate}
+                    notes={notes}
+                    paymentType={paymentType}
                     setDeliverDate={setDeliverDate}
                     setOrderDate={setOrderDate}
                     updateCustomer={setCustomer}

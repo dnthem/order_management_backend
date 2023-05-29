@@ -74,6 +74,7 @@ function ItemCardV2(props) {
     }
 
     const cardClass = edit? 'card border-danger border-2 overflow-hidden': 'card overflow-hidden';
+    
   return (
     <div data-test-id="menu-item-card" className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2 " style={itemHidden? {opacity: 0.5}:{}}>
     <div className={cardClass}>
@@ -83,7 +84,7 @@ function ItemCardV2(props) {
       <div className="card-body">
      
         {!edit && <span data-test-id={props.isNew?'new-card-item-name':'item-name'}  className="card-title border-0 fw-bold text-capitalize text-dark text-truncate">{itemName}</span>}
-        {edit && <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>}
+        {edit && <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 text-capitalize" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName} placeholder="item name"/>}
 
         <h6 className="card-subtitle mb-2" >
             

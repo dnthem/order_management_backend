@@ -11,9 +11,12 @@ function CompleteOrderCard({ order }) {
         <br/>
         Phone: {order.customer.phone}
         <br/>
-        {order.paymentType}
+        Payment type: {order.paymentType}
         <br/>
-        Notes: {order.notes}
+        <details className="text-wrap">
+          <summary>Notes</summary>
+          <p>{order.notes}</p>
+        </details>
       </div>
       <span className="badge bg-primary rounded-pill">${order.total}</span>
     </li>
