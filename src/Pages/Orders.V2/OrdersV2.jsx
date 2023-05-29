@@ -56,12 +56,9 @@ function OrdersV2() {
     const [orderDate, setOrderDate] = useState(dateFormat());
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
-    const [loading, setLoading] = useState(false);
     const pending = orders.filter(order => !order.status);
     const completed = orders.filter(order => order.status);
     const total = completed.reduce((acc, order) => acc + order.total, 0);
-
-    const waitFor = (ms) => new Promise(r => setTimeout(r, ms));
 
     // order CRUD
     const onDelete = (id) => {
@@ -72,13 +69,33 @@ function OrdersV2() {
      * Complete order, update customer order count, total spent, and update menu
      */
     const onComplete = async (id, order) => {
-        setLoading(true);
 
-        await setOrders({type: 'update', indexField: STORES.ORDERSV2.keyPath, keyPath: id, newVal: {...order, status: true, completedTime: getCurrentTime()}});
+        await setOrders(
+            {
+                type: 'update', 
+                indexField: STORES.ORDERSV2.keyPath, 
+                keyPath: id, 
+                newVal: {
+                    ...order, 
+                    status: true, 
+                    completedTime: getCurrentTime()
+                }
+            });
 
         const currentCustomer = customers.find(customer => customer.customerID === order.customer.customerID);
         // update customer order count
-        await setCustomers({type: 'update', indexField: STORES.CUSTOMERS.keyPath, keyPath: order.customerID, newVal: {...currentCustomer, orderCount: currentCustomer.orderCount + 1, totalSpent: currentCustomer.totalSpent + order.total}});
+        await setCustomers(
+            {
+                type: 'update', 
+                indexField: STORES.CUSTOMERS.keyPath, 
+                keyPath: order.customerID, 
+                newVal: {
+                    ...currentCustomer,
+                    orderCount: currentCustomer.orderCount + 1, 
+                    totalSpent: currentCustomer.totalSpent + order.total,
+                    lastPurchase: dateFormat()
+                }
+            });
         
         // update menu
         for (let i = 0; i < order.cart.length; i++) {
@@ -112,11 +129,6 @@ function OrdersV2() {
             UpdateTime: new Date().getTime(),
         }
         await setIncomeUpToDate({type: 'update', indexField: STORES.INCOMEUPTODATE.keyPath, newVal: newIncomeUpToDateData});
-
-        // fake loading
-        await waitFor(0);
-
-        setLoading(false);
     }
 
     const onEdit = (order) => {
@@ -146,7 +158,6 @@ function OrdersV2() {
 
     return ( 
         <>
-            {loading && <Loader/>}
             {
                 showUserInfoForm && 
                 <UserInfoForm 

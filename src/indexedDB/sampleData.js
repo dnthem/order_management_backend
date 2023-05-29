@@ -255,6 +255,7 @@ const sampleData = {
       phone: "123-456-7890",
       orderCount: 5,
       totalSpent: 100,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 2,
@@ -262,6 +263,7 @@ const sampleData = {
       phone: "555-123-4567",
       orderCount: 2,
       totalSpent: 50,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 3,
@@ -269,6 +271,7 @@ const sampleData = {
       phone: "555-555-1212",
       orderCount: 3,
       totalSpent: 75,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 4,
@@ -276,6 +279,7 @@ const sampleData = {
       phone: "987-654-3210",
       orderCount: 1,
       totalSpent: 25,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 5,
@@ -283,6 +287,7 @@ const sampleData = {
       phone: "555-888-9999",
       orderCount: 7,
       totalSpent: 175,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 6,
@@ -290,6 +295,7 @@ const sampleData = {
       phone: "555-777-1212",
       orderCount: 2,
       totalSpent: 50,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 7,
@@ -297,6 +303,7 @@ const sampleData = {
       phone: "123-456-1230",
       orderCount: 5,
       totalSpent: 100,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
   ],
 };

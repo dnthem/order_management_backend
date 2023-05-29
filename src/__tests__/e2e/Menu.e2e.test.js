@@ -69,6 +69,7 @@ describe("Menu", () => {
       browser = await puppeteer.launch({
         headless: false,
         devtools: false,
+        defaultViewport: null
       });
       
       page = await browser.newPage();

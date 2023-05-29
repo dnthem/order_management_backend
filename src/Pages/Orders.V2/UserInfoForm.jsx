@@ -53,7 +53,7 @@ function UserInfoForm(props) {
         phone: phoneFormat(phone),
         orderCount: 0,
         totalSpent: 0,
-        dateAdded: dateFormat(),
+        lastPurchase: '',  
       };
       // new customer
       if (customerID === -1) {
@@ -62,7 +62,9 @@ function UserInfoForm(props) {
               indexField: "customerID",
               newVal: newCustomer,
           }); 
+          newCustomer.registerationDate = dateFormat();
       }
+
       newCustomer.customerID = newCustomerID; 
       setCustomerName("");
       setPhone("");
