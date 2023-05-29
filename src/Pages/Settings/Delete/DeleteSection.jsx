@@ -37,7 +37,7 @@ function DeleteSection(props) {
             <div className="ms-4">
                 <ListItem
                     title='Delete All your data'
-                    detail='Please, make sure you have saved all your data before proceeding furthur in this step'
+                    detail='Please make sure you have saved all your data before proceeding further in this step.'
                 >
                     <button onClick={handleOnClick} className="btn btn-danger">Delete</button>
                 </ListItem>

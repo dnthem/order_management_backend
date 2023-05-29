@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, parseCurrency } from "../config";
+import { pageUrl, parseCurrency, NavigateTo } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 
 
@@ -33,12 +33,6 @@ describe('Order Dashboard suite 2', () => {
     });
 
     afterAll(() => browser.close());
-
-    async function NavigateTo(tag) {
-        page.$eval(tag, el => el.click());
-        const sidebar = await page.waitForSelector('#sidebarToggle');
-        await sidebar.click();
-    }
 
     // Click add order button and add a customer 
     // and confirm
@@ -80,8 +74,8 @@ describe('Order Dashboard suite 2', () => {
     // Remove All orders
     test('1. Remove all orders', async () => {
         // navigate to orders
-        await NavigateTo('#Orders');
-        await page.waitForTimeout(100);
+        await NavigateTo(page, '#Orders');
+        await page.waitForTimeout(200);
 
         // Remove all orders
         const deleteBtns = await page.$$('button[data-test-id="delete-order-btn"]');
@@ -94,7 +88,7 @@ describe('Order Dashboard suite 2', () => {
         const cards = await page.$$('div[data-test-id="order-card"]');
 
         expect(cards.length).toBe(0);
-    });
+    }, 10000);
 
     // Add 10 orders with 5 items each
     test('2. Add 10 orders with 5 items each', async () => {
@@ -103,10 +97,10 @@ describe('Order Dashboard suite 2', () => {
         // Add 10 orders with 5 items each
         for (let i = 0; i < 10; i++) {
             await AddCustomer(`Customer`, `012345678${i}`);
-            await page.waitForTimeout(100);
+            await page.waitForTimeout(200);
             for (let j = 0; j < 5; j++) {
                 totalIncome += await addItemsToOrder(j);
-                await page.waitForTimeout(50);
+                await page.waitForTimeout(100);
             }
             await addToOrder();
             await page.waitForTimeout(100);
@@ -116,7 +110,7 @@ describe('Order Dashboard suite 2', () => {
         const cards = await page.$$('div[data-test-id="order-card"]');
 
         expect(cards.length).toBe(10);
-    }, 10000);
+    }, 15000);
 
     // Complete all orders
 
@@ -130,13 +124,8 @@ describe('Order Dashboard suite 2', () => {
             const newBtn = await page.$('button[data-test-id="complete-order-btn"]');
             await newBtn.click({clickCount: 2, delay: 100});
             await page.waitForTimeout(100);
-
-            // await NavigateTo('#Dashboard');
-            // await page.waitForTimeout(500);
-            // await NavigateTo('#Orders');
-            // await page.waitForTimeout(500);
         }
-
+        await page.waitForTimeout(100);
         // Check if all orders are completed
         const cards = await page.$$('li[data-test-id="completed-order-card"]');
 
@@ -146,7 +135,7 @@ describe('Order Dashboard suite 2', () => {
     // navigate to dashboard and check if the data is correct
     test('4. Check revenue today', async () => {
         // navigate to dashboard
-        await NavigateTo('#Dashboard');
+        await NavigateTo(page, '#Dashboard');
         await page.waitForTimeout(100);
 
         // get revenue today

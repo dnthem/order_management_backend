@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, version, store, NUMBEROFSTORES, parseCurrency } from "../config";
+import { pageUrl, NavigateTo, parseCurrency } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 // Delay function
 function delay(time) {
@@ -35,12 +35,6 @@ describe('Order - Dashboard', () => {
     });
 
     afterAll(() => browser.close());
-
-    async function NavigateTo(tag) {
-        page.$eval(tag, el => el.click());
-        const sidebar = await page.waitForSelector('#sidebarToggle');
-        await sidebar.click();
-    }
 
     // Click add order button and add a customer 
     // and confirm
@@ -90,6 +84,7 @@ describe('Order - Dashboard', () => {
             for (let j = 0; j < numberOfItems; j++) {
                 totalIncome += await addItemsToOrder(indxedList[j]);
                 totalItems++;
+                await page.waitForTimeout(100);
             }
             await addToOrder();
             await page.waitForTimeout(100);
@@ -97,7 +92,7 @@ describe('Order - Dashboard', () => {
 
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(10 + totalOrders);
-    }, 10000);
+    }, 20000);
 
 
     test('2. Complete all orders', async () => {
@@ -124,8 +119,8 @@ describe('Order - Dashboard', () => {
     });
 
     test('5. Check dashboard info matches testing', async () => {
-        await NavigateTo('#Dashboard');
-        await page.waitForTimeout(100);
+        await NavigateTo(page, '#Dashboard');
+        await page.waitForTimeout(200);
         
         // Get dashboard info
         // income up to date info
@@ -157,7 +152,7 @@ describe('Order - Dashboard', () => {
         // Total items sold should be greater than total items because we added 10 orders with 5 items each
         // and there exists some orders in the sample data
         expect(totalItemsSoldValue).toBeGreaterThan(totalItems); 
-    },120000);
+    },5000);
 });
 
 
