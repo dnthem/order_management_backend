@@ -82,7 +82,7 @@ function ItemCardV2(props) {
 
       <div className="card-body">
      
-        {!edit && <span className="card-title border-0 fw-bold text-capitalize text-dark text-truncate">{itemName}</span>}
+        {!edit && <span data-test-id={props.isNew?'new-card-item-name':'item-name'}  className="card-title border-0 fw-bold text-capitalize text-dark text-truncate">{itemName}</span>}
         {edit && <input data-test-id={props.isNew?'new-card-item-name':'item-name'} type='text' disabled={!edit} className="card-title bg-transparent border-0 fw-bold text-capitalize text-dark" onFocus={handleOnFocus}  onChange={(e) => setItemName(e.target.value)} value={itemName}/>}
 
         <h6 className="card-subtitle mb-2" >

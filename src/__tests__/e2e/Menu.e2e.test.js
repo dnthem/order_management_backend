@@ -99,7 +99,7 @@ describe("Menu", () => {
     await sidebar.click();
   }
 
-  test('Add an item to menu', async () => {
+  test('1. Add an item to menu', async () => {
 
       // Navigate to menu
       await NavigateToMenu();
@@ -122,7 +122,7 @@ describe("Menu", () => {
 
   });
 
-  test('Edit an item in menu', async () => {
+  test('2. Edit an item in menu', async () => {
     const before = await page.$$('div[data-test-id="menu-item-card"]');
 
     // Randomly select an item to edit
@@ -131,7 +131,7 @@ describe("Menu", () => {
     const cardBody = await item.$('div.card-body');
     const editBtn = await cardBody.$('button[data-test-id="edit"]');
     await editBtn.click();
-
+    await page.waitForTimeout(200);
     const inputText = await cardBody.$('input[data-test-id="item-name"]');
     await inputText.type('Edited');
     const inputPrice = await cardBody.$('input[data-test-id="item-price"]');
@@ -139,19 +139,19 @@ describe("Menu", () => {
     await inputPrice.type('0');
     const saveBtn = await cardBody.$('button[data-test-id="save"]');
     await saveBtn.click();
-
+    await page.waitForTimeout(200);
     // Check if item is edited
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     const editedItem = after[randomItem];
     const editedCardBody = await editedItem.$('div.card-body');
-    const editedItemName = await editedCardBody.$('input[data-test-id="item-name"]');
+    const editedItemName = await editedCardBody.$('span[data-test-id="item-name"]');
     const editedItemPrice = await editedCardBody.$('input[data-test-id="item-price"]');
 
-    expect(await editedItemName.evaluate(el => el.value)).toBe('Edited');
+    expect(await editedItemName.evaluate(el => el.innerText)).toBe('Edited');
     expect(await editedItemPrice.evaluate(el => el.value)).toBe('0');
   });
 
-  test('Delete an item in menu', async () => {
+  test('3. Delete an item in menu', async () => {
     // disable confirm dialog, set it to always true
     await page.evaluate(() => {
       window.confirm = () => true;
@@ -179,7 +179,7 @@ describe("Menu", () => {
   });
 
 
-  test('Hide an item in menu', async () => {
+  test('4. Hide an item in menu', async () => {
     // randomly select an item to hide
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * cards.length);
@@ -198,7 +198,7 @@ describe("Menu", () => {
     expect(css.opacity).toBe('0.5');
   });
 
-  test('Delete all items in menu', async () => {
+  test('5. Delete all items in menu', async () => {
 
     await page.evaluate(() => {
       window.confirm = () => true;
@@ -215,7 +215,7 @@ describe("Menu", () => {
     expect(after.length).toBe(0);
   });
 
-  test('Add multiple items to menu', async () => {
+  test('6. Add multiple items to menu', async () => {
 
     const addBtn = await page.waitForSelector('button[data-test-id="add-new-item"]');
 
@@ -232,7 +232,7 @@ describe("Menu", () => {
   },3000);
 
 
-  test('hide all items in menu', async () => {
+  test('7. hide all items in menu', async () => {
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
 
     let countHidden = 0;
@@ -254,7 +254,7 @@ describe("Menu", () => {
     expect(countHidden).toBe(cards.length);
   });
 
-  test('show all items in menu', async () => {
+  test('8. show all items in menu', async () => {
 
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     let countShown = 0;
@@ -277,7 +277,7 @@ describe("Menu", () => {
   });
 
 
-  test('Randomly hide an item in menu', async () => {
+  test('9. Randomly hide an item in menu', async () => {
 
     const before = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * before.length);
