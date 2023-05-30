@@ -34,7 +34,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     afterAll(() => browser.close());
 
     async function AddCustomer(customerName, phone) {
-        console.log("AddCustomer");
         await page.waitForSelector('button[data-test-id="add-new-order-btn"]', {timeout: 5000});
         page.$eval('button[data-test-id="add-new-order-btn"]', el => el.click());
 
@@ -91,7 +90,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     // Check if the added items are added in order page
     
     test("2. Add some items to menu page", async () => {
-        console.log("Test 2: Add some items to menu page");
         listItems = [];
         await NavigateTo(page, "#Menu");
         await page.waitForSelector('[data-test-id="menu-item-card"]');
@@ -99,7 +97,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
-        console.log("Test 2: Add some items to menu page: before loop");
+        
         for (let i = 0; i < 3; i++) {
             await btnAddItem.click();
             const cardBody = await page.waitForSelector('.card-body');
