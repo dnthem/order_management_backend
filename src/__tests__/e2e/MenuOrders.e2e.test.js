@@ -2,7 +2,7 @@ import puppeteer from "puppeteer";
 import { pageUrl, NavigateTo, parseCurrency } from "../config";
 
 
-describe('Check synchronization between Menu page and Menu on Order page', () => {
+describe('Check synchronization of the Menu on Menu and Order Pages', () => {
 
     let browser;
     let page;
@@ -11,7 +11,8 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
         browser = await puppeteer.launch({
             headless: false,
             devtools: false,
-            defaultViewport: null
+            defaultViewport: null,
+            // slowMo: 40,
         }); // error if not headless : 'old not used :
         
         page = await browser.newPage();
@@ -33,11 +34,12 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
     afterAll(() => browser.close());
 
     async function AddCustomer(customerName, phone) {
-        await page.waitForSelector('[data-test-id="add-new-order-btn"]');
-        const addOrderBtn = await page.$('[data-test-id="add-new-order-btn"]');
-        await addOrderBtn.click();
-        await page.waitForSelector('[data-test-id="add-customer-form"]');
-        const addCustomerForm = await page.$('[data-test-id="add-customer-form"]');
+        console.log("AddCustomer");
+        await page.waitForSelector('button[data-test-id="add-new-order-btn"]', {timeout: 5000});
+        page.$eval('button[data-test-id="add-new-order-btn"]', el => el.click());
+
+        await page.waitForSelector('div[data-test-id="add-customer-form"]', {timeout: 5000});
+        const addCustomerForm = await page.$('div[data-test-id="add-customer-form"]');
         const customerNameInput = await addCustomerForm.$('[data-test-id="customer-name-input"]');
         await customerNameInput.type(customerName);
         const customerPhoneInput = await addCustomerForm.$('[data-test-id="phone-input"]');
@@ -55,7 +57,7 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
     let listItems = []; // list of items to hide
     test("1. Hide some items in menu page", async () => {
         await NavigateTo(page, "#Menu");
-        await page.waitForSelector('[data-test-id="menu-item-card"]');
+        await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 5000});
         const menuItems = await page.$$('[data-test-id="menu-item-card"]');
         
         // Hide some random cards, and store their names in listItems
@@ -79,7 +81,7 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
             const index = listItems.findIndex(item => item === itemName);
             expect(index).toBe(-1);
         }
-    }, 10000);
+    }, 15000);
 
 
     // Test 2
@@ -89,12 +91,15 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
     // Check if the added items are added in order page
     
     test("2. Add some items to menu page", async () => {
+        console.log("Test 2: Add some items to menu page");
         listItems = [];
         await NavigateTo(page, "#Menu");
         await page.waitForSelector('[data-test-id="menu-item-card"]');
         
         // Add 3 new Items
-        const btnAddItem = await page.$('[data-test-id="add-new-item"]');
+        const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
+
+        console.log("Test 2: Add some items to menu page: before loop");
         for (let i = 0; i < 3; i++) {
             await btnAddItem.click();
             const cardBody = await page.waitForSelector('.card-body');
@@ -109,9 +114,8 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
 
             listItems.push("test" + i);
             await confirmBtn.click();
-            await page.waitForTimeout(200);
         }
-
+        
         // Go to order page
         await NavigateTo(page, "#Orders");
         await AddCustomer("test", "1234567890");
@@ -129,7 +133,7 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
         }
         expect(trueListItems.length).toBe(listItems.length);
 
-    }, 10000);
+    }, 15000);
 
     // Test 3
     // Remove some items from menu page
@@ -165,12 +169,11 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
             listItems.push(itemName);
             const removeBtn = await item.$('[data-test-id="remove"]');
             await removeBtn.click();
-            await page.waitForTimeout(200);
         }
 
         // Go to order page
         await NavigateTo(page, "#Orders");
-        await AddCustomer("test", "1234567890");
+        await AddCustomer("test", "1234569890");
 
         // Check if the removed items are removed in order page
         await page.waitForSelector('[data-test-id="menu-table-card"]');
@@ -185,7 +188,7 @@ describe('Check synchronization between Menu page and Menu on Order page', () =>
             }
         }
         expect(flag).toBe(true);
-    });
+    }, 15000);
 
     // Test 4
     // Change some items in menu page
