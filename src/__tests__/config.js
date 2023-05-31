@@ -9,7 +9,10 @@ export const launchOptions = {
     headless: import.meta.env.VITE_HEADLESS === "new" ? 'new' : false,
     devtools: false,
     defaultViewport: null,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    env: {
+        DISPLAY: import.meta.env.VITE_DISPLAY || null,
+    }
 };
 
 export const parseCurrency = (value) => {

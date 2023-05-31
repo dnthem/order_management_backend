@@ -35,5 +35,6 @@ jobs:
           VITE_PREVIEW_URL: https://localhost:3000/
           VITE_HEADLESS: new
           VITE_CHROME_PATH: /usr/bin/chromium-browser
+          VITE_DISPLAY: ":10.0"
         run: npm run test
 
