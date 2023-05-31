@@ -6,22 +6,30 @@ on:
       - Development
 
 jobs:
-  installDependencies:
-    name: Install Dependencies
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Use Node.js
         uses: actions/setup-node@v2
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
-        
-      - name: Install Dependencies
-        run: npm install
-      - name: Test Code
-        uses: mujo-code/puppeteer-headful@16.6.0
-        env:
-          CI: "true"
         with:
-          args: npm test
+          node-version: '15.x'
+          cache: 'npm'
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Perform e2e tests with Heaful Puppeteer
+        uses: maufrontier/puppeteer-headful@v3
+        env:
+          VITE_HEADLESS: 'false'
+
+        with:
+          commands: |
+            npm run build
+            npm run test
 
