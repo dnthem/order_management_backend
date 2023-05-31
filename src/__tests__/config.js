@@ -12,6 +12,7 @@ export const launchOptions = {
     args: ['--no-sandbox', '--disable-setuid-sandbox']
 };
 
+
 export const parseCurrency = (value) => {
     return parseFloat(value.replace(/[^0-9.-]+/g,""));
 }

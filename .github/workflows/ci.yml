@@ -6,30 +6,33 @@ on:
       - Development
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
-      
-      - name: Use Node.js
+
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: '15.x'
-          cache: 'npm'
-        env:
-          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: 'true'
-      
+          node-version: 16
+          
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libgconf-2-4
 
-      - name: Perform e2e tests with Heaful Puppeteer
-        uses: maufrontier/puppeteer-headful@v3
+      - name: run build
+        run: npm run build
+
+      - name: Run test
         env:
-          VITE_HEADLESS: 'false'
-
-        with:
-          commands: |
-            npm run build
-            npm run test
+          CI: true
+          VITE_PREVIEW_URL: https://localhost:3000/
+          VITE_HEADLESS: true
+        run: npm run test
 
