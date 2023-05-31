@@ -6,7 +6,7 @@ export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
     executablePath: import.meta.env.VITE_CHROME_PATH || null,
-    headless: import.meta.env.VITE_HEADLESS === "new" ? 'new' : false,
+    headless: import.meta.env.VITE_HEADLESS === true ? true : false,
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox']

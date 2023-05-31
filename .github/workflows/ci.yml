@@ -8,29 +8,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x]
+   
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16
           
       - name: Install dependencies
         run: npm install
-
-      - name: install chromium
-        run: sudo apt-get install chromium-browser
-      
-      - name: install xvfb
-        run: sudo apt-get install xvfb x11-apps x11-xkb-utils libx11-6 libx11-xcb1
-
-      - name: start xvfb
-        run: sudo Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
 
       - name: run build
         run: npm run build
@@ -39,8 +23,6 @@ jobs:
         env:
           CI: true
           VITE_PREVIEW_URL: https://localhost:3000/
-          VITE_HEADLESS: new
-          VITE_CHROME_PATH: /usr/bin/chromium-browser
-          VITE_DISPLAY: ":10.0"
+          VITE_HEADLESS: false
         run: npm run test
 
