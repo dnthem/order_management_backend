@@ -23,6 +23,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: install libXscrnSaver
+        run: sudo yum -y install libXScrnSaver-1.2.2-6.1.el7.x86_64
+
       - name: run build
         run: npm run build
 
@@ -30,6 +33,6 @@ jobs:
         env:
           CI: true
           VITE_PREVIEW_URL: https://localhost:3000/
-          VITE_HEADLESS: false
+          VITE_HEADLESS: new
         run: npm run test
 

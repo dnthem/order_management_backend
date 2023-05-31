@@ -7,7 +7,8 @@ export const NUMBEROFSTORES = 6;
 export const launchOptions = {
     headless: import.meta.env.VITE_HEADLESS === "new" ? 'new' : false,
     devtools: false,
-    defaultViewport: null
+    defaultViewport: null,
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
 };
 
 export const parseCurrency = (value) => {
