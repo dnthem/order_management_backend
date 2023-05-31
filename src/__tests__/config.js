@@ -1,12 +1,11 @@
 export const databaseName = "ORDER_MANAGEMENT";
 export const version = 1;
-export const pageUrl = import.meta.env.VITE_PREVIEW_URL || "https://localhost:3000/";
+export const pageUrl = "https://localhost:3000/";
 export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
-    executablePath: import.meta.env.PUPPETEER_EXEC_PATH || null,
-    headless: import.meta.env.VITE_HEADLESS === true ? true : false,
+    headless: true,
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
