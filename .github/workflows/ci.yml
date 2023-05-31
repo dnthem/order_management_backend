@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: install libXscrnSaver
-        run: sudo yum -y install libXScrnSaver-1.2.2-6.1.el7.x86_64
+      - name: install chromium
+        run: sudo apt-get install chromium-browser
 
       - name: run build
         run: npm run build
@@ -34,5 +34,6 @@ jobs:
           CI: true
           VITE_PREVIEW_URL: https://localhost:3000/
           VITE_HEADLESS: new
+          VITE_CHROME_PATH: /usr/bin/chromium-browser
         run: npm run test
 

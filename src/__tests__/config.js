@@ -5,6 +5,7 @@ export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
+    executablePath: import.meta.env.VITE_CHROME_PATH || null,
     headless: import.meta.env.VITE_HEADLESS === "new" ? 'new' : false,
     devtools: false,
     defaultViewport: null,
