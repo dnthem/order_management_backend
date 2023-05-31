@@ -6,23 +6,21 @@ on:
       - Development
 
 jobs:
-  test:
+  installDependencies:
+    name: Install Dependencies
     runs-on: ubuntu-latest
-   
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-          
-      - name: Install dependencies
-        run: npm install
-
-      - name: run build
-        run: npm run build
-
-      - name: Run test
+      - uses: actions/checkout@v3
+      - name: Install Dependencies
+        uses: actions/setup-node@v2
         env:
-          CI: true
-          VITE_PREVIEW_URL: https://localhost:3000/
-          VITE_HEADLESS: false
-        run: npm run test
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        with:
+          args: install
+      - name: Test Code
+        uses: mujo-code/puppeteer-headful@16.6.0
+        env:
+          CI: "true"
+        with:
+          args: npm test
 
