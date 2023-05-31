@@ -1,5 +1,5 @@
 import Backdrop from "../Backdrop";
-import "./Loader.css";
+import "./loader.css";
 function Loader(props) {
     return ( 
         <>
