@@ -5,7 +5,7 @@ export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
-    headless: true,
+    headless: import.meta.env.VITE_HEADLESS??'new',
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
