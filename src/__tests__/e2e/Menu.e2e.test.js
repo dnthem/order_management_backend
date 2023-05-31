@@ -18,11 +18,7 @@ describe("IndexedDB Pre-checks", () => {
     let page;
     beforeAll(async () => {
       server = await preview({ preview : { port : 3000 }});
-      browser = await puppeteer.launch({
-        headless: false,
-        devtools: false,
-        defaultViewport: null
-      }); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
+      browser = await puppeteer.launch(launchOptions); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
       page = await browser.newPage();
 
       await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
