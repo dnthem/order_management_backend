@@ -8,7 +8,10 @@ export const launchOptions = {
     headless: import.meta.env.VITE_HEADLESS??'new',
     devtools: false,
     defaultViewport: null,
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    env: {
+        DISPLAY: ":10.0",
+    },
 };
 
 

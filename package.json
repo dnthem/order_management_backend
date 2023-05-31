@@ -6,7 +6,7 @@
   "scripts": {
     "test:ci": "vitest",
     "test:watch": "vitest",
-    "test": "vitest --run --sequence",
+    "test": "vitest --run",
     "coverage": "vitest --coverage",
     "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",
     "dev": "vite",
