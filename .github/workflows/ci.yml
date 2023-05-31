@@ -27,10 +27,10 @@ jobs:
         run: sudo apt-get install chromium-browser
       
       - name: install xvfb
-        run: apt-get install xvfb x11-apps x11-xkb-utils libx11-6 libx11-xcb1
+        run: sudo apt-get install xvfb x11-apps x11-xkb-utils libx11-6 libx11-xcb1
 
       - name: start xvfb
-        run: Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
+        run: sudo Xvfb -ac :99 -screen 0 1280x1024x16 & export DISPLAY=:99
 
       - name: run build
         run: npm run build
