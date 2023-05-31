@@ -10,6 +10,8 @@ function delay(time) {
   });
 }
 
+console.log(launchOptions);
+
 describe("IndexedDB Pre-checks", () => {
     let server;
     let browser;
