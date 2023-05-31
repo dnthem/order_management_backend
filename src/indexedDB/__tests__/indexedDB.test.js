@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import indexedDBController from "../indexedDB";
 
 const STORES = {
@@ -238,12 +238,12 @@ describe('IndexedDB tests', () => {
 
     console.log = function() {};
   
-    beforeEach(async () => {
+    beforeAll(async () => {
       // Set up a fresh IndexedDB database for each test case
         db = await createDB('testDB', 1);
     });
   
-    afterEach(() => {
+    afterAll(() => {
       // Close the IndexedDB database after each test case
         db.close();
     });

@@ -8,26 +8,28 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [16.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Waiting for 200 from the Netlify Preview
-        uses: josephduffy/wait-for-netlify-action@v1
-        id: wait-for-netflify-preview
-        with:
-          site_name: "order-management-app"
           
       - name: Install dependencies
         run: npm install
 
-      - name: Run unit tests
+      - name: run build
+        run: npm run build
+
+      - name: Run test
         env:
-          VITE_PREVIEW_URL: ${{ steps.wait-for-netflify-preview.outputs.url }}
-        run: npm test
+          CI: true
+          VITE_PREVIEW_URL: https://localhost:3000/
+          VITE_HEADLESS: false
+        run: npm run test
+      

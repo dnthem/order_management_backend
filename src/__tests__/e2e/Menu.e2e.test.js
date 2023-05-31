@@ -1,6 +1,8 @@
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, version, store, NUMBEROFSTORES } from "../config";
+import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES } from "../config";
 import sampleData from "../../indexedDB/sampleData";
+import { preview } from 'vite';
 // Delay function
 function delay(time) {
   return new Promise(function(resolve) { 
@@ -9,9 +11,11 @@ function delay(time) {
 }
 
 describe("IndexedDB Pre-checks", () => {
+    let server;
     let browser;
     let page;
     beforeAll(async () => {
+      server = await preview({ preview : { port : 3000 }});
       browser = await puppeteer.launch({
         headless: false,
         devtools: false,
@@ -22,7 +26,10 @@ describe("IndexedDB Pre-checks", () => {
       await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
     });
 
-    afterAll(() => browser.close());
+    afterAll(() => {
+      browser.close();
+      server.httpServer.close();
+    });
   
     test('Check if indexedDB is created', async () => {
       const result = await page.evaluate((databaseName) => new Promise((resolve, reject) => {
@@ -61,16 +68,12 @@ describe("IndexedDB Pre-checks", () => {
 });
 
 describe("Menu", () => {
-  console.log = () => {};
-
+  let server;
   let browser;
   let page;
   beforeAll(async () => {
-      browser = await puppeteer.launch({
-        headless: false,
-        devtools: false,
-        defaultViewport: null
-      });
+      server = await preview({ preview : { port : 3000 }});
+      browser = await puppeteer.launch(launchOptions);
       
       page = await browser.newPage();
 
@@ -91,7 +94,10 @@ describe("Menu", () => {
 
   });
 
-  afterAll(() => browser.close());
+  afterAll(() => {
+    browser.close();
+    server.httpServer.close();
+  });
 
   async function NavigateToMenu() {
     page.$eval('#Menu', el => el.click());
