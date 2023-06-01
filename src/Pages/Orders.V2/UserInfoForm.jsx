@@ -57,12 +57,12 @@ function UserInfoForm(props) {
       };
       // new customer
       if (customerID === -1) {
-          newCustomerID = await setCustomers({ // add customer to database     
-              type: "add",
-              indexField: "customerID",
-              newVal: newCustomer,
-          }); 
-          newCustomer.registerationDate = dateFormat();
+        newCustomer.registerationDate = dateFormat();
+        newCustomerID = await setCustomers({ // add customer to database     
+            type: "add",
+            indexField: "customerID",
+            newVal: newCustomer,
+        }); 
       }
 
       newCustomer.customerID = newCustomerID; 
@@ -166,7 +166,7 @@ function UserInfoForm(props) {
                 className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <option 
+                    <option data-test-id="suggestion-item"
                       className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}

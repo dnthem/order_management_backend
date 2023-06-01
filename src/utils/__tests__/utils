@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import * as util from '../index.js';
 
 describe('utils', () => {

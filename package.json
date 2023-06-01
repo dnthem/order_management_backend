@@ -3,25 +3,11 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "jest": {
-    "preset": "jest-puppeteer",
-    "testMatch": [
-      "**/__tests__/**/*.js?(x)",
-      "**/?(*.)+(spec|test).js?(x)"
-    ],
-    "transform": {
-      "^.+\\.(js|jsx)$": "babel-jest"
-    },
-    "transformIgnorePatterns": [
-      "/node_modules/"
-    ],
-    "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-    }
-  },
   "scripts": {
-    "test": "jest --runInBand ",
-    "teste2e": "jest src/__tests__/e2e/* --runInBand",
+    "test:ci": "vitest",
+    "test:watch": "vitest",
+    "test": "vitest --run",
+    "coverage": "vitest --coverage",
     "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",
     "dev": "vite",
     "build": "vite build && npm run postbuild",
@@ -47,13 +33,12 @@
     "babel-plugin-transform-import-meta": "^2.2.0",
     "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "fake-indexeddb": "^4.0.1",
-    "jest": "^29.5.0",
-    "jest-puppeteer": "^9.0.0",
     "puppeteer": "^20.4.0",
     "purgecss": "^5.0.0",
     "react-test-renderer": "^18.2.0",
     "vite": "^4.0.0",
     "vite-plugin-mkcert": "^1.10.1",
-    "vite-plugin-pwa": "^0.14.1"
+    "vite-plugin-pwa": "^0.14.1",
+    "vitest": "^0.31.2"
   }
 }
