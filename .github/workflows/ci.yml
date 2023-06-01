@@ -34,5 +34,6 @@ jobs:
         env:
           CI: true
           VITE_PREVIEW_URL: https://localhost:3000/
-        run: npm run test
+        run: |
+          npm run test
 
