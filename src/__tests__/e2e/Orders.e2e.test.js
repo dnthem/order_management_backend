@@ -184,6 +184,7 @@ describe('Orders - basic checks', () => {
         const deleteOrderBtns = await page.$$('button[data-test-id="delete-order-btn"]');
         for (let i = 0; i < 2; i++) {
             await deleteOrderBtns[i].click({clickCount: 2, delay: 100});
+            await delay(100);
         }
 
         const cards = await page.$$('div[data-test-id="order-card"]');
