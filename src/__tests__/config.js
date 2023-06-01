@@ -6,7 +6,7 @@ export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
     slowMo: 0,
-    headless: false,
+    headless: import.meta.env.MODE === 'test' ? true : true,
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -21,4 +21,8 @@ export  async function NavigateTo(page, tag) {
     page.$eval(tag, el => el.click());
     const sidebar = await page.waitForSelector('#sidebarToggle');
     await sidebar.click();
+}
+
+export async function delay (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
