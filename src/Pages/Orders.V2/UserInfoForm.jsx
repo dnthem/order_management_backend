@@ -161,21 +161,21 @@ function UserInfoForm(props) {
                 `}
 
               </style>
-              <datalist 
+              <ul 
                 data-test-id='suggestions-list'
                 className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <option data-test-id="suggestion-item"
+                    <li data-test-id="suggestion-item"
                       className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
                       {suggestion.customerName} &nbsp;
                       {suggestion.phone}
-                    </option>
+                    </li>
                   ))}
-              </datalist>
+              </ul>
 
               <label htmlFor="phone" className="form-label">
               <AiOutlinePhone/> Phone
