@@ -121,7 +121,7 @@ describe("Menu", () => {
     page.on('dialog', async dialog => {
       await dialog.accept();
     });
-
+    await delay(100);
 
     // check if item is deleted
     const after = await page.$$('div[data-test-id="menu-item-card"]');
