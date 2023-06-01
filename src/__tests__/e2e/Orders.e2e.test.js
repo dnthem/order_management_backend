@@ -180,7 +180,7 @@ describe('Orders - basic checks', () => {
     },5000);
 
     test('9. Remove 2 orders and expect to have 2 orders', async () => {
-
+    
         const deleteOrderBtns = await page.$$('button[data-test-id="delete-order-btn"]');
         for (let i = 0; i < 2; i++) {
             await deleteOrderBtns[i].click({clickCount: 2, delay: 100});

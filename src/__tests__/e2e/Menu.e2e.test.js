@@ -185,6 +185,7 @@ describe("Menu", () => {
 
 
   test('7. hide all items in menu', async () => {
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
 
     let countHidden = 0;
@@ -207,7 +208,7 @@ describe("Menu", () => {
   });
 
   test('8. show all items in menu', async () => {
-
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     let countShown = 0;
     for (const card of cards) {
@@ -230,7 +231,7 @@ describe("Menu", () => {
 
 
   test('9. Randomly hide an item in menu', async () => {
-
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const before = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * before.length);
     const item = before[randomItem];
