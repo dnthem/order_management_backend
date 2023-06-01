@@ -1,38 +1,40 @@
 import puppeteer from "puppeteer";
-import { pageUrl, NavigateTo, parseCurrency } from "../config";
-
+import { pageUrl, NavigateTo, launchOptions } from "../config";
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import { preview } from 'vite';
 
 describe('Check synchronization of the Menu on Menu and Order Pages', () => {
-
+    let server;
     let browser;
     let page;
-
     beforeAll(async () => {
-        browser = await puppeteer.launch({
-            headless: false,
-            devtools: false,
-            defaultViewport: null,
-            // slowMo: 40,
-        }); // error if not headless : 'old not used :
+        server = await preview({ preview : { port : 3000 }});
+        browser = await puppeteer.launch(launchOptions);
         
         page = await browser.newPage();
-
+  
         // Clear indexedDB
         await page.goto('chrome://indexeddb-internals');
         await page.evaluate(() => {
-            try {
-                indexedDB.deleteDatabase('ORDER_MANAGEMENT');
-            } catch (e)
+          try {
+              indexedDB.deleteDatabase('ORDER_MANAGEMENT');
+          } catch (e)
             {
                 console.log(e);
             }
         });
+        page.close();
+        page = await browser.newPage();
+        await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
         
-        await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+  
     });
-
-    afterAll(() => browser.close());
-
+  
+    afterAll(() => {
+      browser.close();
+      server.httpServer.close();
+    });
+  
     async function AddCustomer(customerName, phone) {
         await page.waitForSelector('button[data-test-id="add-new-order-btn"]', {timeout: 5000});
         page.$eval('button[data-test-id="add-new-order-btn"]', el => el.click());

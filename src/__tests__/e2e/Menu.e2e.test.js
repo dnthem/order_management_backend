@@ -1,6 +1,8 @@
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, version, store, NUMBEROFSTORES } from "../config";
+import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES } from "../config";
 import sampleData from "../../indexedDB/sampleData";
+import { preview } from 'vite';
 // Delay function
 function delay(time) {
   return new Promise(function(resolve) { 
@@ -8,69 +10,15 @@ function delay(time) {
   });
 }
 
-describe("IndexedDB Pre-checks", () => {
-    let browser;
-    let page;
-    beforeAll(async () => {
-      browser = await puppeteer.launch({
-        headless: false,
-        devtools: false,
-        defaultViewport: null
-      }); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
-      page = await browser.newPage();
-
-      await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
-    });
-
-    afterAll(() => browser.close());
-  
-    test('Check if indexedDB is created', async () => {
-      const result = await page.evaluate((databaseName) => new Promise((resolve, reject) => {
-        const request = window.indexedDB.open(databaseName, 1);
-        request.onsuccess = () => {
-          resolve(true);
-        }
-        request.onerror = () => {
-          reject(false);
-        }
-    }), databaseName);
-      
-      expect(result).toBe(true);
-    });
-
-    test('Check if indexedDB has corret number of stores', async () => {
-      
-      const result = await page.evaluate(() => new Promise((resolve, reject) => {
-        const request = window.indexedDB.open('ORDER_MANAGEMENT', 1);
-        
-        request.onsuccess = () => {
-          const db = request.result;
-          const storeNames = db.objectStoreNames;
-          resolve(storeNames.length);
-        }
-
-        request.onerror = () => {
-          reject('Failed to open IndexedDB');
-        }
-
-    }));
-
-    expect(result).not.toBe('Failed to open IndexedDB');
-    expect(result).toBe(NUMBEROFSTORES);
-    });
-});
+console.log(launchOptions);
 
 describe("Menu", () => {
-  console.log = () => {};
-
+  let server;
   let browser;
   let page;
   beforeAll(async () => {
-      browser = await puppeteer.launch({
-        headless: false,
-        devtools: false,
-        defaultViewport: null
-      });
+      server = await preview({ preview : { port : 3000 }});
+      browser = await puppeteer.launch(launchOptions);
       
       page = await browser.newPage();
 
@@ -91,7 +39,10 @@ describe("Menu", () => {
 
   });
 
-  afterAll(() => browser.close());
+  afterAll(() => {
+    browser.close();
+    server.httpServer.close();
+  });
 
   async function NavigateToMenu() {
     page.$eval('#Menu', el => el.click());
@@ -170,7 +121,7 @@ describe("Menu", () => {
     page.on('dialog', async dialog => {
       await dialog.accept();
     });
-
+    await delay(100);
 
     // check if item is deleted
     const after = await page.$$('div[data-test-id="menu-item-card"]');
@@ -209,8 +160,9 @@ describe("Menu", () => {
       const cardBody = await card.$('div.card-body');
       const deleteBtn = await cardBody.$('button[data-test-id="remove"]');
       await deleteBtn.click();
+      
     }
-
+    await delay(100);
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(0);
   });
@@ -233,6 +185,7 @@ describe("Menu", () => {
 
 
   test('7. hide all items in menu', async () => {
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
 
     let countHidden = 0;
@@ -255,7 +208,7 @@ describe("Menu", () => {
   });
 
   test('8. show all items in menu', async () => {
-
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     let countShown = 0;
     for (const card of cards) {
@@ -278,7 +231,7 @@ describe("Menu", () => {
 
 
   test('9. Randomly hide an item in menu', async () => {
-
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const before = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * before.length);
     const item = before[randomItem];

@@ -21,19 +21,19 @@ jobs:
           node-version: 16
           
       - name: Install dependencies
-        run: npm install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libgconf-2-4
+          npm install
+          
 
       - name: run build
         run: npm run build
 
-      - name: Test Menu
-        run: npm run test Menu.e2e.test.js
+      - name: Run test
+        env:
+          CI: true
+          VITE_PREVIEW_URL: https://localhost:3000/
+        run: |
+          npm run test
 
-      - name: Test MenuOrders
-        run: npm run test MenuOrders.e2e.test.js
-
-      - name: Test Orders
-        run: npm run test Orders
-
-      - name: Test Utils
-        run: npm run test Utils

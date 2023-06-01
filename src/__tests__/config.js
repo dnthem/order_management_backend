@@ -1,8 +1,16 @@
 export const databaseName = "ORDER_MANAGEMENT";
 export const version = 1;
-export const pageUrl = import.meta.env.VITE_PREVIEW_URL || "https://localhost:5173/";
+export const pageUrl = "http://localhost:3000/";
 export const store = "Menu";
 export const NUMBEROFSTORES = 6;
+
+export const launchOptions = {
+    slowMo: 0,
+    headless: import.meta.env.MODE === 'test' ? true : true,
+    devtools: false,
+    defaultViewport: null,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+};
 
 
 export const parseCurrency = (value) => {
@@ -15,6 +23,6 @@ export  async function NavigateTo(page, tag) {
     await sidebar.click();
 }
 
-test("Test config", () => {
-    expect(true).toBe(true);
-});
+export async function delay (ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

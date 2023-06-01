@@ -12,10 +12,12 @@ function CustomerTable(props) {
                         <th scope="col">Last purchase</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody data-test-id="customer-table-body">
                     {
                         sortedCustomers.map(customer => (
-                            <tr key={customer.id}>
+                            <tr
+                             data-test-id="customer-info"
+                             key={customer.id}>
                                 <td>{customer.registerationDate}</td>
                                 <td>{customer.customerName}</td>
                                 <td>{customer.phone}</td>

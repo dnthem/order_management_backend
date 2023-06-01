@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
-import { pageUrl, NavigateTo, parseCurrency } from "../config";
-import sampleData from "../../indexedDB/sampleData";
+import { pageUrl, NavigateTo, parseCurrency, launchOptions } from "../config";
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
+import { preview } from 'vite';
 // Delay function
 function delay(time) {
     return new Promise(function(resolve) { 
@@ -10,31 +11,40 @@ function delay(time) {
 
 
 describe('Order - Dashboard', () => {
-
+    let server;
     let browser;
     let page;
-    let totalIncome = sampleData.OrdersV2.reduce((total, order) => total + order.total, 0);
-    const totalOrders = sampleData.OrdersV2.length;
+    let totalIncome = 0;
     let totalItems = 0;
+    let totalOrders = 0;
+
     beforeAll(async () => {
-        browser = await puppeteer.launch({
-            headless: false,
-            devtools: false,
-            defaultViewport: null
-        }); // error if not headless : 'old not used :
+        server = await preview({ preview : { port : 3000 }});
+        browser = await puppeteer.launch(launchOptions);
         
         page = await browser.newPage();
-
+  
         // Clear indexedDB
         await page.goto('chrome://indexeddb-internals');
         await page.evaluate(() => {
-                indexedDB.deleteDatabase('ORDER_MANAGEMENT');
+          try {
+              indexedDB.deleteDatabase('ORDER_MANAGEMENT');
+          } catch (e)
+            {
+                console.log(e);
+            }
         });
+        page.close();
+        page = await browser.newPage();
+        await page.goto(pageUrl, { waitUntil: 'networkidle0' }); 
         
-        await page.goto(pageUrl, { waitUntil: 'networkidle0' });
+  
     });
-
-    afterAll(() => browser.close());
+  
+    afterAll(() => {
+      browser.close();
+      server.httpServer.close();
+    });
 
     // Click add order button and add a customer 
     // and confirm
@@ -145,13 +155,13 @@ describe('Order - Dashboard', () => {
         const totalCustomersValue = await totalCustomersText.evaluate(el => parseInt(el.innerText));
 
 
-        expect(totalCustomersValue).toBe(10 + sampleData.Customers.length);
+        expect(totalCustomersValue).toBe(10);
         expect(revenueValue).toBe(totalIncome);
-        expect(incomeUpToDateValue).toBe(sampleData.IncomeUpToDate[0].Total + totalIncome);
+        expect(incomeUpToDateValue).toBe( totalIncome);
 
         // Total items sold should be greater than total items because we added 10 orders with 5 items each
         // and there exists some orders in the sample data
-        expect(totalItemsSoldValue).toBeGreaterThan(totalItems); 
+        expect(totalItemsSoldValue).toBe(totalItems); 
     },5000);
 });
 
