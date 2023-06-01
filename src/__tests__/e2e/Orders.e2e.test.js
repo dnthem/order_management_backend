@@ -62,7 +62,7 @@ describe('Orders - basic checks', () => {
     });
     
     test('1. Check number of orders', async () => {
-        NavigateToOrders();
+        await NavigateToOrders();
         
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(0);
@@ -94,12 +94,13 @@ describe('Orders - basic checks', () => {
     });
 
     test('4. Check if the number of menu items are correct', async () => {
-        
+        await page.waitForSelector('tr[data-test-id="menu-table-card"]');
         const menuItems = await page.$$('tr[data-test-id="menu-table-card"]');
         expect(menuItems.length).toBe(sampleData['Menu'].length);
     });
 
-    test('5. Add 4 items to cart and check for correct prices', async () => {      
+    test('5. Add 4 items to cart and check for correct prices', async () => {    
+        await page.waitForSelector('tr[data-test-id="menu-table-card"]');
         const menuItems = await page.$$('tr[data-test-id="menu-table-card"]');
         let counter = 0;
         let totalPrice = 0;
@@ -123,6 +124,7 @@ describe('Orders - basic checks', () => {
     });
 
     test('6. Confirm order -> close add-to-order form', async () => {
+        await page.waitForSelector('div[data-test-id="add-to-order-form"]')
         const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
         const confirmBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
         await confirmBtn.click();
@@ -132,7 +134,7 @@ describe('Orders - basic checks', () => {
     });
 
     test('7. Check if the number of orders is correct to be 1', async () => {
-
+        await page.waitForSelector('div[data-test-id="order-card"]');
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(1);
     });
@@ -172,7 +174,7 @@ describe('Orders - basic checks', () => {
             const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
             const confirmAddToOrderBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
             await confirmAddToOrderBtn.click();
-            await page.waitForTimeout(1000);
+            await page.waitForTimeout(500);
         }
 
         const cards = await page.$$('div[data-test-id="order-card"]');
@@ -180,7 +182,7 @@ describe('Orders - basic checks', () => {
     },5000);
 
     test('9. Remove 2 orders and expect to have 2 orders', async () => {
-    
+        await page.waitForSelector('button[data-test-id="delete-order-btn"]');
         const deleteOrderBtns = await page.$$('button[data-test-id="delete-order-btn"]');
         for (let i = 0; i < 2; i++) {
             await deleteOrderBtns[i].click({clickCount: 2, delay: 100});
@@ -192,7 +194,7 @@ describe('Orders - basic checks', () => {
     });
 
     test('10. Complete 1 order and expect to have 1 order', async () => {
-
+        await page.waitForSelector('button[data-test-id="complete-order-btn"]');
         const completeOrderBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         await completeOrderBtns[0].click({clickCount: 2, delay: 100});
         await page.waitForTimeout(100);
@@ -201,7 +203,7 @@ describe('Orders - basic checks', () => {
     });
 
     test('11. Check if the number of completed orders is correct to be 1', async () => {
-
+        await page.waitForSelector('li[data-test-id="completed-order-card"]');
         const completedOrders = await page.$$('li[data-test-id="completed-order-card"]');
         expect(completedOrders.length).toBe(1);
     });
