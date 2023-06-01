@@ -1,17 +1,15 @@
 export const databaseName = "ORDER_MANAGEMENT";
 export const version = 1;
-export const pageUrl = "https://localhost:3000/";
+export const pageUrl = "http://localhost:3000/";
 export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
-    headless: import.meta.env.VITE_HEADLESS??'new',
+    slowMo: 0,
+    headless: false,
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    env: {
-        DISPLAY: ":10.0",
-    },
 };
 
 
