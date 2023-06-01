@@ -35,10 +35,5 @@ jobs:
           CI: true
           VITE_PREVIEW_URL: https://localhost:3000/
         run: |
-          npm run test Menu
-          npm run test Orders
-          npm run test Suggestions
-          npm run test utils
-          npm run test DataConverter
-          npm run test indexedDB
+          npm run test
 

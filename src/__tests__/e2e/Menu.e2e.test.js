@@ -160,8 +160,9 @@ describe("Menu", () => {
       const cardBody = await card.$('div.card-body');
       const deleteBtn = await cardBody.$('button[data-test-id="remove"]');
       await deleteBtn.click();
+      
     }
-
+    await delay(100);
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(0);
   });
