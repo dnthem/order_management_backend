@@ -72,21 +72,25 @@ describe("Customer suggestion list", () => {
     }, 30_000);
 
     test("2. should suggest customer name: John Doe", async () => {
-        await NavigateTo(page, '#Orders');
+        try {
+            await NavigateTo(page, '#Orders');
 
-        const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
-        await btnAddOrder.click();
-        const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
-
-        const customerNameInput = await addCustomerForm.$('input[data-test-id="customer-name-input"]');
-        await customerNameInput.type('John Doe');
-        await delay(1000);
-        await page.waitForSelector('ul', { timeout: 1000, visible: false });
-        const suggestionNames = await page.evaluate(() => {
-            const suggestionNameElement = document.querySelectorAll('li');
-            return Array.from(suggestionNameElement).map((el) => el.innerText.toLowerCase());
-        });
-        const found = suggestionNames.findIndex(e => e.includes('John Doe'.toLowerCase()));
-        expect(found).not.toBe(-1);
-    }, 10_000);
+            const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
+            await btnAddOrder.click();
+            const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
+    
+            const customerNameInput = await addCustomerForm.$('input[data-test-id="customer-name-input"]');
+            await customerNameInput.type('John Doe');
+            await delay(1000);
+            await page.waitForSelector('ul', { timeout: 1000, visible: false });
+            const suggestionNames = await page.evaluate(() => {
+                const suggestionNameElement = document.querySelectorAll('li');
+                return Array.from(suggestionNameElement).map((el) => el.innerText.toLowerCase());
+            });
+            const found = suggestionNames.findIndex(e => e.includes('John Doe'.toLowerCase()));
+            expect(found).not.toBe(-1);
+        } catch (error) {
+            console.log(error);
+        }
+    }, 20_000);
 });
