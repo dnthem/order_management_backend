@@ -163,7 +163,6 @@ describe("Menu", () => {
       
     }
     await delay(100);
-    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(0);
   });
