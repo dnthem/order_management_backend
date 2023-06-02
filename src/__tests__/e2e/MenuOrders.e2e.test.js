@@ -94,7 +94,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     test("2. Add some items to menu page", async () => {
         listItems = [];
         await NavigateTo(page, "#Menu");
-        await page.waitForSelector('[data-test-id="menu-item-card"]');
         
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
@@ -102,7 +101,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         for (let i = 0; i < 3; i++) {
             await btnAddItem.click();
             const cardBody = await page.waitForSelector('.card-body');
-            await page.waitForSelector('[data-test-id="new-card-edit"]');
             const editBtn = await cardBody.waitForSelector('[data-test-id="new-card-edit"]');
             await editBtn.click();
 
