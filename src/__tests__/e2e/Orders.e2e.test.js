@@ -154,23 +154,23 @@ describe('Orders - basic checks', () => {
     test('8. Add 3 more orders and expect to have 4 orders', async () => {
 
         const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
-
+        const customerNames = ['John', 'Mary', 'Bob'];
         for (let i = 0; i < 3; i++) {
             // add new order
             await btnAddOrder.click();
 
             // add customer name
             const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
-            const customerNameInput = await addCustomerForm.$('input[data-test-id="customer-name-input"]');
-            await customerNameInput.type('test' + i*2);
+            const customerNameInput = await addCustomerForm.waitForSelector('input[data-test-id="customer-name-input"]');
+            await customerNameInput.type(customerNames[i]);
 
             // add customer phone
-            const customerPhoneInput = await addCustomerForm.$('input[data-test-id="phone-input"]');
-            const randomPhone = Math.floor(Math.random() * 1000000000);
-            await customerPhoneInput.type(randomPhone.toString());
+            const customerPhoneInput = await addCustomerForm.waitForSelector('input[data-test-id="phone-input"]');
+            await customerPhoneInput.type('123456789' + i);
 
             // confirm customer
-            const confirmBtn = await addCustomerForm.$('button[data-test-id="confirm-btn"]');
+
+            const confirmBtn = await addCustomerForm.waitForSelector('button[data-test-id="confirm-btn"]');
             await confirmBtn.click();
 
             // add items to order
@@ -178,17 +178,17 @@ describe('Orders - basic checks', () => {
             // select random 4 items
             for (let j = 0; j < 4; j++) {
                 const randomItemIndex = Math.floor(Math.random() * menuItems.length);
-                const addToOrderBtn = await menuItems[randomItemIndex].$('td > button[data-test-id="add-to-order-btn"]');
+                const addToOrderBtn = await menuItems[randomItemIndex].waitForSelector('td > button[data-test-id="add-to-order-btn"]');
                 await addToOrderBtn.click();
             }
 
             // confirm order
-            const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
-            const confirmAddToOrderBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
+            const addToOrderForm = await page.waitForSelector('div[data-test-id="add-to-order-form"]');
+            const confirmAddToOrderBtn = await addToOrderForm.waitForSelector('button[data-test-id="add-to-order-form-btn"]');
             await confirmAddToOrderBtn.click();
             await page.waitForTimeout(500);
         }
-
+        await page.waitForSelector('div[data-test-id="order-card"]');
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(4);
     },5000);
