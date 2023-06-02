@@ -47,7 +47,7 @@ function Customer(props) {
                             <div className="">Total: 
                                 <span  
                                     data-test-id='order-total'
-                                    className='fw-bold'> ${total}</span>
+                                    className='fw-bold ms-1'>${total}</span>
                             </div>
                             <div className="">Payment type: 
                                 <select className="border-0 bg-transparent fw-bold" value={props.paymentType} onChange={(e) => props.setPaymentType(e.target.value)}>
