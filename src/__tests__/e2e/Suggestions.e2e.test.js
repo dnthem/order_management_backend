@@ -72,8 +72,8 @@ describe("Customer suggestion list", () => {
     }, 30_000);
 
     test("2. should suggest customer name: John Doe", async () => {
-        if (import.meta.env.VITE_SKIP_TEST) return;
-        
+        if (import.meta.env.VITE_SKIP_TESTS) return;
+
         await NavigateTo(page, '#Orders');
 
         const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
