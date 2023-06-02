@@ -142,9 +142,7 @@ describe('Promotion Tests', () => {
         await addToOrder(); 
 
         // that is why we can still select the cancel button
-        await page.waitForSelector('button[data-test-id="add-to-order-form-cancel-btn"]', {timeout: 5000});
-        const cancelBtn = await page.$('button[data-test-id="add-to-order-form-cancel-btn"]');
-
+        const cancelBtn = await page.waitForSelector('button[data-test-id="add-to-order-form-cancel-btn"]', {timeout: 5000});
         expect(cancelBtn).toBeTruthy();
         await cancelBtn.click();
 
@@ -152,6 +150,4 @@ describe('Promotion Tests', () => {
         const orderCards = await page.$$('div[data-test-id="order-card"]');
         expect(orderCards.length).toBe(2);
     });
-
-    
 });
