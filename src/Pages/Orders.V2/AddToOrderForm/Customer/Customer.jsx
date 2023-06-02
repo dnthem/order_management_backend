@@ -37,8 +37,8 @@ function Customer(props) {
                                 <input type="date" className="border-0 bg-transparent" value={dateToISO(props.deliverDate)} onChange={(e) => props.setDeliverDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
                             </div>
                             <div data-test-id="promotion" className="">
-                                <label htmlFor="promotion">Promotion/Discount: </label>
-                                <input type="number" className="border-0 bg-transparent ms-1 " id="promotion" max={0} min={-total} 
+                                <label htmlFor="promotion">Promotion/Discount: $</label>
+                                <input type="number" className="border-0 bg-transparent ms-1 fw-bold" id="promotion" max={100} min={0} 
                                         value={props.promotion} 
                                         onChange={(e) => props.setPromotion(e.target.value)}
                                         style={{width: '7ch'}}
