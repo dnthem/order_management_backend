@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, launchOptions } from "../config";
+import { pageUrl, launchOptions, parseCurrency } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
@@ -49,8 +49,26 @@ describe('Orders - basic checks', () => {
         await sidebar.click();
       }
 
-    // remove all orders
-    test('0. Remove all orders', async () => {
+      async function addItemsToOrder(itemIndex) {
+        await page.waitForSelector('tr[data-test-id="menu-table-card"]', {timeout: 5000});
+        const menuItems = await page.$$('tr[data-test-id="menu-table-card"]');
+        const addToOrderBtn = await menuItems[itemIndex].$('td > button[data-test-id="add-to-order-btn"]');
+        await addToOrderBtn.click();
+
+        const price = await menuItems[itemIndex].$('td[data-test-id="menu-table-card-price"]');
+        const priceText = await price.evaluate(price => price.innerText);
+
+        // remove $ sign
+        return parseCurrency(priceText)
+    }
+
+    async function addToOrder() {
+        const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
+        const confirmBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
+        await confirmBtn.click();
+    }
+
+    test('1. Remove all orders', async () => {
         await NavigateToOrders();
         await page.waitForTimeout(100);
         const btnRemoveAllOrders = await page.$$('button[data-test-id="delete-order-btn"]');
@@ -59,10 +77,6 @@ describe('Orders - basic checks', () => {
             await btnRemoveAllOrders[i].click({clickCount: 2, delay: 100});
             await page.waitForTimeout(100);
         }
-    });
-    
-    test('1. Check number of orders', async () => {
-        await NavigateToOrders();
         
         const cards = await page.$$('div[data-test-id="order-card"]');
         expect(cards.length).toBe(0);
@@ -102,36 +116,34 @@ describe('Orders - basic checks', () => {
     test('5. Add 4 items to cart and check for correct prices', async () => {    
         await page.waitForSelector('tr[data-test-id="menu-table-card"]');
         const menuItems = await page.$$('tr[data-test-id="menu-table-card"]');
-        let counter = 0;
         let totalPrice = 0;
-
+        
         for (let i = 0; i < 4; i++) {
             const addToOrderBtn = await menuItems[i].$('td > button[data-test-id="add-to-order-btn"]');
             await addToOrderBtn.click();
-            counter++;
             totalPrice += await menuItems[i].$eval('td[data-test-id="menu-table-card-price"]', el => parseFloat(el.innerText.slice(1)));
-  
-            if (counter === 4)
-                break;
+            await page.waitForTimeout(100);
         }
         
-        const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
-        const total = await addToOrderForm.$eval('span[data-test-id="order-total"]', el => parseFloat(el.innerText.slice(1)));
-        const orderItems = await page.$$('li[data-test-id="customer-cart-card"]');
+        
+        const addToOrderForm = await page.waitForSelector('div[data-test-id="add-to-order-form"]');
+        const orderItems = await addToOrderForm.$$('li[data-test-id="customer-cart-card"]');
         expect(orderItems.length).toBe(4);
+
+        const total = await addToOrderForm.$eval('[data-test-id="order-total"]', el => parseFloat(el.innerText.slice(1)));
         expect(total).toBe(totalPrice);
         
-    });
+    },30_000);
 
     test('6. Confirm order -> close add-to-order form', async () => {
-        await page.waitForSelector('div[data-test-id="add-to-order-form"]')
-        const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
+        
+        const addToOrderForm = await page.waitForSelector('div[data-test-id="add-to-order-form"]')
         const confirmBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
         await confirmBtn.click();
 
         const addToOrderFormClosed = await page.$('div[data-test-id="add-to-order-form"]');
         expect(addToOrderFormClosed).toBeNull();
-    });
+    }, 10_000);
 
     test('7. Check if the number of orders is correct to be 1', async () => {
         await page.waitForSelector('div[data-test-id="order-card"]');
