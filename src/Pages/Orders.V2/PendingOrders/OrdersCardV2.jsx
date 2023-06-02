@@ -21,14 +21,14 @@ function OrderCardV2({nthOrderOfDay, order, onDelete, onComplete, onEdit }) {
       <div className="card-body" style={{ position: "relative", paddingBottom: '2.5em'}}>
         <CloseBtn dataTestId="delete-order-btn" onDoubleClick={() => onDelete(order.orderID)} />
         <div className="header">
-          <h5 className="card-title">{nthOrderOfDay} - {order.customer.customerName!== ''?order.customer.customerName : getLast4Digits(order.customer.phone)}</h5>
-          <div className="card-subtitle mb-2 text-muted">{order.customer.phone}</div>
-          <div className="card-subtitle mb-2 text-muted">{`$${order.total} - ${order.paymentType}`}</div>
-          <div className="card-subtitle mb-2 text-muted">Order Date: {`${order.orderDate}`}</div>
-          <div className="card-subtitle mb-2 text-muted">Deliver Date: {`${order.deliverDate}`}</div>
+          <h5 className="card-title" aria-label="card-title">{nthOrderOfDay} - {order.customer.customerName!== ''?order.customer.customerName : getLast4Digits(order.customer.phone)}</h5>
+          <div className="card-subtitle mb-2 text-muted" aria-label="customer-phone-number">{order.customer.phone}</div>
+          <div className="card-subtitle mb-2 text-muted" aria-label="total-payment-type">{`$${order.total} - ${order.paymentType}`}</div>
+          <div className="card-subtitle mb-2 text-muted" aria-label="order-date">Order Date: {`${order.orderDate}`}</div>
+          <div className="card-subtitle mb-2 text-muted" aria-label="deliver-date">Deliver Date: {`${order.deliverDate}`}</div>
           <details className="card-subtitle mb-2 text-muted text-wrap" style={{maxWidth: "16em"}}>
             <summary>Notes</summary>
-            <p>{`${order.notes}`}</p>
+            <p aria-label="order-notes">{`${order.notes}`}</p>
           </details>
         </div>
         <ListItem list={order.cart} /> 

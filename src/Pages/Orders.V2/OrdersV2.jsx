@@ -50,9 +50,6 @@ function OrdersV2() {
         keyPath: 1,
     });
 
-    // the n-th order of the day
-    const [nthOrderOfDay, setNthOrderOfDay] = useLocalStorage('nthOrderOfDay', 0);
-
     const [customer, setCustomer] = useState(null);
     const [cart, setCart] = useState(null);
     const [orderID, setOrderID] = useState(-1);
@@ -60,7 +57,8 @@ function OrdersV2() {
     const [orderDate, setOrderDate] = useState(dateFormat());
     const [notes, setNotes] = useState('');
     const [paymentType, setPaymentType] = useState('Cash');
-
+    const [promotion, setPromotion] = useState(0);
+    const [nthOrderOfDayProp, setNthOrderOfDayProp] = useState(null);
 
     const [showUserInfoForm, setShowUserInfoForm] = useState(false);
     const [showAddToOrderForm, setShowAddToOrderForm] = useState(false);
@@ -148,11 +146,12 @@ function OrdersV2() {
         setOrderDate(order.orderDate);
         setNotes(order.notes);
         setPaymentType(order.paymentType);
+        setPromotion(order.promotion);
+        setNthOrderOfDayProp(order.nthOrderOfDay);
     }
 
     const onAddNewOrder = (newVal) => {
-        setOrders({type: 'add', indexField: STORES.ORDERSV2.keyPath, newVal: {...newVal, nthOrderOfDay: nthOrderOfDay + 1}});
-        setNthOrderOfDay(nthOrderOfDay + 1);
+        setOrders({type: 'add', indexField: STORES.ORDERSV2.keyPath, newVal});
     }
 
     const onUpdateOrder = (newVal) => { 
@@ -219,6 +218,10 @@ function OrdersV2() {
                     orderDate={orderDate}
                     notes={notes}
                     paymentType={paymentType}
+                    promotion={promotion}
+                    nthOrderOfDay={nthOrderOfDayProp}
+                    setNthOrderOfDay={setNthOrderOfDayProp}
+                    setPromotion={setPromotion}
                     setDeliverDate={setDeliverDate}
                     setOrderDate={setOrderDate}
                     updateCustomer={setCustomer}
