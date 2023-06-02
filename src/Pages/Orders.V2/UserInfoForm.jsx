@@ -81,12 +81,18 @@ function UserInfoForm(props) {
             indexField: "customerID",
             newVal: newCustomer,
         }); 
+        newCustomer.customerID = newCustomerID; 
+      } 
+      else {
+        newCustomer.customerID= newCustomerID;
+        await setCustomers({ // update customer to database     
+          type: "update",
+          indexField: "customerID",
+          indexValue: newCustomerID,
+          newVal: newCustomer,
+        });
       }
 
-      newCustomer.customerID = newCustomerID; 
-      setCustomerName("");
-      setPhone("");
-      
       props.onAddCustomerSubmit(newCustomer);
     }
 
@@ -98,8 +104,8 @@ function UserInfoForm(props) {
         if (value.length <= 10) {
             const results = exactMatch(customers, value);
             if (results) {
-                setCustomerName(results.customerName);
-                setPhone(results.phone)
+                setCustomerName(results.customerName === '' ? customerName : results.customerName );
+                setPhone(results.phone === '' ? phone : results.phone)
                 setCustomerID(results.customerID);
                 outline = "success";
             }
@@ -122,8 +128,6 @@ function UserInfoForm(props) {
       }
       
   }, [debouncedQuery]);
-
-  
 
     return (
       <>

@@ -26,10 +26,12 @@ function OrderCardV2({nthOrderOfDay, order, onDelete, onComplete, onEdit }) {
           <div className="card-subtitle mb-2 text-muted" aria-label="total-payment-type">{`$${order.total} - ${order.paymentType}`}</div>
           <div className="card-subtitle mb-2 text-muted" aria-label="order-date">Order Date: {`${order.orderDate}`}</div>
           <div className="card-subtitle mb-2 text-muted" aria-label="deliver-date">Deliver Date: {`${order.deliverDate}`}</div>
-          <details className="card-subtitle mb-2 text-muted text-wrap" style={{maxWidth: "16em"}}>
-            <summary>Notes</summary>
-            <p aria-label="order-notes">{`${order.notes}`}</p>
-          </details>
+          {order.notes !== "" && 
+            <details className="card-subtitle mb-2 text-muted text-wrap" style={{maxWidth: "16em"}}>
+              <summary>Notes</summary>
+              <p aria-label="order-notes">{`${order.notes}`}</p>
+            </details>
+          }
         </div>
         <ListItem list={order.cart} /> 
       </div>

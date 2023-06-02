@@ -86,9 +86,8 @@ function AddToOrderForm(props) {
             deliverDate: convertISOToUSA(deliverDate),
             promotion,
         });
-
+        // promotion cannot be greater than total
         if (newOrder.total < 0) return alert('Promotion/Discount cannot be greater than total');
-        if (promotion > 0) return alert('Promotion/Discount cannot be greater than 0');
         if (newOrder.orderDate > newOrder.deliverDate) return alert('Order date cannot be greater than deliver date');
         if (newOrder.deliverDate < new Date().toLocaleDateString()) return alert('Deliver date cannot be in the past');
         if (newOrder.orderDate < new Date().toLocaleDateString()) return alert('Order date cannot be in the past');
@@ -110,7 +109,7 @@ function AddToOrderForm(props) {
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
             <div
                 data-test-id="add-to-order-form"
-                className={`col-md-12 col-xl-10 p-3 bg-white border rounded-3 shadow-lg`}
+                className={`col-md-12 col-md-12 col-xl-10 col-12 p-3 bg-white border rounded-3 shadow-lg`}
                 style={{
                     position: "fixed",
                     top: "50%",

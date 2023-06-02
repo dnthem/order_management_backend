@@ -71,7 +71,8 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       sampleData['Menu'].forEach(e => menu.add(e));
 
       if (import.meta.env.MODE === 'development') {
-        localStorage.setItem('nthOrderOfDay', 6);
+        localStorage.setItem('nthOrderOfDay', sampleData['OrdersV2'].length);
+        localStorage.setItem('isnewday', new Date().toLocaleDateString('en-us'));
         sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e));
         sampleData['OrdersV2'].forEach(e => orderV2.add(e));
         sampleData['Customers'].forEach(e => customers.add(e));

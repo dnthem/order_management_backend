@@ -11,8 +11,7 @@ export function orderFormater({
     deliverDate,
     promotion
 }) {
-    
-    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0) + Number(promotion);
+    const total = cart.reduce((acc, item) => acc + item.price * item.quantity, 0) - Math.abs(Number(promotion));
     const result = {
         orderDate: dateFormat(orderDate),
         deliverDate: dateFormat(deliverDate),
