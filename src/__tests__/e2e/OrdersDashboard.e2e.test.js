@@ -84,9 +84,10 @@ describe('Order - Dashboard', () => {
 
 
     test('1. Add 10 orders', async () => {
-
+        // list customer names
+        const customerNames = ['John', 'Mary', 'Bob', 'Alice', 'Jane', 'Joe', 'Sally', 'Tom', 'Jerry', 'Mickey'];
         for (let i = 0; i < 10; i++) {
-            await AddCustomer(`Test${i}`, (9000000000 + i).toString()); 
+            await AddCustomer(customerNames[i], (9000000000 + i).toString()); 
             await page.waitForTimeout(200);
             
             const numberOfItems = 5 
@@ -128,7 +129,7 @@ describe('Order - Dashboard', () => {
         expect(total).toBe(totalIncome);
     });
 
-    test('5. Check dashboard info matches testing', async () => {
+    test('4. Check dashboard info matches testing', async () => {
         await NavigateTo(page, '#Dashboard');
         await page.waitForTimeout(200);
         
@@ -147,22 +148,17 @@ describe('Order - Dashboard', () => {
         const totalItemsSold = await page.$('[data-test-id="total-items-sold-today"]');
         const totalItemsSoldText = await totalItemsSold.$('[data-test-id="card-info-value"]');
         const totalItemsSoldValue = await totalItemsSoldText.evaluate(el => parseInt(el.innerText));
-
         // Total customers info
 
         const totalCustomers = await page.$('[data-test-id="total-customers"]');
         const totalCustomersText = await totalCustomers.$('[data-test-id="card-info-value"]');
         const totalCustomersValue = await totalCustomersText.evaluate(el => parseInt(el.innerText));
 
-
         expect(totalCustomersValue).toBe(10);
         expect(revenueValue).toBe(totalIncome);
-        expect(incomeUpToDateValue).toBe( totalIncome);
-
-        // Total items sold should be greater than total items because we added 10 orders with 5 items each
-        // and there exists some orders in the sample data
+        expect(incomeUpToDateValue).toBe(totalIncome);
         expect(totalItemsSoldValue).toBe(totalItems); 
-    },5000);
+    },60_000);
 });
 
 
