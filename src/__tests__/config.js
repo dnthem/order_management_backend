@@ -6,7 +6,7 @@ export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
     slowMo: 0,
-    headless: import.meta.env.MODE === 'test' ? true : true,
+    headless: 'new',
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],

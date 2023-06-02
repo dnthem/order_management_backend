@@ -1,5 +1,6 @@
 import ListItem from "./ListItems";
 import CloseBtn from "../../../components/CloseBtn";
+import { getLast4Digits } from "../../../utils";
 
 /**
  * @param {object} order - order object
@@ -20,7 +21,7 @@ function OrderCardV2({nthOrderOfDay, order, onDelete, onComplete, onEdit }) {
       <div className="card-body" style={{ position: "relative", paddingBottom: '2.5em'}}>
         <CloseBtn dataTestId="delete-order-btn" onDoubleClick={() => onDelete(order.orderID)} />
         <div className="header">
-          <h5 className="card-title">{nthOrderOfDay} - {order.customer.customerName}</h5>
+          <h5 className="card-title">{nthOrderOfDay} - {order.customer.customerName!== ''?order.customer.customerName : getLast4Digits(order.customer.phone)}</h5>
           <div className="card-subtitle mb-2 text-muted">{order.customer.phone}</div>
           <div className="card-subtitle mb-2 text-muted">{`$${order.total} - ${order.paymentType}`}</div>
           <div className="card-subtitle mb-2 text-muted">Order Date: {`${order.orderDate}`}</div>

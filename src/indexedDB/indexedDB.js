@@ -64,7 +64,7 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       orderV2.createIndex("orderDate", "orderDate", {unique: false});
 
       customers.createIndex('customerID', 'customerID', { unique: true });
-      customers.createIndex('phone', 'phone', { unique: true });
+      customers.createIndex('phone', 'phone', { unique: false });
 
 
       menu.createIndex('id', 'id', { unique: true });

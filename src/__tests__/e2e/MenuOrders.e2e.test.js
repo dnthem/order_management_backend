@@ -103,9 +103,9 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         for (let i = 0; i < 3; i++) {
             await btnAddItem.click();
             const cardBody = await page.waitForSelector('.card-body');
+            await page.waitForSelector('[data-test-id="new-card-edit"]');
             const editBtn = await cardBody.$('[data-test-id="new-card-edit"]');
             await editBtn.click();
-            const confirmBtn = await cardBody.$('[data-test-id="new-item-save"]');
 
             const itemNameInput = await cardBody.$('[data-test-id="new-card-item-name"]');
             await itemNameInput.type("test" + i);
@@ -113,6 +113,9 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
             await itemPriceInput.type("1");
 
             listItems.push("test" + i);
+
+            await page.waitForSelector('[data-test-id="new-item-save"]');
+            const confirmBtn = await cardBody.$('[data-test-id="new-item-save"]');
             await confirmBtn.click();
         }
         

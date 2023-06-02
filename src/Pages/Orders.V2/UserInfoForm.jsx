@@ -8,12 +8,12 @@ import { dateFormat, phoneFormat } from '../../utils';
 /**
  * Function to filter the customers array based on the query
  * @param {string} query - The search query
- * @param {string} searchField - The input type to search on
+ * @param {string} type - The input type to search on
  * @returns {array} - The filtered array of customers
  */
-function autoComplete(customers, query, searchField) {
+function autoComplete(customers, query, type) {
   return customers.filter((customer) =>
-    customer[searchField].toLowerCase().includes(query.toLowerCase())
+    customer[type].toLowerCase().includes(query.toLowerCase())
   );
 }
 
@@ -21,10 +21,12 @@ function autoComplete(customers, query, searchField) {
  * Function to filter the customers array based on the query, but only returns the first result
  * @param {object} customers  - The array of customers
  * @param {string} query  - The search query
+ * @param {string} type  - The input type to search on
  * @returns {object} - The filtered array of customers
  */
-function exactMatch(customers, query) {
-    return customers.find((customer) => phoneFormat(customer.phone) === phoneFormat(query));
+function exactMatch(customers, query, type = "phone") {
+  if (type === "customerName") return customers.find((customer) => customer[type].toLowerCase() === query.toLowerCase());
+  return customers.find((customer) => phoneFormat(customer[type]) === phoneFormat(query));
 }
 
 function UserInfoForm(props) {
@@ -47,7 +49,23 @@ function UserInfoForm(props) {
 
     async function handleSubmit(e) {
       e.preventDefault();
+      // check either at least one of the fields is filled
+      if (customerName === "" && phone === "") {
+        alert("Please enter customer name or phone number");
+        return;
+      }
+
       let newCustomerID = customerID;
+      
+      // in case user hits enter without selecting a suggestion even though there is a exact match
+      if (customerID === -1) {
+        const query = customerName=== ""? phone : customerName;
+        const type = customerName === "" ? "phone" : "customerName";
+        const results = exactMatch(customers, query, type);
+        if (results) 
+          newCustomerID = results.customerID;
+      }
+
       const newCustomer = { // create new customer object
         customerName,
         phone: phoneFormat(phone),
@@ -56,7 +74,7 @@ function UserInfoForm(props) {
         lastPurchase: '',  
       };
       // new customer
-      if (customerID === -1) {
+      if (newCustomerID === -1) {
         newCustomer.registerationDate = dateFormat();
         newCustomerID = await setCustomers({ // add customer to database     
             type: "add",
@@ -74,24 +92,22 @@ function UserInfoForm(props) {
 
     function handleInputPhone(e) {
         const value = e.target.value.replace(/\D/g, "")
-        if (value.length <= 10) {
-            setPhone(value);
+        if (value.length > 10) {
+            return;
         }
-        if (value.length === 10) {
+        if (value.length <= 10) {
             const results = exactMatch(customers, value);
-            console.log(results);
             if (results) {
                 setCustomerName(results.customerName);
                 setPhone(results.phone)
                 setCustomerID(results.customerID);
                 outline = "success";
             }
+            else {
+              setCustomerID(-1);
+              setPhone(phoneFormat(value));
+            }   
         }
-        else {
-            setCustomerID(-1);
-            outline = "primary";
-        }
-
     }
     
     
