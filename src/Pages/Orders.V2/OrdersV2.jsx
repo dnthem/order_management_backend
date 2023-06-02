@@ -169,6 +169,18 @@ function OrdersV2() {
     useEffect(() => {
         let timeOut;
 
+        function checkNthOrderOfDay() {
+            // check update nthOrderOfDay
+            // if the date is different, reset nthOrderOfDay to 0
+            // check local storage for isnewday, if the current date is different from the date in local storage, reset nthOrderOfDay to 0
+            const date = new Date().toLocaleDateString("en-us");
+            const isnewday = localStorage.getItem('isnewday')? localStorage.getItem('isnewday') : '';
+            if(isnewday !== date) {
+                localStorage.setItem('isnewday', date);
+                localStorage.setItem('nthOrderOfDay', 0);
+            }
+
+        }
 
         function refreshPageAtTime(hour, minute, second) {
             const now = new Date();
@@ -186,7 +198,7 @@ function OrdersV2() {
             }, delay);
         }
           
-        
+        checkNthOrderOfDay();
         refreshPageAtTime(0, 0, 0);
 
         return () => {

@@ -110,7 +110,7 @@ function AddToOrderForm(props) {
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
             <div
                 data-test-id="add-to-order-form"
-                className={`col-md-12 col-xl-10 p-3 bg-white border rounded-3 shadow-lg`}
+                className={`col-md-12 col-md-12 col-xl-10 col-12 p-3 bg-white border rounded-3 shadow-lg`}
                 style={{
                     position: "fixed",
                     top: "50%",
