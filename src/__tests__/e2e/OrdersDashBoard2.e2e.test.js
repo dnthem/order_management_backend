@@ -8,8 +8,7 @@ describe('Order Dashboard suite 2', () => {
     let browser;
     let page;
     let totalIncome = 0;
-    let totalItems = 0;
-    let totalOrders = 0;
+
     beforeAll(async () => {
         server = await preview({ preview : { port : 3000 }});
         browser = await puppeteer.launch(launchOptions);
