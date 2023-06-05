@@ -54,6 +54,7 @@ describe("Customer suggestion list", () => {
 
     test("1. should add new customers", async () => {
         await NavigateTo(page, '#Orders');
+        await delay(100);
         // add all customer from sample data
         for (let i = 0; i < sampleData.Customers.length; i++) {
             await AddCustomer(sampleData.Customers[i].customerName, sampleData.Customers[i].phone);
@@ -61,12 +62,14 @@ describe("Customer suggestion list", () => {
         }
 
         await NavigateTo(page, '#Dashboard');
+        await delay(100);
         await page.evaluate(() => {
             const el = document.querySelector('table');
             el.scrollIntoView();
         })
-        await page.waitForSelector('tr[data-test-id="customer-info"]');
-        const customerInfo = await page.$$('tr[data-test-id="customer-info"]');
+        await delay(100);
+        await page.waitForSelector('tr[aria-label="customer-table-row"]');
+        const customerInfo = await page.$$('tr[aria-label="customer-table-row"]');
 
         expect(customerInfo.length).toBe(sampleData.Customers.length);
     }, 30_000);
@@ -78,7 +81,7 @@ describe("Customer suggestion list", () => {
         };
 
         await NavigateTo(page, '#Orders');
-
+        await delay(100);
         const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
         await btnAddOrder.click();
         const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');

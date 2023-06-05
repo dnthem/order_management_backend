@@ -11,7 +11,7 @@ import Loader from "../../components/Loaders/Loader";
 import { dateFormat } from "../../utils";
 import {BiTrendingUp ,BiTrendingDown} from 'react-icons/bi';
 import { STORES } from "../../indexedDB/indexedDB";
-import CustomerTable from "./CustomerTable";
+import CustomerTable from "../../components/CustomerTable";
 
 function Dashboard(props) {
     const [menu, ] = useData({

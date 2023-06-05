@@ -2,9 +2,9 @@
 
 #### Goals:
 
-- [ ] Seperate customers information from dashboard into a single section/page/route
-- [ ] Allow CRUD on customers
-- [ ] Update related tests
+- [x] Seperate customers information from dashboard into a single section/page/route
+- [x] Allow CRUD on customers
+- [x] Update related tests
 
 # First sprint:
 

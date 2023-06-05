@@ -1,10 +1,10 @@
 import { useData } from "../../customHooks/useData";
 import Header from "../../components/Header";
 import { STORES } from "../../indexedDB/indexedDB";
-import CustomerTable from "../Dashboard/CustomerTable";
+import CustomerTable from "../../components/CustomerTable";
 import {AiOutlineUser} from 'react-icons/ai';
 import UserInfoForm from "../Orders.V2/UserInfoForm";
-import useToggle from "../Orders.V2/customHooks/useToggle";
+import useToggle from "../../customHooks/useToggle";
 import { useDeferredValue, useState } from "react";
 function Customers(props) {
     const [customers, setCustomers] = useData({
@@ -74,11 +74,11 @@ function Customers(props) {
 
                 <div className="col-sm-12 col-md-8">
                     <div className="d-flex justify-content-evenly mt-4">
-                        <button className="btn text-primary " onClick={setAddFormToggle}>Add Customer</button>
+                        <button aria-label="add-new-customer-btn" className="btn text-primary" onClick={setAddFormToggle}>Add Customer</button>
                         
                         <div className="input-group " style={{width: "15em"}}>
-                        <input type="text" className="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2" value={query} onChange={(e) => setQuery(e.target.value)}/>
-                        <span className="input-group-text" id="basic-addon2">Search</span>
+                        <input type="text" className="form-control" placeholder="Search customer" aria-label="customer-search-input" value={query} onChange={(e) => setQuery(e.target.value)}/>
+                        <label className="input-group-text" id="basic-addon2">Search</label>
                         </div>
                     </div>
                 </div>

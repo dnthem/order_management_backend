@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, parseCurrency, NavigateTo, launchOptions } from "../config";
+import { pageUrl, parseCurrency, NavigateTo, launchOptions, delay } from "../config";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
 
@@ -120,13 +120,14 @@ describe('Order Dashboard suite 2', () => {
 
     test('3. Complete all orders', async () => {
         // Complete all orders
+        await delay(100);
         const completeBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         const length = completeBtns.length;
         for (let i = 0; i < length; i++) {
             const newBtn = completeBtns[i];
             await newBtn.click({clickCount: 2, delay: 100});
         }
-        
+        await delay(100);
         // Check if all orders are completed
         await page.waitForSelector('li[data-test-id="completed-order-card"]');
         const cards = await page.$$('li[data-test-id="completed-order-card"]');
