@@ -1,7 +1,9 @@
+import useToggle from '../Orders.V2/customHooks/useToggle';
 import {FaRegTrashAlt, FaEdit} from 'react-icons/fa';
 function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
     const customers = sortedCustomers;
-
+    const [editStateToggle, setEditStateToggle] = useToggle(false);
+    const [editCustomer, setEditCustomer] = useState(null);
     function edit(id) {
         updateCustomer
         // call back
@@ -28,6 +30,10 @@ function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
                                 <td>{customer.registerationDate}</td>
                                 <td>{customer.customerName}</td>
                                 <td>{customer.phone}</td>
+                                
+
+
+
                                 <td>{customer.orderCount}</td>
                                 <td>{Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(customer.totalSpent)}</td>
                                 <td>{customer.lastPurchase}</td>
