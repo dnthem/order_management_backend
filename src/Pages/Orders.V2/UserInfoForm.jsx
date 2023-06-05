@@ -57,7 +57,8 @@ function UserInfoForm(props) {
 
       let _customerID = customerID,
           _customerName = customerName,
-          _phone = phone;
+          _phone = phone,
+          _registerationDate = '';
       
       // in case user hits enter without selecting a suggestion even though there is a exact match
       if (customerID === -1) {
@@ -68,6 +69,7 @@ function UserInfoForm(props) {
           _customerID = results.customerID;
           _customerName = results.customerName;
           _phone = results.phone;
+          _registerationDate = results.registerationDate;
         }
       }
 
@@ -77,6 +79,7 @@ function UserInfoForm(props) {
         orderCount: 0,
         totalSpent: 0,
         lastPurchase: '',  
+        registerationDate: _registerationDate,
       };
       // new customer
       if (_customerID === -1) {
