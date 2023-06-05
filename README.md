@@ -1,3 +1,11 @@
+# Customers:
+
+#### Goals:
+
+- [ ] Seperate customers information from dashboard into a single section/page/route
+- [ ] Allow CRUD on customers
+- [ ] Update related tests
+
 # First sprint:
 
 ### Dashboard-log:
