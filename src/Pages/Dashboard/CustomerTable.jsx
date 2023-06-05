@@ -1,13 +1,7 @@
-import useToggle from '../Orders.V2/customHooks/useToggle';
-import {FaRegTrashAlt, FaEdit} from 'react-icons/fa';
+
+import CustomerTableRow from './CustomerTableRow';
 function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
     const customers = sortedCustomers;
-    const [editStateToggle, setEditStateToggle] = useToggle(false);
-    const [editCustomer, setEditCustomer] = useState(null);
-    function edit(id) {
-        updateCustomer
-        // call back
-    }
 
     return ( 
         <table className="table table-striped table-hover">
@@ -24,27 +18,12 @@ function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
                 <tbody data-test-id="customer-table-body">
                     {
                         customers.map(customer => (
-                            <tr
-                             data-test-id="customer-info"
-                             key={customer.customerID}>
-                                <td>{customer.registerationDate}</td>
-                                <td>{customer.customerName}</td>
-                                <td>{customer.phone}</td>
-                                
-
-
-
-                                <td>{customer.orderCount}</td>
-                                <td>{Intl.NumberFormat('en-us',{style: 'currency', currency: 'USD'}).format(customer.totalSpent)}</td>
-                                <td>{customer.lastPurchase}</td>
-                                { deleteCustomer && updateCustomer &&
-                                    <td>
-                                        <button className="btn" aria-label='edit-customer' onClick={() => edit(customer.customerID)}><FaEdit/></button>
-
-                                        <button className="btn" aria-label='remove-customer' onClick={async () => await deleteCustomer(customer.customerID)}><FaRegTrashAlt/></button>
-                                    </td>
-                                }
-                            </tr>
+                            <CustomerTableRow
+                                key={customer.customerID}
+                                customer={customer}
+                                deleteCustomer={deleteCustomer}
+                                updateCustomer={updateCustomer}
+                            />
                         ))
                     }
                 </tbody>
