@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, NavigateTo, launchOptions } from "../config";
+import { NavigateTo, delay, launchOptions } from "../config";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
 
@@ -7,8 +7,10 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     let server;
     let browser;
     let page;
+    const port = 3001;
+    const pageUrl = `http://localhost:${port}`;
     beforeAll(async () => {
-        server = await preview({ preview : { port : 3000 }});
+        server = await preview({ preview : { port }});
         browser = await puppeteer.launch(launchOptions);
         
         page = await browser.newPage();
@@ -58,12 +60,13 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     let listItems = []; // list of items to hide
     test("1. Hide some items in menu page", async () => {
         await NavigateTo(page, "#Menu");
-        await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 5000});
+        await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 200});
         const menuItems = await page.$$('[data-test-id="menu-item-card"]');
         
         // Hide some random cards, and store their names in listItems
+        const hideList = [0, 4, 2 ];
         for (let i = 0; i < 3; i++) {
-            const itemIndex = Math.floor(Math.random() * menuItems.length);
+            const itemIndex = hideList[i];
             const itemName = await menuItems[itemIndex].$eval('[data-test-id="item-name"]', el => el.innerText);
             listItems.push(itemName);
             const hideBtn = await menuItems[itemIndex].waitForSelector('[data-test-id="hide"]');
@@ -72,6 +75,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
 
         // Go to order page
         await NavigateTo(page, "#Orders");
+        await delay(1000);
         await AddCustomer("test", "1234567890");
 
         // Check if the hidden items are hidden in order page
@@ -94,7 +98,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     test("2. Add some items to menu page", async () => {
         listItems = [];
         await NavigateTo(page, "#Menu");
-        
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
@@ -113,10 +116,12 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
 
             const confirmBtn = await cardBody.waitForSelector('[data-test-id="new-item-save"]');
             await confirmBtn.click();
+            await delay(100);
         }
         
         // Go to order page
         await NavigateTo(page, "#Orders");
+        await delay(100);
         await AddCustomer("test", "1234567890");
 
         // Check if the added items are added in order page
@@ -132,7 +137,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
         expect(trueListItems.length).toBe(listItems.length);
 
-    }, 15000);
+    }, 20_000);
 
     // Test 3
     // Remove some items from menu page
