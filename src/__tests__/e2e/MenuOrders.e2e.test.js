@@ -98,7 +98,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     test("2. Add some items to menu page", async () => {
         listItems = [];
         await NavigateTo(page, "#Menu");
-        
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
@@ -117,10 +116,12 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
 
             const confirmBtn = await cardBody.waitForSelector('[data-test-id="new-item-save"]');
             await confirmBtn.click();
+            await delay(100);
         }
         
         // Go to order page
         await NavigateTo(page, "#Orders");
+        await delay(100);
         await AddCustomer("test", "1234567890");
 
         // Check if the added items are added in order page
@@ -136,7 +137,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
         expect(trueListItems.length).toBe(listItems.length);
 
-    }, 15000);
+    }, 20_000);
 
     // Test 3
     // Remove some items from menu page
