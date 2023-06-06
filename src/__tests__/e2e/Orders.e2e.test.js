@@ -72,10 +72,7 @@ describe('Orders - basic checks', () => {
     }
 
     test('1. Remove all orders', async () => {
-<<<<<<< HEAD
-=======
         // Navigate to orders
->>>>>>> dc2d23a79d7920000d656f455eb62cf926efd6d9
         await NavigateToOrders();
         await page.waitForTimeout(100);
         const btnRemoveAllOrders = await page.$$('button[data-test-id="delete-order-btn"]');
