@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           
       - name: Install dependencies
         run: |
@@ -36,5 +36,5 @@ jobs:
           CI: true
           VITE_SKIP_TESTS: true
         run: |
-          xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm run test
+          npm run test
 
