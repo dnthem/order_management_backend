@@ -99,6 +99,157 @@ describe("Menu", () => {
     expect(await editedItemName.evaluate(el => el.innerText)).toBe('Edited');
     expect(await editedItemPrice.evaluate(el => el.value)).toBe('0');
   }, 5000);
+  test('3. Delete an item in menu', async () => {
+    // disable confirm dialog, set it to always true
+    await page.evaluate(() => {
+      window.confirm = () => true;
+    });
 
+    
+    // randomly select an item to delete
+    const before = await page.$$('div[data-test-id="menu-item-card"]');
+    const randomItem = Math.floor(Math.random() * before.length);
+    const item = before[randomItem];
+    const cardBody = await item.waitForSelector('div.card-body');
+    const deleteBtn = await cardBody.waitForSelector('button[data-test-id="remove"]');
+    await deleteBtn.click();
+
+    // confirm delete
+    page.on('dialog', async dialog => {
+      await dialog.accept();
+    });
+    await delay(100);
+
+    // check if item is deleted
+    const after = await page.$$('div[data-test-id="menu-item-card"]');
+    expect(after.length).toBe(before.length - 1);
+
+  });
+
+
+  test('4. Hide an item in menu', async () => {
+    // randomly select an item to hide
+    const cards = await page.$$('div[data-test-id="menu-item-card"]');
+    const randomItem = Math.floor(Math.random() * cards.length);
+    const item = cards[randomItem];
+    const cardBody = await item.waitForSelector('div.card-body');
+    const hideBtn = await cardBody.waitForSelector('input[data-test-id="hide"]');
+    await hideBtn.click();
+
+    // check if item is hidden by checking item css 
+    const css = await item.evaluate(el => {
+      return {
+        opacity: el.style.opacity,
+      }
+    });
+
+    expect(css.opacity).toBe('0.5');
+  });
+
+  test('5. Delete all items in menu', async () => {
+
+    await page.evaluate(() => {
+      window.confirm = () => true;
+    });
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
+    const cards = await page.$$('div[data-test-id="menu-item-card"]');
+    for (const card of cards) {
+      const cardBody = await card.waitForSelector('div.card-body');
+      const deleteBtn = await cardBody.waitForSelector('button[data-test-id="remove"]');
+      await deleteBtn.click();
+      
+    }
+    await delay(100);
+    const after = await page.$$('div[data-test-id="menu-item-card"]');
+    expect(after.length).toBe(0);
+  });
+
+  test('6. Add multiple items to menu', async () => {
+
+    const addBtn = await page.waitForSelector('button[data-test-id="add-new-item"]');
+
+    for (let i = 0; i < 10; i++) {
+      await addBtn.click();
+      await (await page.waitForSelector('button[data-test-id="new-card-edit"]')).click();
+      await (await page.waitForSelector('input[data-test-id="new-card-item-name"]')).type('Test' + i);
+      await (await page.waitForSelector('input[data-test-id="new-card-item-price"]')).type('10');
+      await (await page.waitForSelector('button[data-test-id="new-item-save"]')).click();
+    }
+
+    const after = await page.$$('div[data-test-id="menu-item-card"]');
+    expect(after.length).toBe(10);
+  },3000);
+
+
+  test('7. hide all items in menu', async () => {
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
+    const cards = await page.$$('div[data-test-id="menu-item-card"]');
+
+    let countHidden = 0;
+    for (const card of cards) {
+      countHidden++;
+      const cardBody = await card.$('div.card-body');
+      const hideBtn = await cardBody.$('input[data-test-id="hide"]');
+      await hideBtn.click();
+
+      const css = await card.evaluate(el => {
+        return {
+          opacity: el.style.opacity,
+        }
+      }
+      );
+      expect(css.opacity).toBe('0.5');
+    }
+
+    expect(countHidden).toBe(cards.length);
+  });
+
+  test('8. show all items in menu', async () => {
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
+    const cards = await page.$$('div[data-test-id="menu-item-card"]');
+    let countShown = 0;
+    for (const card of cards) {
+      countShown++;
+      const cardBody = await card.$('div.card-body');
+      const showBtn = await cardBody.$('input[data-test-id="hide"]');
+      await showBtn.click();
+
+      const css = await card.evaluate(el => {
+        return {
+          opacity: el.style.opacity,
+        }
+      }
+      );
+      expect(css.opacity).toBe('');
+    }
+
+    expect(countShown).toBe(cards.length);
+  });
+
+
+  test('9. Randomly hide an item in menu', async () => {
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
+    const before = await page.$$('div[data-test-id="menu-item-card"]');
+    const randomItem = Math.floor(Math.random() * before.length);
+    const item = before[randomItem];
+    const cardBody = await item.$('div.card-body');
+    const hideBtn = await cardBody.$('input[data-test-id="hide"]');
+    await hideBtn.click();
+
+    const after = await page.$$('div[data-test-id="menu-item-card"]');
+    let countHidden = 0;
+    for (const card of after) {
+      const css = await card.evaluate(el => {
+        return {
+          opacity: el.style.opacity,
+        }}
+      );
+      if (css.opacity === '0.5') {
+        countHidden++;
+      }
+    }
+
+    expect(countHidden).toBe(1);
+  });
 });
   
