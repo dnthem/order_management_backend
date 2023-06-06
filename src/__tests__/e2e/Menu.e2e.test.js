@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES } from "../config";
+import { databaseName, launchOptions, NUMBEROFSTORES } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { preview } from 'vite';
 // Delay function
@@ -16,8 +16,12 @@ describe("Menu", () => {
   let server;
   let browser;
   let page;
+
+  const port = 3000;
+  const pageUrl = `http://localhost:${port}`;
+
   beforeAll(async () => {
-      server = await preview({ preview : { port : 3000 }});
+      server = await preview({ preview : { port }});
       browser = await puppeteer.launch(launchOptions);
       
       page = await browser.newPage();
@@ -54,7 +58,7 @@ describe("Menu", () => {
 
       // Navigate to menu
       await NavigateToMenu();
-
+      await page.waitForSelector('div[data-test-id="menu-item-card"]');
       const before = await page.$$('div[data-test-id="menu-item-card"]');
       expect(before.length).toBe(sampleData['Menu'].length);
 
@@ -79,24 +83,24 @@ describe("Menu", () => {
     // Randomly select an item to edit
     const randomItem = Math.floor(Math.random() * before.length);
     const item = before[randomItem];
-    const cardBody = await item.$('div.card-body');
-    const editBtn = await cardBody.$('button[data-test-id="edit"]');
+    const cardBody = await item.waitForSelector('div.card-body');
+    const editBtn = await cardBody.waitForSelector('button[data-test-id="edit"]');
     await editBtn.click();
     await page.waitForTimeout(200);
-    const inputText = await cardBody.$('input[data-test-id="item-name"]');
+    const inputText = await cardBody.waitForSelector('input[data-test-id="item-name"]');
     await inputText.type('Edited');
-    const inputPrice = await cardBody.$('input[data-test-id="item-price"]');
+    const inputPrice = await cardBody.waitForSelector('input[data-test-id="item-price"]');
 
     await inputPrice.type('0');
-    const saveBtn = await cardBody.$('button[data-test-id="save"]');
+    const saveBtn = await cardBody.waitForSelector('button[data-test-id="save"]');
     await saveBtn.click();
     await page.waitForTimeout(200);
     // Check if item is edited
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     const editedItem = after[randomItem];
-    const editedCardBody = await editedItem.$('div.card-body');
-    const editedItemName = await editedCardBody.$('span[data-test-id="item-name"]');
-    const editedItemPrice = await editedCardBody.$('input[data-test-id="item-price"]');
+    const editedCardBody = await editedItem.waitForSelector('div.card-body');
+    const editedItemName = await editedCardBody.waitForSelector('span[data-test-id="item-name"]');
+    const editedItemPrice = await editedCardBody.waitForSelector('input[data-test-id="item-price"]');
 
     expect(await editedItemName.evaluate(el => el.innerText)).toBe('Edited');
     expect(await editedItemPrice.evaluate(el => el.value)).toBe('0');
@@ -113,8 +117,8 @@ describe("Menu", () => {
     const before = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * before.length);
     const item = before[randomItem];
-    const cardBody = await item.$('div.card-body');
-    const deleteBtn = await cardBody.$('button[data-test-id="remove"]');
+    const cardBody = await item.waitForSelector('div.card-body');
+    const deleteBtn = await cardBody.waitForSelector('button[data-test-id="remove"]');
     await deleteBtn.click();
 
     // confirm delete
@@ -135,8 +139,8 @@ describe("Menu", () => {
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     const randomItem = Math.floor(Math.random() * cards.length);
     const item = cards[randomItem];
-    const cardBody = await item.$('div.card-body');
-    const hideBtn = await cardBody.$('input[data-test-id="hide"]');
+    const cardBody = await item.waitForSelector('div.card-body');
+    const hideBtn = await cardBody.waitForSelector('input[data-test-id="hide"]');
     await hideBtn.click();
 
     // check if item is hidden by checking item css 
@@ -154,11 +158,11 @@ describe("Menu", () => {
     await page.evaluate(() => {
       window.confirm = () => true;
     });
-
+    await page.waitForSelector('div[data-test-id="menu-item-card"]');
     const cards = await page.$$('div[data-test-id="menu-item-card"]');
     for (const card of cards) {
-      const cardBody = await card.$('div.card-body');
-      const deleteBtn = await cardBody.$('button[data-test-id="remove"]');
+      const cardBody = await card.waitForSelector('div.card-body');
+      const deleteBtn = await cardBody.waitForSelector('button[data-test-id="remove"]');
       await deleteBtn.click();
       
     }
@@ -168,7 +172,7 @@ describe("Menu", () => {
   });
 
   test('6. Add multiple items to menu', async () => {
-
+    await delay(100);
     const addBtn = await page.waitForSelector('button[data-test-id="add-new-item"]');
 
     for (let i = 0; i < 10; i++) {
@@ -177,11 +181,12 @@ describe("Menu", () => {
       await (await page.waitForSelector('input[data-test-id="new-card-item-name"]')).type('Test' + i);
       await (await page.waitForSelector('input[data-test-id="new-card-item-price"]')).type('10');
       await (await page.waitForSelector('button[data-test-id="new-item-save"]')).click();
+      await delay(100);
     }
 
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(10);
-  },3000);
+  });
 
 
   test('7. hide all items in menu', async () => {

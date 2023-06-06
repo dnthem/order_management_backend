@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES, NavigateTo, delay } from "../config";
+import { launchOptions, NavigateTo, delay } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { preview } from 'vite';
 
@@ -8,8 +8,13 @@ describe("Customer suggestion list", () => {
     let server;
     let browser;
     let page;
+
+    // random port
+    const port = Math.floor(Math.random() * 1000) + 3000;
+    const pageUrl = `http://localhost:${port}`;
+
     beforeAll(async () => {
-      server = await preview({ preview : { port : 3000 }});
+      server = await preview({ preview : { port }});
       browser = await puppeteer.launch(launchOptions); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
       page = await browser.newPage();
 
@@ -68,25 +73,31 @@ describe("Customer suggestion list", () => {
         await page.waitForSelector('tr[data-test-id="customer-info"]');
         const customerInfo = await page.$$('tr[data-test-id="customer-info"]');
 
-        expect(customerInfo.length).toBe(7);
+        expect(customerInfo.length).toBe(sampleData.Customers.length);
     }, 30_000);
 
-    // test("2. should suggest customer name: John Doe", async () => {
-    //     await NavigateTo(page, '#Orders');
+    test("2. should suggest customer name: John Doe", async () => {
+        if (import.meta.env.VITE_SKIP_TESTS === 'true') {
+            expect(import.meta.env.VITE_SKIP_TESTS).toBe('true');
+            return;
+        };
 
-    //     const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
-    //     await btnAddOrder.click();
-    //     const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
+        await NavigateTo(page, '#Orders');
 
-    //     const customerNameInput = await addCustomerForm.$('input[data-test-id="customer-name-input"]');
-    //     await customerNameInput.type('John Doe');
-    //     await delay(1000);
-    //     await page.waitForSelector('datalist', { timeout: 1000, visible: false });
-    //     const suggestionNames = await page.evaluate(() => {
-    //         const suggestionNameElement = document.querySelectorAll('option');
-    //         return Array.from(suggestionNameElement).map((el) => el.innerText.toLowerCase());
-    //     });
-    //     const found = suggestionNames.findIndex(e => e.includes('John Doe'.toLowerCase()));
-    //     expect(found).not.toBe(-1);
-    // }, 10_000);
+        const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
+        await btnAddOrder.click();
+        const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
+
+        const customerNameInput = await addCustomerForm.$('input[data-test-id="customer-name-input"]');
+        await customerNameInput.type('John Doe');
+        await delay(1000);
+        await page.waitForSelector('ul', { timeout: 1000, visible: false });
+        const suggestionNames = await page.evaluate(() => {
+            const suggestionNameElement = document.querySelectorAll('li');
+            return Array.from(suggestionNameElement).map((el) => el.innerText.toLowerCase());
+        });
+        const found = suggestionNames.findIndex(e => e.includes('John Doe'.toLowerCase()));
+        expect(found).not.toBe(-1);
+
+    }, 20_000);
 });

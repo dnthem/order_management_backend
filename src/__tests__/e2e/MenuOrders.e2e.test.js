@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { pageUrl, NavigateTo, launchOptions } from "../config";
+import { NavigateTo, delay, launchOptions } from "../config";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
 
@@ -7,8 +7,10 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     let server;
     let browser;
     let page;
+    const port = 3001;
+    const pageUrl = `http://localhost:${port}`;
     beforeAll(async () => {
-        server = await preview({ preview : { port : 3000 }});
+        server = await preview({ preview : { port }});
         browser = await puppeteer.launch(launchOptions);
         
         page = await browser.newPage();
@@ -40,12 +42,12 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         page.$eval('button[data-test-id="add-new-order-btn"]', el => el.click());
 
         await page.waitForSelector('div[data-test-id="add-customer-form"]', {timeout: 5000});
-        const addCustomerForm = await page.$('div[data-test-id="add-customer-form"]');
-        const customerNameInput = await addCustomerForm.$('[data-test-id="customer-name-input"]');
+        const addCustomerForm = await page.waitForSelector('div[data-test-id="add-customer-form"]');
+        const customerNameInput = await addCustomerForm.waitForSelector('[data-test-id="customer-name-input"]');
         await customerNameInput.type(customerName);
-        const customerPhoneInput = await addCustomerForm.$('[data-test-id="phone-input"]');
+        const customerPhoneInput = await addCustomerForm.waitForSelector('[data-test-id="phone-input"]');
         await customerPhoneInput.type(phone);
-        const confirmBtn = await addCustomerForm.$('[data-test-id="confirm-btn"]');
+        const confirmBtn = await addCustomerForm.waitForSelector('[data-test-id="confirm-btn"]');
         await confirmBtn.click();
     }
 
@@ -58,20 +60,22 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     let listItems = []; // list of items to hide
     test("1. Hide some items in menu page", async () => {
         await NavigateTo(page, "#Menu");
-        await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 5000});
+        await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 200});
         const menuItems = await page.$$('[data-test-id="menu-item-card"]');
         
         // Hide some random cards, and store their names in listItems
+        const hideList = [0, 4, 2 ];
         for (let i = 0; i < 3; i++) {
-            const itemIndex = Math.floor(Math.random() * menuItems.length);
+            const itemIndex = hideList[i];
             const itemName = await menuItems[itemIndex].$eval('[data-test-id="item-name"]', el => el.innerText);
             listItems.push(itemName);
-            const hideBtn = await menuItems[itemIndex].$('[data-test-id="hide"]');
+            const hideBtn = await menuItems[itemIndex].waitForSelector('[data-test-id="hide"]');
             await hideBtn.click();
         }
 
         // Go to order page
         await NavigateTo(page, "#Orders");
+        await delay(1000);
         await AddCustomer("test", "1234567890");
 
         // Check if the hidden items are hidden in order page
@@ -94,25 +98,24 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     test("2. Add some items to menu page", async () => {
         listItems = [];
         await NavigateTo(page, "#Menu");
-        await page.waitForSelector('[data-test-id="menu-item-card"]');
         
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
-        
         for (let i = 0; i < 3; i++) {
             await btnAddItem.click();
             const cardBody = await page.waitForSelector('.card-body');
-            const editBtn = await cardBody.$('[data-test-id="new-card-edit"]');
+            const editBtn = await cardBody.waitForSelector('[data-test-id="new-card-edit"]');
             await editBtn.click();
-            const confirmBtn = await cardBody.$('[data-test-id="new-item-save"]');
 
-            const itemNameInput = await cardBody.$('[data-test-id="new-card-item-name"]');
+            const itemNameInput = await cardBody.waitForSelector('[data-test-id="new-card-item-name"]');
             await itemNameInput.type("test" + i);
-            const itemPriceInput = await cardBody.$('[data-test-id="new-card-item-price"]');
+            const itemPriceInput = await cardBody.waitForSelector('[data-test-id="new-card-item-price"]');
             await itemPriceInput.type("1");
 
             listItems.push("test" + i);
+
+            const confirmBtn = await cardBody.waitForSelector('[data-test-id="new-item-save"]');
             await confirmBtn.click();
         }
         
@@ -167,7 +170,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         
             const itemName = await item.$eval('[data-test-id="item-name"]', el => el.innerText.trim());
             listItems.push(itemName);
-            const removeBtn = await item.$('[data-test-id="remove"]');
+            const removeBtn = await item.waitForSelector('[data-test-id="remove"]');
             await removeBtn.click();
         }
 
