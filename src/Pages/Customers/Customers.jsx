@@ -1,6 +1,6 @@
 import { useData } from "../../customHooks/useData";
 import { STORES } from "../../indexedDB/indexedDB";
-import CustomerTable from "../../components/CustomerTable";
+import CustomerTable from "./CustomerTable/CustomerTable";
 import UserInfoForm from "../Orders.V2/UserInfoForm";
 import useToggle from "../../customHooks/useToggle";
 import { useDeferredValue, useState } from "react";

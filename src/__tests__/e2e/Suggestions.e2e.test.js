@@ -65,7 +65,7 @@ describe("Customer suggestion list", () => {
             await CancelAddOrder();
         }
 
-        await NavigateTo(page, pageUrl, 'Dashboard');
+        await NavigateTo(page, pageUrl, 'Customers');
         await page.evaluate(() => {
             const el = document.querySelector('table');
             el.scrollIntoView();

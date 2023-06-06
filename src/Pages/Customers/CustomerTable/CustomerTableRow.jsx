@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import useToggle from '../customHooks/useToggle';
-import {phoneFormat} from '../utils/phoneFormat';
+import useToggle from '../../../customHooks/useToggle';
+import { phoneFormat } from '../../../utils/phoneFormat';
 import {FaRegTrashAlt, FaEdit} from 'react-icons/fa';
 
 function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
