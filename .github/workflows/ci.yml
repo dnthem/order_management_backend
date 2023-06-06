@@ -3,7 +3,7 @@ name: CI - PULL REQUEST ON DEVELOPMENT
 on:
   pull_request:
     branches:
-      - dev-clone
+      - Development
 
 jobs:
   test:
