@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES, NavigateTo, delay } from "../config";
+import { launchOptions, NavigateTo, delay } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { preview } from 'vite';
 
@@ -8,8 +8,13 @@ describe("Customer suggestion list", () => {
     let server;
     let browser;
     let page;
+
+    // random port
+    const port = Math.floor(Math.random() * 1000) + 3000;
+    const pageUrl = `http://localhost:${port}`;
+
     beforeAll(async () => {
-      server = await preview({ preview : { port : 3000 }});
+      server = await preview({ preview : { port }});
       browser = await puppeteer.launch(launchOptions); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
       page = await browser.newPage();
 
@@ -53,14 +58,14 @@ describe("Customer suggestion list", () => {
     }
 
     test("1. should add new customers", async () => {
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
         // add all customer from sample data
         for (let i = 0; i < sampleData.Customers.length; i++) {
             await AddCustomer(sampleData.Customers[i].customerName, sampleData.Customers[i].phone);
             await CancelAddOrder();
         }
 
-        await NavigateTo(page, '#Dashboard');
+        await NavigateTo(page, pageUrl, 'Dashboard');
         await page.evaluate(() => {
             const el = document.querySelector('table');
             el.scrollIntoView();
@@ -77,7 +82,7 @@ describe("Customer suggestion list", () => {
             return;
         };
 
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
 
         const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
         await btnAddOrder.click();

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -18,13 +18,14 @@ jobs:
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: 18
           
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libnss3 libgconf-2-4
           npm install
+          npm audit fix
           
 
       - name: run build
@@ -33,7 +34,6 @@ jobs:
       - name: Run test
         env:
           CI: true
-          VITE_PREVIEW_URL: https://localhost:3000/
           VITE_SKIP_TESTS: true
         run: |
           npm run test

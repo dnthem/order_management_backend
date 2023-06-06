@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, databaseName, launchOptions, NUMBEROFSTORES } from "../config";
+import { NavigateTo, launchOptions } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { preview } from 'vite';
 // Delay function
@@ -16,8 +16,12 @@ describe("Menu", () => {
   let server;
   let browser;
   let page;
+
+  const port = 3000;
+  const pageUrl = `http://localhost:${port}`;
+
   beforeAll(async () => {
-      server = await preview({ preview : { port : 3000 }});
+      server = await preview({ preview : { port }});
       browser = await puppeteer.launch(launchOptions);
       
       page = await browser.newPage();
@@ -44,16 +48,10 @@ describe("Menu", () => {
     server.httpServer.close();
   });
 
-  async function NavigateToMenu() {
-    page.$eval('#Menu', el => el.click());
-    const sidebar = await page.waitForSelector('#sidebarToggle');
-    await sidebar.click();
-  }
-
   test('1. Add an item to menu', async () => {
 
       // Navigate to menu
-      await NavigateToMenu();
+      await NavigateTo(page, pageUrl, 'Menu');
       await page.waitForSelector('div[data-test-id="menu-item-card"]');
       const before = await page.$$('div[data-test-id="menu-item-card"]');
       expect(before.length).toBe(sampleData['Menu'].length);
@@ -71,7 +69,7 @@ describe("Menu", () => {
       const after = await page.$$('div[data-test-id="menu-item-card"]');
       expect(after.length).toBe(before.length + 1);
 
-  });
+  }, 5000);
 
   test('2. Edit an item in menu', async () => {
     const before = await page.$$('div[data-test-id="menu-item-card"]');
@@ -100,8 +98,7 @@ describe("Menu", () => {
 
     expect(await editedItemName.evaluate(el => el.innerText)).toBe('Edited');
     expect(await editedItemPrice.evaluate(el => el.value)).toBe('0');
-  });
-
+  }, 5000);
   test('3. Delete an item in menu', async () => {
     // disable confirm dialog, set it to always true
     await page.evaluate(() => {
