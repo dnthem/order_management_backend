@@ -5,8 +5,8 @@ export const store = "Menu";
 export const NUMBEROFSTORES = 6;
 
 export const launchOptions = {
-    slowMo: 10,
-    headless: false,
+    slowMo: 0,
+    headless: 'new',
     devtools: false,
     defaultViewport: null,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
