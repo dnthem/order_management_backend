@@ -87,7 +87,7 @@ function App(props) {
           <ctx.Provider value={value}>
             <Routes>
               <Route path="/" element={<Menu/>} />
-              <Route path="/Menu" element={<Menu/>} />
+              <Route path="/menu" element={<Menu/>} />
               <Route path="/orders" element={<OrdersV2/>} />
               <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/history" element={<History/>} />
