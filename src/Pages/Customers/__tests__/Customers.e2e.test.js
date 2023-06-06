@@ -153,22 +153,28 @@ describe("Customers Page tests", () => {
     // test add 20 customers and check the number of rows in the table should be 10 by default
     test('5. Add 20 customers', async () => {
         await NavigateTo(page, pageUrl, 'Customers');
+      
         const addCustomerButton = await page.waitForSelector('[aria-label="add-new-customer-btn"]');
+        
         for (let i = 0; i < customers.length; i++) {
-            await addCustomerButton.click();
-            const customerNameInput = await page.waitForSelector('[data-test-id="customer-name-input"]');
-            await customerNameInput.type(customers[i].name);
-            const customerPhoneInput = await page.waitForSelector('[data-test-id="phone-input"]');
-            await customerPhoneInput.type(customers[i].phone);
-            const confirmBtn = await page.waitForSelector('[data-test-id="confirm-btn"]');
-            await confirmBtn.click();
-            await delay(200);
+          await addCustomerButton.click();
+      
+          await page.waitForSelector('[data-test-id="customer-name-input"]');
+          await page.type('[data-test-id="customer-name-input"]', customers[i].name);
+      
+          await page.waitForSelector('[data-test-id="phone-input"]');
+          await page.type('[data-test-id="phone-input"]', customers[i].phone);
+      
+          await page.waitForSelector('[data-test-id="confirm-btn"]');
+          await page.click('[data-test-id="confirm-btn"]');
         }
-        await delay(200);
+      
         await page.waitForSelector('[aria-label="customer-table-row"]');
+      
         const customerTableRows = await page.$$('[aria-label="customer-table-row"]');
         expect(customerTableRows.length).toBe(10);
-    }, 30_000);
+      }, 10000);
+      
 
     // Test search by name
     test('6. Search by name', async () => {
@@ -198,27 +204,54 @@ describe("Customers Page tests", () => {
         await page.waitForSelector('[aria-label="customer-table-row"]');
         const customerTableRows = await page.$$eval('[aria-label="customer-table-row"]', rows => {return Array.from(rows).map(row => row.outerHTML)});
         expect(customerTableRows.length).toBe(20);
-    }, 15_000);
+    }, 5_000);
+      
+      
 
     // delte random customers
     test('8. Delete random customers', async () => {
         page.evaluate(() => {
-            window.confirm = () => true;
+          window.confirm = () => true;
         });
+      
+        const customerTableSelector = '[aria-label="customer-table-row"]';
+        const deleteButtonSelector = '[aria-label="remove-customer-btn"]';
+      
+        // Wait for initial customer table rows to be loaded
+        await page.waitForSelector(customerTableSelector);
+      
+        let initialRowCount = await page.$$eval(customerTableSelector, rows => rows.length);
+      
         let count = 0;
         for (let i = 0; i < 5; i++) {
-            const deleteBtns = await page.$$('[aria-label="remove-customer-btn"]');
-            const randomIndex = Math.floor(Math.random() * customers.length);
+          // Refresh the customer table rows after each deletion
+          const deleteBtns = await page.$$(deleteButtonSelector);
+          
+          if (deleteBtns.length > 0) {
+            const randomIndex = Math.floor(Math.random() * deleteBtns.length);
             const deleteCustomerButton = deleteBtns[randomIndex];
-            if (deleteCustomerButton !== undefined) {
-                await deleteCustomerButton.click();
-                count++;
-            }
-            await delay(200);
+      
+            await deleteCustomerButton.click();
+            count++;
+            
+            // Wait for the customer table rows to be updated after deletion
+            await page.waitForFunction((tableSelector, initialCount, deletedCount) => {
+              const rows = Array.from(document.querySelectorAll(tableSelector));
+              return rows.length === initialCount - deletedCount;
+            }, {}, customerTableSelector, initialRowCount, count);
+          }
+          
+          await delay(500);
         }
-        await page.waitForSelector('[aria-label="customer-table-row"]');
-        const customerTableRows = await page.$$('[aria-label="customer-table-row"]');
-        await delay(200);
-        expect(customerTableRows.length).toBe(20 - count);
-    })
+      
+        // Wait for the final customer table rows to be loaded
+        await page.waitForSelector(customerTableSelector);
+      
+        // Get the updated count of customer table rows
+        const updatedRowCount = await page.$$eval(customerTableSelector, rows => rows.length);
+      
+        // Assert the expected count of customer table rows
+        expect(updatedRowCount).toBe(initialRowCount - count);
+      }, 20_000);
+      
 });
