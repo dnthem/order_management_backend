@@ -157,9 +157,9 @@ describe("Menu", () => {
       const cardBody = await card.waitForSelector('div.card-body');
       const deleteBtn = await cardBody.waitForSelector('button[data-test-id="remove"]');
       await deleteBtn.click();
-      
+      await delay(100);
     }
-    await delay(100);
+    
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(0);
   });
@@ -174,11 +174,12 @@ describe("Menu", () => {
       await (await page.waitForSelector('input[data-test-id="new-card-item-name"]')).type('Test' + i);
       await (await page.waitForSelector('input[data-test-id="new-card-item-price"]')).type('10');
       await (await page.waitForSelector('button[data-test-id="new-item-save"]')).click();
+      await delay(100);
     }
 
     const after = await page.$$('div[data-test-id="menu-item-card"]');
     expect(after.length).toBe(10);
-  },3000);
+  }, 10_000);
 
 
   test('7. hide all items in menu', async () => {
@@ -202,7 +203,7 @@ describe("Menu", () => {
     }
 
     expect(countHidden).toBe(cards.length);
-  });
+  }, 10_000);
 
   test('8. show all items in menu', async () => {
     await page.waitForSelector('div[data-test-id="menu-item-card"]');

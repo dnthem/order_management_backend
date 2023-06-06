@@ -20,8 +20,10 @@ export const parseCurrency = (value) => {
 export  async function NavigateTo(page, pageUrl, target) {
     // convert the first letter to upper case
     let tag = target.charAt(0).toUpperCase() + target.slice(1);
-    const link = await page.waitForSelector(`#${tag}`);
-    await link.click();
+    // await page.goto(pageUrl + "/" + tag, { waitUntil: 'networkidle0' });
+    // const link = await page.waitForSelector(`#${tag}`);
+    //await link.click();
+    await page.click(`#${tag}`);
     await delay(100);
 }
 
