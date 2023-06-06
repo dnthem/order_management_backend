@@ -7,10 +7,8 @@
     "test:ci": "vitest",
     "test:watch": "vitest",
     "test": "vitest --run",
-    "coverage": "vitest --coverage",
-    "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",
     "dev": "vite",
-    "build": "vite build && npm run postbuild",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -39,6 +37,7 @@
     "react-test-renderer": "^18.2.0",
     "vite": "^4.0.0",
     "vite-plugin-mkcert": "^1.10.1",
+    "vite-plugin-purgecss": "^0.2.12",
     "vite-plugin-pwa": "^0.14.1",
     "vitest": "^0.31.2"
   }
