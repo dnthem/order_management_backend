@@ -1,10 +1,11 @@
 const sampleData = {
-  IncomeUpToDate: [{
-    Total: 128,
-    Date: new Date().toLocaleDateString("en-us"),
-    id: 1,
-    UpdatedTime: new Date().getTime(),
-  }],
+  IncomeUpToDate: [
+    {
+      Date: new Date(2022, 11, 31).toLocaleDateString("en-us"),
+      Total: 1928,
+      UpdatedTime: new Date().getTime(),
+    },
+  ],
   Menu: [
     {
       Title: "Orange chicken bowl",

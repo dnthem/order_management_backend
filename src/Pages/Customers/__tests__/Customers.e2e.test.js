@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { pageUrl, launchOptions, NavigateTo, delay } from '../../../__tests__/config';
+import { launchOptions, NavigateTo, delay } from '../../../__tests__/config';
 import { preview } from 'vite';
 import { phoneFormat } from '../../../utils';
 
@@ -9,8 +9,12 @@ describe("Customers Page tests", () => {
     let browser;
     let page;
 
+    // random port
+    const port = Math.floor(Math.random() * 1000) + 3000;
+    const pageUrl = `http://localhost:${port}`;
+
     beforeAll(async () => {
-        server = await preview({ preview : { port : 3000 }});
+        server = await preview({ preview : { port }});
         browser = await puppeteer.launch(launchOptions);
         page = await browser.newPage();
 
@@ -36,8 +40,7 @@ describe("Customers Page tests", () => {
     });
 
     test('1. Add a customer', async () => {
-        await NavigateTo(page, '#Customers');
-        await delay(200);
+        await NavigateTo(page, pageUrl, 'Customers');
 
         const addCustomerButton = await page.waitForSelector('[aria-label="add-new-customer-btn"]');
         await addCustomerButton.click();
