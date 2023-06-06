@@ -4,21 +4,23 @@ on:
   pull_request:
     branches:
       - Development
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version:  [14.x, 16.x, 18.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
           
       - name: Install dependencies
         run: |
