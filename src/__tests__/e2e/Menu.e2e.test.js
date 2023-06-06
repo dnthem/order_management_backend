@@ -18,7 +18,7 @@ describe("Menu", () => {
   let page;
 
   const port = 3000;
-  const pageUrl = `http://localhost:${port}/`;
+  const pageUrl = `http://localhost:${port}`;
 
   beforeAll(async () => {
       server = await preview({ preview : { port }});
@@ -48,12 +48,10 @@ describe("Menu", () => {
     server.httpServer.close();
   });
 
-
   test('1. Add an item to menu', async () => {
 
       // Navigate to menu
-      await NavigateTo(page, pageUrl, 'menu');
-      await delay(1000);
+      await NavigateTo(page, pageUrl, 'Menu');
       await page.waitForSelector('div[data-test-id="menu-item-card"]');
       const before = await page.$$('div[data-test-id="menu-item-card"]');
       expect(before.length).toBe(sampleData['Menu'].length);
