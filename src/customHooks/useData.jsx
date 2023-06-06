@@ -52,11 +52,17 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
     try {
       switch (type) {
         case "add":
+          if (indexField === "") {
+            throw new Error("indexField cannot be empty");
+          }
           const res = await indexedDBController.addData(db, store, newVal);
           setData(prevData => [...prevData, { ...newVal, [indexField]: res }]);
           return res;
   
         case "update":
+          if (indexField === "") {
+            throw new Error("indexField cannot be empty");
+          }
           await indexedDBController.updateARecord(db, store, newVal);
           if (data.length === 0) {
             setData([newVal]);
@@ -68,15 +74,25 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
           return null;
   
         case "delete":
+          if (indexField === "") {
+            throw new Error("indexField cannot be empty");
+          }
           await indexedDBController.deleteARecord(db, store, keyPath);
           setData(prevData => prevData.filter(item => item[indexField] !== keyPath));
           return null;
   
         case "getlimit":
-          const response = await indexedDBController.getLimitRecords(db, store, index, limit);
+          var response = await indexedDBController.getLimitRecords(db, store, index, limit);
           setData(response);
           return null;
-  
+
+        case "get":
+          if (keyPath === "") 
+            throw new Error("keyPath cannot be empty");
+          var response = await indexedDBController.getARecordFromIndex(db, store, indexField, keyPath);
+          setData(response);
+          return null;
+            
         default:
           throw new Error("Invalid type");
       }

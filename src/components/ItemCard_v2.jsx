@@ -78,7 +78,7 @@ function ItemCardV2(props) {
   return (
     <div data-test-id="menu-item-card" className="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-xs-12 my-2 " style={itemHidden? {opacity: 0.5}:{}}>
     <div className={cardClass}>
-      <img src={itemPhoto !== undefined? URL.createObjectURL(itemPhoto):IMAGE_TEMPLATE} className="card-img-top" alt={cardProps.Title} />
+      <img loading="lazy" src={itemPhoto !== undefined? URL.createObjectURL(itemPhoto):IMAGE_TEMPLATE} className="card-img-top" alt={cardProps.Title} />
       {edit && <input type='file' accept="image" onChange={(e) => setItemPhoto(e.target.files[0])}/>}
 
       <div className="card-body">

@@ -124,6 +124,7 @@ describe('Order Dashboard suite 2', () => {
 
     test('3. Complete all orders', async () => {
         // Complete all orders
+        await delay(100);
         const completeBtns = await page.$$('button[data-test-id="complete-order-btn"]');
         const length = completeBtns.length;
         for (let i = 0; i < length; i++) {
@@ -131,7 +132,7 @@ describe('Order Dashboard suite 2', () => {
             await newBtn.click({clickCount: 2, delay: 100});
             await delay(100);
         }
-        
+        await delay(100);
         // Check if all orders are completed
         await page.waitForSelector('li[data-test-id="completed-order-card"]');
         const cards = await page.$$('li[data-test-id="completed-order-card"]');

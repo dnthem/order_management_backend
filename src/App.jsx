@@ -7,9 +7,11 @@ import OrdersV2 from "./Pages/Orders.V2/OrdersV2";
 import { Route, Routes, Link } from "react-router-dom";
 import { FaBars, FaTachometerAlt, FaHistory} from "react-icons/fa";
 import {MdMenuBook} from 'react-icons/md';
-import {AiOutlineShoppingCart} from "react-icons/ai";
+import {AiOutlineShoppingCart, AiOutlineUser} from "react-icons/ai";
+
 import {RiSettings5Line} from 'react-icons/ri'
-import useToggle from "./Pages/Orders.V2/customHooks/useToggle";
+import useToggle from "./customHooks/useToggle";
+import Customers from "./Pages/Customers/Customers";
 const ctx = createContext();
 
 
@@ -63,12 +65,19 @@ function App(props) {
                       </div>
                       History
                     </Link>
+                    <Link to="/customers" id="Customers" className="btn nav-link">
+                      <div className="sb-nav-link-icon">
+                        <AiOutlineUser style={iconStyle}/>
+                      </div>
+                      Customers
+                    </Link>
                     <Link to="/settings" id="Setting" className="btn nav-link">
                       <div className="sb-nav-link-icon">
                         <RiSettings5Line style={iconStyle}/>
                       </div>
                       Setting
                     </Link>
+                    
                 </div>
             </div>
         </nav>
@@ -78,11 +87,12 @@ function App(props) {
           <ctx.Provider value={value}>
             <Routes>
               <Route path="/" element={<Menu/>} />
-              <Route path="/Menu" element={<Menu/>} />
+              <Route path="/menu" element={<Menu/>} />
               <Route path="/orders" element={<OrdersV2/>} />
               <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/history" element={<History/>} />
               <Route path="/settings" element={<Settings/>} />
+              <Route path="/customers" element={<Customers/>} />
             </Routes>
             </ctx.Provider>
           </main>

@@ -85,6 +85,9 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
             const index = listItems.findIndex(item => item === itemName);
             expect(index).toBe(-1);
         }
+
+        const cancleBtn = await page.waitForSelector('[data-test-id="add-to-order-form-cancel-btn"]');
+        await cancleBtn.click();
     }, 15000);
 
 
@@ -120,7 +123,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         
         // Go to order page
         await NavigateTo(page, pageUrl, "Orders");
-        await delay(100);
         await AddCustomer("test", "1234567890");
 
         // Check if the added items are added in order page
@@ -134,6 +136,9 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
                 trueListItems.push(listItems[index]);
             }
         }
+        const cancleBtn = await page.waitForSelector('[data-test-id="add-to-order-form-cancel-btn"]');
+        await cancleBtn.click();
+
         expect(trueListItems.length).toBe(listItems.length);
 
     }, 20_000);

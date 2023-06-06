@@ -65,13 +65,14 @@ describe("Customer suggestion list", () => {
             await CancelAddOrder();
         }
 
-        await NavigateTo(page, pageUrl, 'Dashboard');
+        await NavigateTo(page, pageUrl, 'Customers');
         await page.evaluate(() => {
             const el = document.querySelector('table');
             el.scrollIntoView();
         })
-        await page.waitForSelector('tr[data-test-id="customer-info"]');
-        const customerInfo = await page.$$('tr[data-test-id="customer-info"]');
+        await delay(100);
+        await page.waitForSelector('tr[aria-label="customer-table-row"]');
+        const customerInfo = await page.$$('tr[aria-label="customer-table-row"]');
 
         expect(customerInfo.length).toBe(sampleData.Customers.length);
     }, 30_000);

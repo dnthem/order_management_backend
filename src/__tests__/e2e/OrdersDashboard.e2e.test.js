@@ -2,12 +2,6 @@ import puppeteer from "puppeteer";
 import { NavigateTo, parseCurrency, launchOptions } from "../config";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
-// Delay function
-function delay(time) {
-    return new Promise(function(resolve) { 
-        setTimeout(resolve, time)
-    });
-}
 
 
 describe('Order - Dashboard', () => {
@@ -16,7 +10,6 @@ describe('Order - Dashboard', () => {
     let page;
     let totalIncome = 0;
     let totalItems = 0;
-    let totalOrders = 0;
 
     // random port
     const port = Math.floor(Math.random() * 1000) + 3000;
@@ -88,7 +81,7 @@ describe('Order - Dashboard', () => {
 
     const nOrders = 5;
 
-    test('1. Add 10 orders', async () => {
+    test('1. Add 5 orders', async () => {
         await NavigateTo(page, pageUrl, 'Orders');
         // list customer names
         const customerNames = ['John', 'Mary', 'Bob', 'Alice', 'Jane', 'Joe', 'Sally', 'Tom', 'Jerry', 'Mickey'];

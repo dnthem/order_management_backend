@@ -55,40 +55,48 @@ function UserInfoForm(props) {
         return;
       }
 
-      let newCustomerID = customerID;
+      let _customerID = customerID,
+          _customerName = customerName,
+          _phone = phone,
+          _registerationDate = '';
       
       // in case user hits enter without selecting a suggestion even though there is a exact match
       if (customerID === -1) {
         const query = customerName=== ""? phone : customerName;
         const type = customerName === "" ? "phone" : "customerName";
         const results = exactMatch(customers, query, type);
-        if (results) 
-          newCustomerID = results.customerID;
+        if (results) {
+          _customerID = results.customerID;
+          _customerName = results.customerName;
+          _phone = results.phone;
+          _registerationDate = results.registerationDate;
+        }
       }
 
       const newCustomer = { // create new customer object
-        customerName,
-        phone: phoneFormat(phone),
+        customerName : _customerName,
+        phone: phoneFormat(_phone),
         orderCount: 0,
         totalSpent: 0,
         lastPurchase: '',  
+        registerationDate: _registerationDate,
       };
       // new customer
-      if (newCustomerID === -1) {
+      if (_customerID === -1) {
         newCustomer.registerationDate = dateFormat();
-        newCustomerID = await setCustomers({ // add customer to database     
+        _customerID = await setCustomers({ // add customer to database     
             type: "add",
             indexField: "customerID",
             newVal: newCustomer,
         }); 
-        newCustomer.customerID = newCustomerID; 
+        newCustomer.customerID = _customerID; 
       } 
       else {
-        newCustomer.customerID= newCustomerID;
+        newCustomer.customerID= _customerID;
         await setCustomers({ // update customer to database     
           type: "update",
           indexField: "customerID",
-          indexValue: newCustomerID,
+          indexValue: _customerID,
           newVal: newCustomer,
         });
       }

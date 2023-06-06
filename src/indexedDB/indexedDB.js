@@ -183,6 +183,28 @@ indexedDBController.getARecord = function (db, store, keyPath) {
     })
 }
 
+
+/**
+ * Get a record from an object store with a particular value index
+ * @param {indexedDBRef} db 
+ * @param {*} store 
+ * @param {*} index
+ * @param {*} keyPath
+ * @returns 
+ */
+indexedDBController.getARecordFromIndex = function (db, store, index, keyPath) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readonly');
+    const objStore = trans.objectStore(store).index(index);
+    const request = objStore.get(keyPath);
+    request.onsuccess = function (event) {
+        res(event.target.result)
+    }
+    request.onerror = (event) => {
+      rej(event.target.error);
+    }
+  })
+};
 /**
  * Deletes a record from an object store
  * @param {indexedDBRef} db db reference
@@ -307,5 +329,7 @@ indexedDBController.getLimitRecords = function (db, store, keyPath, limit) {
     }
   })
 }
+
+
 
 export default indexedDBController;

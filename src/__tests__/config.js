@@ -17,8 +17,14 @@ export const parseCurrency = (value) => {
     return parseFloat(value.replace(/[^0-9.-]+/g,""));
 }
 
-export  async function NavigateTo(page, pageUrl, tag) {
-    await page.goto(pageUrl + '/' + tag, { waitUntil: 'networkidle0' });
+export  async function NavigateTo(page, pageUrl, target) {
+    // convert the first letter to upper case
+    //let tag = target.charAt(0).toUpperCase() + target.slice(1);
+    await page.goto(pageUrl + "/" + target, { waitUntil: 'networkidle0' });
+    // const link = await page.waitForSelector(`#${tag}`);
+    //await link.click();
+    //const link = await page.waitForSelector(`a[href="/${target}"]`);
+    //await link.click();
     await delay(100);
 }
 
