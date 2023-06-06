@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer";
-import { launchOptions, parseCurrency } from "../config";
+import { NavigateTo, launchOptions, parseCurrency } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import { preview } from 'vite';
@@ -45,36 +45,10 @@ describe('Orders - basic checks', () => {
       browser.close();
       server.httpServer.close();
     });
-    
-    async function NavigateToOrders() {
-        page.$eval('#Orders', el => el.click());
-        const sidebar = await page.waitForSelector('#sidebarToggle');
-        await sidebar.click();
-      }
-
-      async function addItemsToOrder(itemIndex) {
-        await page.waitForSelector('tr[data-test-id="menu-table-card"]', {timeout: 5000});
-        const menuItems = await page.$$('tr[data-test-id="menu-table-card"]');
-        const addToOrderBtn = await menuItems[itemIndex].$('td > button[data-test-id="add-to-order-btn"]');
-        await addToOrderBtn.click();
-
-        const price = await menuItems[itemIndex].$('td[data-test-id="menu-table-card-price"]');
-        const priceText = await price.evaluate(price => price.innerText);
-
-        // remove $ sign
-        return parseCurrency(priceText)
-    }
-
-    async function addToOrder() {
-        const addToOrderForm = await page.$('div[data-test-id="add-to-order-form"]');
-        const confirmBtn = await addToOrderForm.$('button[data-test-id="add-to-order-form-btn"]');
-        await confirmBtn.click();
-    }
 
     test('1. Remove all orders', async () => {
-        // Navigate to orders
-        await NavigateToOrders();
-        await page.waitForTimeout(100);
+        
+        await NavigateTo(page, pageUrl, 'Orders');
         const btnRemoveAllOrders = await page.$$('button[data-test-id="delete-order-btn"]');
 
         for (let i = 0; i < btnRemoveAllOrders.length; i++) {

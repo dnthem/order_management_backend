@@ -81,7 +81,7 @@ describe('Order Dashboard suite 2', () => {
     // Remove All orders
     test('1. Remove all orders', async () => {
         // navigate to orders
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
         await page.waitForTimeout(100);
 
         // Remove all orders
@@ -145,8 +145,7 @@ describe('Order Dashboard suite 2', () => {
         // otherwise the data will be incorrect
         await delay(100);
         // navigate to dashboard
-        await NavigateTo(page, '#Dashboard');
-        await delay(100);
+        await NavigateTo(page, pageUrl, 'Dashboard');
         // get revenue today
         const revenueTodayCard = await page.waitForSelector('div[data-test-id="revenue-today"]');
         const revenueToday = await revenueTodayCard.$('div[data-test-id="card-info-value"]');

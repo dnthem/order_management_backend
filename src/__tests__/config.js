@@ -17,10 +17,9 @@ export const parseCurrency = (value) => {
     return parseFloat(value.replace(/[^0-9.-]+/g,""));
 }
 
-export  async function NavigateTo(page, tag) {
-    page.$eval(tag, el => el.click());
-    const sidebar = await page.waitForSelector('#sidebarToggle');
-    await sidebar.click();
+export  async function NavigateTo(page, pageUrl, tag) {
+    await page.goto(pageUrl + '/' + tag, { waitUntil: 'networkidle0' });
+    await delay(100);
 }
 
 export async function delay (ms) {

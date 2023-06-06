@@ -59,7 +59,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     // Check if the hidden items are hidden in order page
     let listItems = []; // list of items to hide
     test("1. Hide some items in menu page", async () => {
-        await NavigateTo(page, "#Menu");
+        await NavigateTo(page, pageUrl, "Menu");
         await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 200});
         const menuItems = await page.$$('[data-test-id="menu-item-card"]');
         
@@ -74,8 +74,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
 
         // Go to order page
-        await NavigateTo(page, "#Orders");
-        await delay(1000);
+        await NavigateTo(page, pageUrl, "Orders");
         await AddCustomer("test", "1234567890");
 
         // Check if the hidden items are hidden in order page
@@ -97,7 +96,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     
     test("2. Add some items to menu page", async () => {
         listItems = [];
-        await NavigateTo(page, "#Menu");
+        await NavigateTo(page, pageUrl, "Menu");
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
@@ -120,7 +119,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
         
         // Go to order page
-        await NavigateTo(page, "#Orders");
+        await NavigateTo(page, pageUrl, "Orders");
         await delay(100);
         await AddCustomer("test", "1234567890");
 
@@ -147,7 +146,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     test("3. Remove some items from menu page", async () => {
 
         listItems = [];
-        await NavigateTo(page, "#Menu");
+        await NavigateTo(page, pageUrl, "Menu");
         await page.evaluate(() => {
             window.confirm = () => true;
         });
@@ -176,7 +175,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
 
         // Go to order page
-        await NavigateTo(page, "#Orders");
+        await NavigateTo(page, pageUrl, "Orders");
         await AddCustomer("test", "1234569890");
 
         // Check if the removed items are removed in order page

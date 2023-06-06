@@ -58,14 +58,14 @@ describe("Customer suggestion list", () => {
     }
 
     test("1. should add new customers", async () => {
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
         // add all customer from sample data
         for (let i = 0; i < sampleData.Customers.length; i++) {
             await AddCustomer(sampleData.Customers[i].customerName, sampleData.Customers[i].phone);
             await CancelAddOrder();
         }
 
-        await NavigateTo(page, '#Dashboard');
+        await NavigateTo(page, pageUrl, 'Dashboard');
         await page.evaluate(() => {
             const el = document.querySelector('table');
             el.scrollIntoView();
@@ -82,7 +82,7 @@ describe("Customer suggestion list", () => {
             return;
         };
 
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
 
         const btnAddOrder = await page.waitForSelector('button[data-test-id="add-new-order-btn"]');
         await btnAddOrder.click();

@@ -89,7 +89,7 @@ describe('Order - Dashboard', () => {
     const nOrders = 5;
 
     test('1. Add 10 orders', async () => {
-        await NavigateTo(page, '#Orders');
+        await NavigateTo(page, pageUrl, 'Orders');
         await delay(100);
         // list customer names
         const customerNames = ['John', 'Mary', 'Bob', 'Alice', 'Jane', 'Joe', 'Sally', 'Tom', 'Jerry', 'Mickey'];
@@ -136,7 +136,7 @@ describe('Order - Dashboard', () => {
     });
 
     test('4. Check dashboard info matches testing', async () => {
-        await NavigateTo(page, '#Dashboard');
+        await NavigateTo(page, pageUrl, 'Dashboard');
         
         // Get dashboard info
         // income up to date info
