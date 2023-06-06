@@ -1,5 +1,5 @@
 import Header from "../../../components/Header";
-import { AiOutlineUser } from "react-icons/ai";
+import { AiOutlineUser, AiOutlineSearch} from "react-icons/ai";
 function CustomerHeader({ query, setQuery, setAddFormToggle }) {
   return (
     <div className="row">
@@ -11,23 +11,23 @@ function CustomerHeader({ query, setQuery, setAddFormToggle }) {
         <div className="d-flex justify-content-evenly mt-4">
           <button
             aria-label="add-new-customer-btn"
-            className="btn text-primary"
+            className="btn text-primary "
             onClick={setAddFormToggle}
           >
-            Add Customer
+            + Add Customer
           </button>
 
           <div className="input-group " style={{ width: "15em" }}>
             <input
               type="text"
               className="form-control"
-              placeholder="Search customer"
+              placeholder="Search customers"
               aria-label="customer-search-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
             <label className="input-group-text" id="basic-addon2">
-              Search
+              <AiOutlineSearch />
             </label>
           </div>
         </div>

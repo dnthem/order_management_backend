@@ -4,7 +4,7 @@ import CustomerTable from "./CustomerTable/CustomerTable";
 import UserInfoForm from "../Orders.V2/UserInfoForm";
 import useToggle from "../../customHooks/useToggle";
 import { useDeferredValue, useState } from "react";
-import SelectInput from "./SelectInput";
+import Select from "./Select";
 import CustomerHeader from "./CustomerHeader/CustomerHeader";
 import PageLink from "./PageLink";
 
@@ -20,8 +20,9 @@ function Customers(props) {
   const [addFormToggle, setAddFormToggle] = useToggle(false);
   const [sortedBy, setSortedBy] = useState("registerationDate");
   const [page, setPage] = useState(1);
+  const [numberToDisplay, setNumberToDisplay] = useState(10); // [10, 25, 50]
   const isStale = query !== deferredQuery;
-  const numberToDisplay = 10;
+  const customerProperties = customers[0] ? Object.keys(customers[0]) : [];
 
   const handleSortBy = (sortBy) => {
     setSortedBy(sortBy);
@@ -85,7 +86,21 @@ function Customers(props) {
       />
 
       <div className="row">
-        <SelectInput handleSortBy={handleSortBy} />
+        <div className="d-flex justify-content-between">
+          <Select
+            label='Sort By'
+            selectOnChange={handleSortBy}
+            values={customerProperties}
+            displayValues={customerProperties.map((property) =>
+              property.replace(/([A-Z])/g, " $1").trim()
+            )}
+          />
+          <Select
+            label="Entry per page"
+            selectOnChange={setNumberToDisplay}
+            values={[10, 25, 50]}
+          />
+        </div>
       </div>
       <div
         className="row"

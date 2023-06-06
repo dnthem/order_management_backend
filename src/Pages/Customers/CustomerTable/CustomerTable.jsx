@@ -6,9 +6,9 @@ function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
     return ( 
         <table className="table table-striped table-hover">
                 <thead>
-                    <tr>
-                        <th scope="col">Registeration Date</th>
-                        <th scope="col">Customer Name</th>
+                    <tr className="text-capitalize">
+                        <th scope="col">Regist. Date</th>
+                        <th scope="col">Name</th>
                         <th scope="col">Phone</th>
                         <th scope="col">Total Orders</th>
                         <th scope="col">Total Spent</th>

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import useToggle from '../../../customHooks/useToggle';
 import { phoneFormat } from '../../../utils/phoneFormat';
 import {FaRegTrashAlt, FaEdit} from 'react-icons/fa';
+import { AiOutlineClose, AiOutlineCheck } from 'react-icons/ai';
 
 function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
     const [editToggle, setEditToggle] = useToggle(false);
@@ -9,7 +10,7 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
 
     const onEditSave = () => {
         if (editCustomer.customerName === "" && editCustomer.phone === "") {
-            alert('Please enter at least a name or phone number');
+            alert('Please enter at least the name or phone number');
             return;
         }
         
@@ -53,6 +54,10 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
         padding: '0px',
         border: 'none',
     };
+
+    const iconSize = {
+        fontSize: '1.2em',
+    };
     return ( 
         <tr
             aria-label="customer-table-row"
@@ -64,6 +69,7 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
                     <>
                     <td> 
                         <input 
+                            className='border-0'
                             aria-label="customer-name-input"
                             type="text"  
                             value={editCustomer.customerName} 
@@ -72,6 +78,7 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
                     </td>
                     <td>
                         <input 
+                            className='border-0'
                             aria-label="customer-phone-input"
                             type="text" 
                             inputMode='numeric'  
@@ -100,11 +107,24 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
                             <button 
                                 className="btn" 
                                 aria-label="save-edit-customer-btn"
-                                onClick={onEditSave}>Save</button>
+                                onClick={onEditSave}
+                                style={btnStyle}
+                            >
+                                
+                                    <AiOutlineCheck 
+                                        style={{color: "light green", ...iconSize }}
+                                    />
+                                </button>
                             <button 
                                 className="btn" 
                                 aria-label="cancel-edit-customer-btn"
-                                onClick={onEditCancel}>Cancel</button>
+                                onClick={onEditCancel}
+                                style={btnStyle}
+                            >
+                                    <AiOutlineClose
+                                        style={{color: "red", ...iconSize}}
+                                    />
+                                </button>
                             </>
                             
                         ) : (
@@ -114,10 +134,10 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
                                 className="btn" 
                                 aria-label='edit-customer-btn' onClick={setEditToggle}
                                 style={btnStyle}
-                                ><FaEdit/></button>
+                                ><FaEdit style={iconSize}/></button>
                             <button className="btn" aria-label='remove-customer-btn' onClick={onDeleteCustomer}
                             style={btnStyle}
-                            ><FaRegTrashAlt/></button>
+                            ><FaRegTrashAlt style={iconSize}/></button>
                             </div>
                             
                         )
