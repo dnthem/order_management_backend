@@ -8,7 +8,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     let browser;
     let page;
     const port = 3001;
-    const pageUrl = `http://localhost:${port}`;
+    const pageUrl = `http://localhost:${port}/`;
     beforeAll(async () => {
         server = await preview({ preview : { port }});
         browser = await puppeteer.launch(launchOptions);
@@ -59,7 +59,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     // Check if the hidden items are hidden in order page
     let listItems = []; // list of items to hide
     test("1. Hide some items in menu page", async () => {
-        await NavigateTo(page, "#Menu");
+        await NavigateTo(page, pageUrl, 'Menu');
         await page.waitForSelector('[data-test-id="menu-item-card"]', {timeout: 200});
         const menuItems = await page.$$('[data-test-id="menu-item-card"]');
         
@@ -74,7 +74,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
 
         // Go to order page
-        await NavigateTo(page, "#Orders");
+        await NavigateTo(page, pageUrl, "Orders");
         await delay(1000);
         await AddCustomer("test", "1234567890");
 
@@ -97,7 +97,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
     
     test("2. Add some items to menu page", async () => {
         listItems = [];
-        await NavigateTo(page, "#Menu");
+        await NavigateTo(page, pageUrl, "Menu");
         // Add 3 new Items
         const btnAddItem = await page.waitForSelector('[data-test-id="add-new-item"]');
 
@@ -120,7 +120,7 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         }
         
         // Go to order page
-        await NavigateTo(page, "#Orders");
+        await NavigateTo(page, pageUrl, "Orders");
         await AddCustomer("test", "1234567890");
 
         // Check if the added items are added in order page

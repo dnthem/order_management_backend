@@ -1,6 +1,6 @@
 import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import puppeteer from "puppeteer";
-import { databaseName, launchOptions, NUMBEROFSTORES } from "../config";
+import { NavigateTo, launchOptions } from "../config";
 import sampleData from "../../indexedDB/sampleData";
 import { preview } from 'vite';
 // Delay function
@@ -18,7 +18,7 @@ describe("Menu", () => {
   let page;
 
   const port = 3000;
-  const pageUrl = `http://localhost:${port}`;
+  const pageUrl = `http://localhost:${port}/`;
 
   beforeAll(async () => {
       server = await preview({ preview : { port }});
@@ -48,16 +48,11 @@ describe("Menu", () => {
     server.httpServer.close();
   });
 
-  async function NavigateToMenu() {
-    page.$eval('#Menu', el => el.click());
-    const sidebar = await page.waitForSelector('#sidebarToggle');
-    await sidebar.click();
-  }
 
   test('1. Add an item to menu', async () => {
 
       // Navigate to menu
-      await NavigateToMenu();
+      await NavigateTo(page, pageUrl, 'menu');
       await delay(1000);
       await page.waitForSelector('div[data-test-id="menu-item-card"]');
       const before = await page.$$('div[data-test-id="menu-item-card"]');
