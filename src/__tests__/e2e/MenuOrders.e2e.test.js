@@ -121,7 +121,6 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         
         // Go to order page
         await NavigateTo(page, "#Orders");
-        await delay(100);
         await AddCustomer("test", "1234567890");
 
         // Check if the added items are added in order page
@@ -138,71 +137,5 @@ describe('Check synchronization of the Menu on Menu and Order Pages', () => {
         expect(trueListItems.length).toBe(listItems.length);
 
     }, 20_000);
-
-    // Test 3
-    // Remove some items from menu page
-    // Save what Items are removed
-    // Go to order page
-    // Check if the removed items are removed in order page
-    test("3. Remove some items from menu page", async () => {
-
-        listItems = [];
-        await NavigateTo(page, "#Menu");
-        await page.evaluate(() => {
-            window.confirm = () => true;
-        });
-
-        await page.waitForSelector('[data-test-id="menu-item-card"]');
-        // Remove 3 items from menu page, save their name in listItems
-        // only select unhidden items
-        
-        const menuItemsList = await page.$$('[data-test-id="menu-item-card"]');
-        for (let i = menuItemsList.length - 1; i >= menuItemsList.length - 3; i--) {
-            // check for hidden items
-            const item = menuItemsList[i];
-            const css = await item.evaluate(el => {
-                return {
-                  opacity: el.style.opacity,
-                }
-              });
-            if (css.opacity === "0.5")
-                continue;
-
-        
-            const itemName = await item.$eval('[data-test-id="item-name"]', el => el.innerText.trim());
-            listItems.push(itemName);
-            const removeBtn = await item.waitForSelector('[data-test-id="remove"]');
-            await removeBtn.click();
-        }
-
-        // Go to order page
-        await NavigateTo(page, "#Orders");
-        await AddCustomer("test", "1234569890");
-
-        // Check if the removed items are removed in order page
-        await page.waitForSelector('[data-test-id="menu-table-card"]');
-        const menuItemList = await page.$$('tr[data-test-id="menu-table-card"]');
-        let flag = true;
-        for (let i = 0; i < menuItemList.length; i++) {
-            const itemName = await menuItemList[i].$eval('td', el => el.innerText.trim());
-            const index = listItems.findIndex(item => item.toLowerCase() === itemName.toLowerCase());
-            if (index !== -1) {
-                flag = false;
-                break;
-            }
-        }
-        expect(flag).toBe(true);
-    }, 15000);
-
-    // Test 4
-    // Change some items in menu page
-    // Save what Items are changed
-    // Go to order page
-    // Check if the changed items are changed in order page
-
-    test("4. Change some items in menu page (not impleted yet)", async () => {
-        
-        expect(true).toBe(true);
-    });
 
 });

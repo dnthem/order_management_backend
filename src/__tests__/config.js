@@ -21,6 +21,7 @@ export  async function NavigateTo(page, tag) {
     page.$eval(tag, el => el.click());
     const sidebar = await page.waitForSelector('#sidebarToggle');
     await sidebar.click();
+    await delay(1000);
 }
 
 export async function delay (ms) {
