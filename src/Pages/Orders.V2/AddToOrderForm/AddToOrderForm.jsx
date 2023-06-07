@@ -1,16 +1,21 @@
 import Backdrop from "../../../components/Backdrop";
+import useLocalStorage from "../../../customHooks/useLocalStorage";
 import { convertISOToUSA, orderFormater } from "../../../utils";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
 import { useState } from "react";
 
 function AddToOrderForm(props) {
+        // the n-th order of the day
+    const [nthOrderOfDay, setNthOrderOfDay ] = useLocalStorage('nthOrderOfDay', 0);
     const [cart, setCart] = useState(props.cart?? []);
     const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
-    const [paymentType, setPaymentType] = useState('Cash');
-    const [notes, setNotes] = useState('');
+    const [paymentType, setPaymentType] = useState(props.paymentType?? 'Cash');
+    const [notes, setNotes] = useState(props.notes?? '');
     const [orderDate, setOrderDate] = useState(props.orderDate);
     const [deliverDate, setDeliverDate] = useState(props.deliverDate);
+    const [promotion, setPromotion] = useState(props.promotion?? 0);
+    const [nthOrderOfDayProps,] = useState(props.nthOrderOfDay??(nthOrderOfDay +1));
     const customer = props.customer;
     const menu = props.menu;
     const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
@@ -69,8 +74,9 @@ function AddToOrderForm(props) {
 
     const handleAddToOrder = () => {
         if (cart.length === 0) return alert('Please add item to order');
-
+        
         const newOrder = orderFormater({
+            nthOrderOfDay: nthOrderOfDayProps,
             customer, 
             cart, 
             paymentType, 
@@ -78,13 +84,22 @@ function AddToOrderForm(props) {
             orderID,
             orderDate: convertISOToUSA(orderDate),
             deliverDate: convertISOToUSA(deliverDate),
+            promotion,
         });
-
+        // promotion cannot be greater than total
+        if (newOrder.total < 0) return alert('Promotion/Discount cannot be greater than total');
+        if (newOrder.orderDate > newOrder.deliverDate) return alert('Order date cannot be greater than deliver date');
+        if (newOrder.deliverDate < new Date().toLocaleDateString()) return alert('Deliver date cannot be in the past');
+        if (newOrder.orderDate < new Date().toLocaleDateString()) return alert('Order date cannot be in the past');
+        
         if(orderID !== -1) {
             props.onUpdateOrder(newOrder); 
         }
-        else 
+        else {
+            setNthOrderOfDay(nthOrderOfDay + 1);
             props.onAddNewOrder(newOrder);
+        }
+            
 
         props.showForm(false);
     }
@@ -94,7 +109,7 @@ function AddToOrderForm(props) {
             <Backdrop show={props.showForm} setShow={props.setShowForm}/>
             <div
                 data-test-id="add-to-order-form"
-                className={`col-md-12 col-xl-10 p-3 bg-white border rounded-3 shadow-lg`}
+                className={`col-md-12 col-md-12 col-xl-10 col-12 p-3 bg-white border rounded-3 shadow-lg`}
                 style={{
                     position: "fixed",
                     top: "50%",
@@ -114,6 +129,8 @@ function AddToOrderForm(props) {
                         notes={notes}
                         orderDate={orderDate}
                         deliverDate={deliverDate}
+                        promotion={promotion}
+                        setPromotion={setPromotion}
                         setPaymentType={setPaymentType}
                         setNotes={setNotes}
                         setOrderDate={setOrderDate}

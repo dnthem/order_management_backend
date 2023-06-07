@@ -19,7 +19,7 @@ function MenuTableCard(props) {
             data-test-id="menu-table-card"
             ref={trRef}>
             <td style={{verticalAlign:'middle'}}>
-                <img src={props.Photo !== undefined? URL.createObjectURL(props.Photo):'/template.jpg'} alt="" width={'100vw'} /> {props.Title}
+                <img loading="lazy" src={props.Photo !== undefined? URL.createObjectURL(props.Photo):'/template.jpg'} alt="" width={'100vw'} /> {props.Title}
             </td>
             <td
                 data-test-id="menu-table-card-price"

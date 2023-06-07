@@ -44,7 +44,7 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
 
-      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath });
+      const incomeUpToDate = db.createObjectStore(STORES.INCOMEUPTODATE.name, { keyPath: STORES.INCOMEUPTODATE.keyPath, autoIncrement: true });
       
       const income = db.createObjectStore( STORES.INCOME.name , { keyPath: STORES.INCOME.keyPath });
       const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });
@@ -64,14 +64,16 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       orderV2.createIndex("orderDate", "orderDate", {unique: false});
 
       customers.createIndex('customerID', 'customerID', { unique: true });
-      customers.createIndex('phone', 'phone', { unique: true });
+      customers.createIndex('phone', 'phone', { unique: false });
+
 
       menu.createIndex('id', 'id', { unique: true });
-
       sampleData['Menu'].forEach(e => menu.add(e));
 
-      if (import.meta.env.MODE !== 'development') {
-        console.log('Creating sample data');
+      if (import.meta.env.MODE === 'development') {
+        localStorage.setItem('nthOrderOfDay', sampleData['OrdersV2'].length);
+        localStorage.setItem('isnewday', new Date().toLocaleDateString('en-us'));
+        sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e));
         sampleData['OrdersV2'].forEach(e => orderV2.add(e));
         sampleData['Customers'].forEach(e => customers.add(e));
         sampleData['Income'].forEach(e => income.add(e))
@@ -181,6 +183,28 @@ indexedDBController.getARecord = function (db, store, keyPath) {
     })
 }
 
+
+/**
+ * Get a record from an object store with a particular value index
+ * @param {indexedDBRef} db 
+ * @param {*} store 
+ * @param {*} index
+ * @param {*} keyPath
+ * @returns 
+ */
+indexedDBController.getARecordFromIndex = function (db, store, index, keyPath) {
+  return new Promise((res, rej) => {
+    const trans = db.transaction(store, 'readonly');
+    const objStore = trans.objectStore(store).index(index);
+    const request = objStore.get(keyPath);
+    request.onsuccess = function (event) {
+        res(event.target.result)
+    }
+    request.onerror = (event) => {
+      rej(event.target.error);
+    }
+  })
+};
 /**
  * Deletes a record from an object store
  * @param {indexedDBRef} db db reference
@@ -305,5 +329,7 @@ indexedDBController.getLimitRecords = function (db, store, keyPath, limit) {
     }
   })
 }
+
+
 
 export default indexedDBController;

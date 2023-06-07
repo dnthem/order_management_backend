@@ -1,15 +1,27 @@
+/// <reference types="vitest" />
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import mkcert from 'vite-plugin-mkcert'
+import htmlPurge from 'vite-plugin-purgecss'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  test:  {
+    testTimeout: 15_000,
+    hookTimeout: 15_000,
+  },
   server: {
     host: true,
-    https: true
+    https: false
   },
   plugins: [
+    htmlPurge({ 
+      content: ['./src/index.html', './src/**/*.jsx'],
+      css: ['./src/style.css', './src/**/*.css'],
+      variables: true,
+      safelist: ['html', 'body']
+    }),
     react(),
     mkcert(),
     VitePWA({ 

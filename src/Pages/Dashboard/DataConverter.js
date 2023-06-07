@@ -7,7 +7,6 @@
  * @returns {object} {labels, data, max - Count, maxTick}
  */
 function dataConverterMenu(data, number = 7) {
-
     const NUMBERS_TO_DISPLAY = data.length < number ? data.length : number;
     const sortedData = data.sort((a,b) =>  b.Count - a.Count).slice(0, NUMBERS_TO_DISPLAY);
     const res = {};

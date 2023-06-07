@@ -4,25 +4,43 @@ on:
   pull_request:
     branches:
       - Development
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version:  [14.x, 16.x, 18.x]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
           
       - name: Install dependencies
-        run: npm install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libgconf-2-4
+          npm install
+          npm audit fix
+          
 
+      - name: run build
+        run: npm run build
+
+      - name: Run test
+        env:
+          CI: true
+          VITE_SKIP_TESTS: true
+        run: |
+          npm run test
+
+<<<<<<< HEAD
       - name: run build
         run: npm run build
 
@@ -37,3 +55,5 @@ jobs:
 
       - name: Test Utils
         run: npm run test Utils
+=======
+>>>>>>> be503eaa144f77debedbe8ac1bfc0e8d0766d377

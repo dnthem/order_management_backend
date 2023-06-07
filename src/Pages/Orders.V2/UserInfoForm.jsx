@@ -8,12 +8,12 @@ import { dateFormat, phoneFormat } from '../../utils';
 /**
  * Function to filter the customers array based on the query
  * @param {string} query - The search query
- * @param {string} inputType - The input type to search on
+ * @param {string} type - The input type to search on
  * @returns {array} - The filtered array of customers
  */
-function autoComplete(customers, query, inputType) {
+function autoComplete(customers, query, type) {
   return customers.filter((customer) =>
-    customer[inputType].toLowerCase().includes(query.toLowerCase())
+    customer[type].toLowerCase().includes(query.toLowerCase())
   );
 }
 
@@ -21,10 +21,12 @@ function autoComplete(customers, query, inputType) {
  * Function to filter the customers array based on the query, but only returns the first result
  * @param {object} customers  - The array of customers
  * @param {string} query  - The search query
+ * @param {string} type  - The input type to search on
  * @returns {object} - The filtered array of customers
  */
-function exactMatch(customers, query) {
-    return customers.find((customer) => phoneFormat(customer.phone) === phoneFormat(query));
+function exactMatch(customers, query, type = "phone") {
+  if (type === "customerName") return customers.find((customer) => customer[type].toLowerCase() === query.toLowerCase());
+  return customers.find((customer) => phoneFormat(customer[type]) === phoneFormat(query));
 }
 
 function UserInfoForm(props) {
@@ -47,49 +49,79 @@ function UserInfoForm(props) {
 
     async function handleSubmit(e) {
       e.preventDefault();
-      let newCustomerID = customerID;
+      // check either at least one of the fields is filled
+      if (customerName === "" && phone === "") {
+        alert("Please enter customer name or phone number");
+        return;
+      }
+
+      let _customerID = customerID,
+          _customerName = customerName,
+          _phone = phone,
+          _registerationDate = '';
+      
+      // in case user hits enter without selecting a suggestion even though there is a exact match
+      if (customerID === -1) {
+        const query = customerName=== ""? phone : customerName;
+        const type = customerName === "" ? "phone" : "customerName";
+        const results = exactMatch(customers, query, type);
+        if (results) {
+          _customerID = results.customerID;
+          _customerName = results.customerName;
+          _phone = results.phone;
+          _registerationDate = results.registerationDate;
+        }
+      }
+
       const newCustomer = { // create new customer object
-        customerName,
-        phone: phoneFormat(phone),
+        customerName : _customerName,
+        phone: phoneFormat(_phone),
         orderCount: 0,
         totalSpent: 0,
-        dateAdded: dateFormat(),
+        lastPurchase: '',  
+        registerationDate: _registerationDate,
       };
       // new customer
-      if (customerID === -1) {
-          newCustomerID = await setCustomers({ // add customer to database     
-              type: "add",
-              indexField: "customerID",
-              newVal: newCustomer,
-          }); 
+      if (_customerID === -1) {
+        newCustomer.registerationDate = dateFormat();
+        _customerID = await setCustomers({ // add customer to database     
+            type: "add",
+            indexField: "customerID",
+            newVal: newCustomer,
+        }); 
+        newCustomer.customerID = _customerID; 
+      } 
+      else {
+        newCustomer.customerID= _customerID;
+        await setCustomers({ // update customer to database     
+          type: "update",
+          indexField: "customerID",
+          indexValue: _customerID,
+          newVal: newCustomer,
+        });
       }
-      newCustomer.customerID = newCustomerID; 
-      setCustomerName("");
-      setPhone("");
-      
+
       props.onAddCustomerSubmit(newCustomer);
     }
 
     function handleInputPhone(e) {
         const value = e.target.value.replace(/\D/g, "")
-        if (value.length <= 10) {
-            setPhone(value);
+        if (value.length > 10) {
+            return;
         }
-        if (value.length === 10) {
+        if (value.length <= 10) {
             const results = exactMatch(customers, value);
-            console.log(results);
             if (results) {
-                setCustomerName(results.customerName);
-                setPhone(results.phone)
+                setCustomerName(results.customerName === '' ? customerName : results.customerName );
+                setPhone(results.phone === '' ? phone : results.phone)
                 setCustomerID(results.customerID);
                 outline = "success";
             }
+            else {
+              setCustomerID(-1);
+              setPhone(phoneFormat(value));
+            }   
         }
-        else {
-            setCustomerID(-1);
-            outline = "primary";
-        }
-
     }
     
     
@@ -104,8 +136,6 @@ function UserInfoForm(props) {
       }
       
   }, [debouncedQuery]);
-
-  
 
     return (
       <>
@@ -164,19 +194,13 @@ function UserInfoForm(props) {
                 className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <li 
+                    <li data-test-id="suggestion-item"
                       className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
-                      <div className="row">
-                        <div className="col-6">
-                          <span>{suggestion.customerName}</span>
-                        </div>
-                        <div className="col-6">
-                          <span>{suggestion.phone}</span>
-                        </div>
-                      </div>
+                      {suggestion.customerName} &nbsp;
+                      {suggestion.phone}
                     </li>
                   ))}
               </ul>

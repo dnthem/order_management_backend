@@ -1,5 +1,5 @@
 import "fake-indexeddb/auto";
-
+import { afterAll, beforeAll, describe, expect, test } from 'vitest'
 import indexedDBController from "../indexedDB";
 
 const STORES = {
@@ -238,17 +238,17 @@ describe('IndexedDB tests', () => {
 
     console.log = function() {};
   
-    beforeEach(async () => {
+    beforeAll(async () => {
       // Set up a fresh IndexedDB database for each test case
         db = await createDB('testDB', 1);
     });
   
-    afterEach(() => {
+    afterAll(() => {
       // Close the IndexedDB database after each test case
         db.close();
     });
   
-    test('should add and retrieve data from the object store', async () => {
+    test('1. should add and retrieve data from the object store', async () => {
         const Customers = [
             {
               customerID: 1,
@@ -308,7 +308,7 @@ describe('IndexedDB tests', () => {
   
     // Add more test cases for other IndexedDB operations
     let customerID = 0;
-    test('Should Add and Retrieve customer from Customers Store', async () => {
+    test('2. Should Add and Retrieve customer from Customers Store', async () => {
         const customer = {
             customerName: "John Doe",
             phone: "912-345-6789",
@@ -325,7 +325,7 @@ describe('IndexedDB tests', () => {
         expect(result).toEqual(customer);
     });
 
-    test('Should Remove customer from Customers Store', async () => {
+    test('3. Should Remove customer from Customers Store', async () => {
 
         await indexedDBController.deleteARecord(db, STORES.CUSTOMERS, customerID);
 
@@ -334,7 +334,7 @@ describe('IndexedDB tests', () => {
         expect(result).toEqual(undefined);
     });
 
-    test('Should Add and Retrieve Order from OrdersV2 Store', async () => {
+    test('4. Should Add and Retrieve Order from OrdersV2 Store', async () => {
         const order = {
             customer: {
                 customerID: 1,
@@ -367,7 +367,7 @@ describe('IndexedDB tests', () => {
         
     });
     
-    test('Should Add and Retrieve Income from Income Store', async () => {
+    test('5. Should Add and Retrieve Income from Income Store', async () => {
 
         const income = {
             Date: new Date().toLocaleDateString('en-US'),
@@ -381,7 +381,7 @@ describe('IndexedDB tests', () => {
         expect(result).toEqual(income);
     });
 
-    test('Should Add and Retrieve ItemCount from ItemCount Store', async () => {
+    test('6. Should Add and Retrieve ItemCount from ItemCount Store', async () => {
 
         const itemCount = {
             Date: new Date().toLocaleDateString('en-US'),
@@ -398,7 +398,7 @@ describe('IndexedDB tests', () => {
 
     let newMenuID;
 
-    test('Should Add and Retrieve Menu from Menu Store', async () => {
+    test('7. Should Add and Retrieve Menu from Menu Store', async () => {
 
         const menu = {
             Title: "Pizza",
@@ -418,7 +418,7 @@ describe('IndexedDB tests', () => {
 
     });
 
-    test('Should remove a record from Menu store', async () => {
+    test('8. Should remove a record from Menu store', async () => {
 
         await indexedDBController.deleteARecord(db, STORES.MENU, newMenuID);
 
@@ -427,7 +427,7 @@ describe('IndexedDB tests', () => {
         expect(result).toEqual(undefined);
     });
 
-    test('Should retreive all records from Menu store', async () => {
+    test('9. Should retreive all records from Menu store', async () => {
 
         const result = await indexedDBController.getListOfRecords(db, STORES.MENU, 'id', null);
 
@@ -435,7 +435,7 @@ describe('IndexedDB tests', () => {
         expect(result.length).toEqual(sampleData['Menu'].length);
     });
 
-    test('Should update a record from Menu store', async () => {
+    test('10. Should update a record from Menu store', async () => {
 
         const menu = {
             id: 2,
@@ -453,7 +453,7 @@ describe('IndexedDB tests', () => {
         expect(result).toEqual(menu);
     });
 
-    test('Should Delete all records from Menu store', async () => {
+    test('11. Should Delete all records from Menu store', async () => {
 
         await indexedDBController.deleteAllRecord(db, STORES.MENU);
 
@@ -464,7 +464,7 @@ describe('IndexedDB tests', () => {
     });
 
 
-    test('Should Get A limited number of records from Customers store', async () => {
+    test('12. Should Get A limited number of records from Customers store', async () => {
 
         const result = await indexedDBController.getLimitRecords(db, STORES.CUSTOMERS, 'customerID', 2);
 
@@ -472,11 +472,19 @@ describe('IndexedDB tests', () => {
     });
 
 
-    test('Get more than the number of records from Customers store', async () => {
+    test('13. Get more than the number of records from Customers store', async () => {
 
         const result = await indexedDBController.getLimitRecords(db, STORES.CUSTOMERS, 'customerID', 10);
 
         expect(result.length).toEqual(7);
     });
 
+    test('14. Should add a list of records to Menu store', async () => {
+  
+          await indexedDBController.addListDataToStore(db, STORES.MENU, sampleData['Menu']);
+  
+          const result = await indexedDBController.getListOfRecords(db, STORES.MENU, 'id', null);
+  
+          expect(result).toEqual(sampleData['Menu']);
+    });
   });
