@@ -109,7 +109,7 @@ function AddToOrderForm(props) {
         if (order.cart.length === 0) return alert('Please add item to order');
         
         const newOrder = orderFormater({
-            nthOrderOfDay: order.nthOrderOfDay,
+            nthOrderOfDay: nthOrderOfDayProps,
             customer: order.customer,
             cart: order.cart, 
             paymentType: order.paymentType, 
@@ -129,10 +129,7 @@ function AddToOrderForm(props) {
             props.onUpdateOrder(newOrder); 
         }
         else {
-            setOrder({
-                type: 'nthOrderOfDay',
-                payload: nthOrderOfDay + 1
-            });
+            setNthOrderOfDay(nthOrderOfDayProps);
             props.onAddNewOrder(newOrder);
         }
             
