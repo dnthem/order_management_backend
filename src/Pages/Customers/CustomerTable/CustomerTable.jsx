@@ -17,14 +17,18 @@ function CustomerTable({sortedCustomers, deleteCustomer, updateCustomer}) {
                 </thead>
                 <tbody data-test-id="customer-table-body">
                     {
-                        customers.map(customer => (
+                        customers.length !== 0 ? customers.map(customer => (
                             <CustomerTableRow
                                 key={customer.customerID}
                                 customer={customer}
                                 deleteCustomer={deleteCustomer}
                                 updateCustomer={updateCustomer}
-                            />
-                        ))
+                            /> 
+                        )) : (
+                            <tr>
+                                <td colSpan="6" className="text-center">No customer found</td>
+                            </tr>
+                        )
                     }
                 </tbody>
             </table>
