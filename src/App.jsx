@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import History from "./Pages/History/History";
 import Menu from "./Pages/Menu/Menu"
