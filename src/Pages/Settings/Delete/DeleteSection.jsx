@@ -23,10 +23,10 @@ function DeleteSection(props) {
         }
     }
     
-    const onDeleteAll = () => {
+    const onDeleteAll = (...tables) => {
         if (!deleteGuard()) return;
         try {
-            DB_LIST.forEach(async (db_name) => {
+            tables.forEach(async (db_name) => {
                 await indexedDBController.deleteAllRecord(db, db_name);
             });
             alert('All data has been deleted!');
@@ -37,37 +37,7 @@ function DeleteSection(props) {
         
     }
 
-    const onDeleteAllOrders = async () => {
-        if (!deleteGuard()) return;
-
-        try {
-            await indexedDBController.deleteAllRecord(db, STORES.ORDERSV2.name);
-            alert('All orders has been deleted!');
-        } catch (error) {
-            alert('Error occured: ' + error);
-        }
-
-    }
-
-    const onDeleteAllCustomers = async () => {
-        if (!deleteGuard()) return;
-        try {
-            await indexedDBController.deleteAllRecord(db, STORES.CUSTOMERS.name);
-            alert('All customers has been deleted!');
-        } catch (error) {
-            alert('Error occured: ' + error);
-        }
-    }
-
-    const onDeleteAllIncomeUpToDate = async () => {
-        if (!deleteGuard()) return;
-        try {
-            await indexedDBController.deleteAllRecord(db, STORES.INCOMEUPTODATE.name);
-            alert('All income up to date has been deleted!');
-        } catch (error) {
-            alert('Error occured: ' + error);
-        }
-    }
+ 
 
     return ( 
         <div className="list-group mb-5 shadow my-2 py-2" style={{outline: 'red 1px solid'}}>
@@ -76,31 +46,37 @@ function DeleteSection(props) {
             <div className="ms-4">
                 <ListItem
                     title='Delete all your orders'
-                    detail='Please make sure you have saved all your orders before proceeding further in this step.'
+                    detail='This will reset all your order history including today orders'
                 >
-                    <button onClick={onDeleteAllOrders} className="btn btn-danger">Delete</button>
+                    <button onClick={() => onDeleteAll(STORES.ORDERSV2.name)} className="btn btn-danger">Delete</button>
                 </ListItem>
 
                 <ListItem
                     title='Delete all your customers'
-                    detail='Please make sure you have saved all your customers before proceeding further in this step.'
+                    detail='This will remove all your customer information.'
                 >
-                    <button onClick={onDeleteAllCustomers} className="btn btn-danger">Delete</button>
+                    <button onClick={() => onDeleteAll(STORES.CUSTOMERS.name)} className="btn btn-danger">Delete</button>
                 </ListItem>
 
                 <ListItem
                     title='Delete data income up to date table'
-                    detail='This will reset your income up to date table. Please make sure you have saved all your data before proceeding further in this step.'
+                    detail='This will reset your income up to date table.'
                 >
-                    <button onClick={onDeleteAllIncomeUpToDate} className="btn btn-danger">Delete</button>
+                    <button onClick={() => onDeleteAll(STORES.INCOMEUPTODATE.name)} className="btn btn-danger">Delete</button>
+                </ListItem>
 
+                <ListItem
+                    title='Delete all your income history'
+                    detail='This will reset your income history.'
+                >
+                    <button onClick={() => onDeleteAll(STORES.INCOME.name)} className="btn btn-danger">Delete</button>
                 </ListItem>
 
                 <ListItem
                     title='Delete All your data'
                     detail='Please make sure you have saved all your data before proceeding further in this step.'
                 >
-                    <button onClick={onDeleteAll} className="btn btn-danger">Delete</button>
+                    <button onClick={() => onDeleteAll(...DB_LIST)} className="btn btn-danger">Delete</button>
                 </ListItem>
 
 
