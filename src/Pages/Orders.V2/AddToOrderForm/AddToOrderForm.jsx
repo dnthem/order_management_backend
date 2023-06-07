@@ -3,30 +3,54 @@ import useLocalStorage from "../../../customHooks/useLocalStorage";
 import { convertISOToUSA, orderFormater } from "../../../utils";
 import Customer from "./Customer/Customer";
 import Menu from "./Menu";
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 function AddToOrderForm(props) {
         // the n-th order of the day
+
+    const [order, setOrder] = useReducer((state, action) => {
+        switch (action.type) {
+            case 'cart':
+                return {...state, cart: action.payload};
+            case 'orderID':
+                return {...state, orderID: action.payload};
+            case 'deliverDate':
+                return {...state, deliverDate: action.payload};
+            case 'orderDate':
+                return {...state, orderDate: action.payload};
+            case 'notes':
+                return {...state, notes: action.payload};
+            case 'paymentType':
+                return {...state, paymentType: action.payload};
+            case 'promotion':
+                return {...state, promotion: action.payload};
+            case 'nthOrderOfDay':
+                return {...state, nthOrderOfDay: action.payload};
+            case 'customer':
+                return {...state, customer: action.payload};
+            case 'registerationDate':
+                return {...state, registerationDate: action.payload};
+            case 'all':
+                return action.payload;
+            case 'quickAdd':
+                return {...state, ...payload};
+            default:
+                return state;
+        }
+    }, {...props.order});
+
     const [nthOrderOfDay, setNthOrderOfDay ] = useLocalStorage('nthOrderOfDay', 0);
-    const [cart, setCart] = useState(props.cart?? []);
-    const [orderID, setOrderID] = useState(props.orderID?? -1); // -1 means new order
-    const [paymentType, setPaymentType] = useState(props.paymentType?? 'Cash');
-    const [notes, setNotes] = useState(props.notes?? '');
-    const [orderDate, setOrderDate] = useState(props.orderDate);
-    const [deliverDate, setDeliverDate] = useState(props.deliverDate);
-    const [promotion, setPromotion] = useState(props.promotion?? 0);
-    const [nthOrderOfDayProps,] = useState(props.nthOrderOfDay??(nthOrderOfDay +1));
-    const customer = props.customer;
+    const [nthOrderOfDayProps,] = useState(order.nthOrderOfDay??(nthOrderOfDay +1));
     const menu = props.menu;
-    const btnText = props.orderID !== -1 ? 'Update Order' : 'Add to Order';
+    const btnText = order.orderID !== -1 ? 'Update Order' : 'Add to Order';
     /**
-     * Update order
+     * Update cart
      * @param {number} id  id of the item
      * @returns {void}
      */
     const updateOrder = (id) => {
-        const updatedCart = [...cart];
-        const index = cart.findIndex(item => item.id === id);
+        const updatedCart = [...order.cart];
+        const index = order.cart.findIndex(item => item.id === id);
         if(index === -1) {
             const item = menu.find(item => item.id === id);
             const newCart = {
@@ -39,21 +63,27 @@ function AddToOrderForm(props) {
         } else {
             updatedCart[index].quantity += 1;
         }
-        setCart(updatedCart);
+        setOrder({
+            type: 'cart',
+            payload: updatedCart,
+        });
     }
 
     /**
-     * Update quantity
+     * Update quantity of an item in cart
      * @param {number} id  id of the item
      * @param {number} quantity  quantity of the item
      * @returns {void}
     */
     const updateQuantity = (id, quantity) => {
-        const index = cart.findIndex(item => item.id === id);
+        const index = order.cart.findIndex(item => item.id === id);
         if(index !== -1) {
-            const updatedCart = [...cart];
+            const updatedCart = [...order.cart];
             updatedCart[index].quantity = parseInt(quantity);
-            setCart(updatedCart);
+            setOrder({
+                type: 'cart',
+                payload: updatedCart,
+            });
         }
     }
 
@@ -62,29 +92,32 @@ function AddToOrderForm(props) {
      * @param {number} id  id of the item
      * @returns {void}
      * */
-    const removeOrder = (id) => {
-        const index = cart.findIndex(item => item.id === id);
+    const removeAnItemFromCart = (id) => {
+        const index = order.cart.findIndex(item => item.id === id);
         if(index !== -1) {
-            const updatedCart = [...cart];
+            const updatedCart = [...order.cart];
             updatedCart.splice(index, 1);
-            setCart(updatedCart);
+            setOrder({
+                type: 'cart',
+                payload: updatedCart,
+            });
         }
 
     }
 
     const handleAddToOrder = () => {
-        if (cart.length === 0) return alert('Please add item to order');
+        if (order.cart.length === 0) return alert('Please add item to order');
         
         const newOrder = orderFormater({
             nthOrderOfDay: nthOrderOfDayProps,
-            customer, 
-            cart, 
-            paymentType, 
-            notes, 
-            orderID,
-            orderDate: convertISOToUSA(orderDate),
-            deliverDate: convertISOToUSA(deliverDate),
-            promotion,
+            customer: order.customer,
+            cart: order.cart, 
+            paymentType: order.paymentType, 
+            notes : order.notes, 
+            orderID: order.orderID,
+            orderDate: convertISOToUSA(order.orderDate),
+            deliverDate: convertISOToUSA(order.deliverDate),
+            promotion: order.promotion,
         });
         // promotion cannot be greater than total
         if (newOrder.total < 0) return alert('Promotion/Discount cannot be greater than total');
@@ -92,11 +125,11 @@ function AddToOrderForm(props) {
         if (newOrder.deliverDate < new Date().toLocaleDateString()) return alert('Deliver date cannot be in the past');
         if (newOrder.orderDate < new Date().toLocaleDateString()) return alert('Order date cannot be in the past');
         
-        if(orderID !== -1) {
+        if(order.orderID !== -1) {
             props.onUpdateOrder(newOrder); 
         }
         else {
-            setNthOrderOfDay(nthOrderOfDay + 1);
+            setNthOrderOfDay(nthOrderOfDayProps);
             props.onAddNewOrder(newOrder);
         }
             
@@ -122,19 +155,11 @@ function AddToOrderForm(props) {
                     height: "80dvh",
                     
                 }}>
-                    <Customer customer={customer} cart={cart} 
-                        removeOrder={removeOrder} 
+                    <Customer 
+                        order={order}
+                        updateOrder={setOrder}
+                        removeOrder={removeAnItemFromCart} 
                         updateQuantity={updateQuantity}
-                        paymentType={paymentType}
-                        notes={notes}
-                        orderDate={orderDate}
-                        deliverDate={deliverDate}
-                        promotion={promotion}
-                        setPromotion={setPromotion}
-                        setPaymentType={setPaymentType}
-                        setNotes={setNotes}
-                        setOrderDate={setOrderDate}
-                        setDeliverDate={setDeliverDate}
                     />
                     
                     <Menu  menu={menu} updateOrder={updateOrder}/>

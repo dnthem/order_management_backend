@@ -2,10 +2,10 @@ import React from 'react';
 import CustomerOrderList from './CustomerOrderList';
 import { dateFormat, dateToISO } from '../../../../utils';
 function Customer(props) {
-    const customer = props.customer;
+    const customer = props.order.customer;
     const customerName = customer.customerName;
     const phone = customer.phone;
-    const cart = props.cart??[]; 
+    const cart = props.order.cart??[]; 
 
     const numberOfItem = cart.reduce((total, item) => total + item.quantity, 0);
     const total = cart.reduce((total, item) => total + item.quantity * item.price, 0);
@@ -30,17 +30,28 @@ function Customer(props) {
                     <div className="summary ">
                         <div className='d-flex justify-content-between'>
                                 <span>Order Date: </span>
-                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.orderDate)} onChange={(e) => props.setOrderDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
+                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.order.orderDate)} onChange={(e) => props.updateOrder({
+                                    type: 'orderDate',
+                                    payload: dateFormat(e.target.valueAsNumber + 8.64e+7)
+                                }
+                                )}/>
                             </div>
                             <div className='d-flex justify-content-between'>
                                 <span>Deliver Date:</span>
-                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.deliverDate)} onChange={(e) => props.setDeliverDate(dateFormat(e.target.valueAsNumber + 8.64e+7))}/>
+                                <input type="date" className="border-0 bg-transparent" value={dateToISO(props.order.deliverDate)} onChange={(e) => props.updateOrder({
+                                    type: 'deliverDate',
+                                    payload: dateFormat(e.target.valueAsNumber + 8.64e+7)
+                                })}/>
+                                    
                             </div>
-                            <div data-test-id="promotion" className="">
+                            <div className="">
                                 <label htmlFor="promotion">Promotion/Discount: $</label>
-                                <input type="number" className="border-0 bg-transparent ms-1 fw-bold" id="promotion" max={100} min={0} 
-                                        value={props.promotion} 
-                                        onChange={(e) => props.setPromotion(e.target.value)}
+                                <input type="number" className="border-0 bg-transparent ms-1 fw-bold" data-test-id="promotion-input" max={100} min={0} 
+                                        value={props.order.promotion} 
+                                        onChange={(e) => props.updateOrder({
+                                            type: 'promotion',
+                                            payload: e.target.value
+                                        })}
                                         style={{width: '7ch'}}
                                 />
                             </div>
@@ -50,7 +61,12 @@ function Customer(props) {
                                     className='fw-bold ms-1'>${total}</span>
                             </div>
                             <div className="">Payment type: 
-                                <select className="border-0 bg-transparent fw-bold" value={props.paymentType} onChange={(e) => props.setPaymentType(e.target.value)}>
+                                <select className="border-0 bg-transparent fw-bold" value={props.paymentType} onChange={(e) => props.updateOrder({
+                                        type: 'paymentType',
+                                        payload: e.target.value
+                                })}>
+                                    
+                                    
                                     <option value="Cash">Cash</option>
                                     <option value="Zelle">Zelle</option>
                                     <option value="Venmo">Venmo</option>
@@ -58,7 +74,10 @@ function Customer(props) {
                             </div>
                             <div className="">
                                 <div>Notes:</div>
-                                <textarea maxLength={200} className="w-100" style={{resize: 'none'}} value={props.notes} onChange={(e) => props.setNotes(e.target.value)}></textarea>
+                                <textarea data-test-id="notes" maxLength={200} className="w-100" style={{resize: 'none'}} value={props.order.notes} onChange={(e) => props.updateOrder({
+                                    type: 'notes',
+                                    payload: e.target.value
+                                })}></textarea>
                             </div>
                     </div>
                 
@@ -75,7 +94,7 @@ function Customer(props) {
 
             
             <div className="cart mb-3 py-2 ">
-                <CustomerOrderList cart={cart} 
+                <CustomerOrderList cart={props.order.cart} 
                     removeOrder={props.removeOrder}
                     updateQuantity={props.updateQuantity}
                 />

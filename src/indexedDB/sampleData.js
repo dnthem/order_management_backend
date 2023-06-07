@@ -126,6 +126,7 @@ const sampleData = {
   ],
   OrdersV2: [
     {
+      promotion: 0,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -150,6 +151,7 @@ const sampleData = {
       nthOrderOfDay: 1,
     },
     {
+      promotion: 0,
       nthOrderOfDay: 2,
       orderDate: "5/17/2023",
       deliverDate: new Date().toLocaleDateString('en-US'),
@@ -171,6 +173,7 @@ const sampleData = {
       orderID: 2,
     },
     {
+      promotion: 0,
       nthOrderOfDay: 3,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
@@ -193,6 +196,7 @@ const sampleData = {
       completedTime: "17:24",
     },
     {
+      promotion: 0,
       nthOrderOfDay: 4,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
@@ -216,6 +220,7 @@ const sampleData = {
       completedTime: "17:23",
     },
     {
+      promotion: 0,
       nthOrderOfDay: 5,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
@@ -236,6 +241,7 @@ const sampleData = {
       completedTime: "17:24",
     },
     {
+      promotion: 0,
       nthOrderOfDay: 6,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
