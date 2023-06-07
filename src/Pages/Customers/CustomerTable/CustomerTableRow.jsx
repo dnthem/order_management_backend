@@ -34,10 +34,10 @@ function CustomerTableRow({customer, deleteCustomer, updateCustomer}) {
     };
 
     const handleNameChange = (e) => {
-        const regex = /^[a-zA-Z ]*$/;
-        if (regex.test(e.target.value)) {
-            setEditCustomer({...editCustomer, customerName: e.target.value});
-        }
+        setEditCustomer({
+            ...editCustomer, 
+            customerName: e.target.value.replace(/[^A-Za-z\s\u00C0-\u1EF9]/g, '')
+        });
     };
 
     const handlePhoneChange = (e) => {
