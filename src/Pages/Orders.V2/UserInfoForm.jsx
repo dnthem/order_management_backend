@@ -176,7 +176,7 @@ function UserInfoForm(props) {
                 placeholder="Customer Name"
                 ref={nameRef}
                 value={customerName}
-                onChange={(e) => setCustomerName(e.target.value.replace(/[^A-Za-z ]/g, ''))}
+                onChange={(e) => setCustomerName(e.target.value.replace(/[^A-Za-z\u00C0-\u017F ]/g, ''))}
                 autoComplete='off'
               />
               <style>
