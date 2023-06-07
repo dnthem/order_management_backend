@@ -44,9 +44,9 @@ function Customer(props) {
                                 })}/>
                                     
                             </div>
-                            <div data-test-id="promotion" className="">
+                            <div className="">
                                 <label htmlFor="promotion">Promotion/Discount: $</label>
-                                <input type="number" className="border-0 bg-transparent ms-1 fw-bold" id="promotion" max={100} min={0} 
+                                <input type="number" className="border-0 bg-transparent ms-1 fw-bold" data-test-id="promotion-input" max={100} min={0} 
                                         value={props.order.promotion} 
                                         onChange={(e) => props.updateOrder({
                                             type: 'promotion',
@@ -74,7 +74,7 @@ function Customer(props) {
                             </div>
                             <div className="">
                                 <div>Notes:</div>
-                                <textarea maxLength={200} className="w-100" style={{resize: 'none'}} value={props.order.notes} onChange={(e) => props.updateOrder({
+                                <textarea data-test-id="notes" maxLength={200} className="w-100" style={{resize: 'none'}} value={props.order.notes} onChange={(e) => props.updateOrder({
                                     type: 'notes',
                                     payload: e.target.value
                                 })}></textarea>

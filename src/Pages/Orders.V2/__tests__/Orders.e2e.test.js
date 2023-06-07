@@ -219,4 +219,18 @@ describe('Orders - basic checks', () => {
         const orderItems = await page.$$('ul[data-test-id="customer-cart-list"]');
         expect(orderItems.length).toBeLessThanOrEqual(2);
     }, 5000);
+
+    // Complete all orders
+    test('13. Complete all orders', async () => {
+        await page.waitForSelector('button[data-test-id="complete-order-btn"]');
+        const completeOrderBtns = await page.$$('button[data-test-id="complete-order-btn"]');
+        for (let i = 0; i < completeOrderBtns.length; i++) {
+            await completeOrderBtns[i].click({clickCount: 2, delay: 100});
+            await page.waitForTimeout(100);
+        }
+        const cards = await page.$$('div[data-test-id="order-card"]');
+        expect(cards.length).toBe(0);
+    });
+
+
 });

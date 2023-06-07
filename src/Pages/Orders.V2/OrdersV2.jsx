@@ -348,7 +348,7 @@ function OrdersV2() {
           </div>
           <div
             className="section-content row d-flex justify-content-start px-1 overflow-auto"
-            style={{ height: "78dvh" }}
+            style={{ height: "100dvh" }}
           >
             {pending
               .map((order, index) => {

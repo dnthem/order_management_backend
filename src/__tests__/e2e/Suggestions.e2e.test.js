@@ -15,7 +15,7 @@ describe("Customer suggestion list", () => {
 
     beforeAll(async () => {
       server = await preview({ preview : { port }});
-      browser = await puppeteer.launch(launchOptions); // error if not headless : 'old not used : https://github.com/ckeditor/ckeditor5/issues/14063
+      browser = await puppeteer.launch(launchOptions); 
       page = await browser.newPage();
 
       // Clear indexedDB
