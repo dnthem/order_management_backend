@@ -29,7 +29,6 @@
     "@types/react-dom": "^18.0.9",
     "@vitejs/plugin-react": "^3.0.0",
     "@vitest/coverage-c8": "^0.32.0",
-    "@vitest/coverage-v8": "^0.32.0",
     "babel-jest": "^29.5.0",
     "babel-plugin-react-remove-properties": "^0.3.0",
     "babel-plugin-transform-import-meta": "^2.2.0",
