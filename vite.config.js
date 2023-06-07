@@ -8,6 +8,13 @@ import htmlPurge from 'vite-plugin-purgecss'
 // https://vitejs.dev/config/
 export default defineConfig({
   test:  {
+    coverage: {
+      all: true,
+      include: ['src/**/*.js'],
+      reportsDirectory: './coverage',
+      exclude: ['src/**/*.test.jsx', 'src/**/*.test.js', 'src/**/*.e2e.jsx', 'src/**/*.e2e.js'],
+
+    },
     testTimeout: 15_000,
     hookTimeout: 15_000,
   },
