@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
+import { STORES } from "../indexedDB/indexedDB";
+import { fetchAPI } from "../utils";
+const storeNames = Object.values(STORES).map((store) => store.name);
+const urls = {};
+storeNames.forEach((store) => {
+  urls[store] = `http://localhost:3000/${store}/`;
+});
 
 /**
  * Get all records from an object store with a particular value index
@@ -8,20 +15,31 @@ import indexedDBController from "../indexedDB/indexedDB";
  * @param {string} index - the name of the index
  * @param {string} keyPath - the value of the index, if null, then all records are returned
  * @returns [data, updateData] - the data from the object store and a function to update the data in the object store
- * 
+ *
  */
-export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
+export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
   const [data, setData] = useState([]);
   const { db } = GetDataBaseContext();
+  const url = urls[store];
 
   useEffect(() => {
     async function getData() {
       try {
         if (version === 1)
-          var response = await indexedDBController.getListOfRecords(db, store, index, keyPath);
+          var response = await indexedDBController.getListOfRecords(
+            db,
+            store,
+            index,
+            keyPath
+          );
         else
-          var response = await indexedDBController.getLimitRecords(db, store, index, limit);
-        setData(response??[]);
+          var response = await indexedDBController.getLimitRecords(
+            db,
+            store,
+            index,
+            limit
+          );
+        setData(response ?? []);
       } catch (error) {
         alert(error);
       }
@@ -43,7 +61,13 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
    * @returns the new ID of the record added
    * @throws error if the type is invalid
    */
-  async function updateData({ type, indexField, newVal = null, keyPath = "", limit }) {
+  async function updateData({
+    type,
+    indexField,
+    newVal = null,
+    keyPath = "",
+    limit,
+  }) {
     /*
       explaination of the callback function in useData:
       By using the callback form of setData, we ensure that the state is updated correctly, even when multiple updateData calls are made in quick succession.
@@ -51,48 +75,87 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
 
     try {
       switch (type) {
+// ---------------------------------------------------------------------------- //        
         case "add":
           if (indexField === "") {
             throw new Error("indexField cannot be empty");
           }
           const res = await indexedDBController.addData(db, store, newVal);
-          setData(prevData => [...prevData, { ...newVal, [indexField]: res }]);
+          setData((prevData) => [
+            ...prevData,
+            { ...newVal, [indexField]: res },
+          ]);
+          await fetchAPI.post(url, { ...newVal, id: res });
           return res;
-  
+// ---------------------------------------------------------------------------- //
         case "update":
           if (indexField === "") {
             throw new Error("indexField cannot be empty");
           }
-          await indexedDBController.updateARecord(db, store, newVal);
+          
           if (data.length === 0) {
-            setData([newVal]);
+            const res = await indexedDBController.addData(db, store, newVal);
+            setData((prevData) => [
+              ...prevData,
+              { ...newVal, [indexField]: res },
+            ]);
+            await fetchAPI.post(url, { ...newVal, id: res });
             return null;
           }
-          setData(prevData =>
-            prevData.map(item => (item[indexField] === newVal[indexField] ? newVal : item))
+          await indexedDBController.updateARecord(db, store, newVal);
+          setData((prevData) =>
+            prevData.map((item) =>
+              item[indexField] === newVal[indexField] ? newVal : item
+            )
           );
+          var tempNewVal = { ...newVal };
+          delete tempNewVal[indexField];
+          tempNewVal.id = newVal[indexField];
+
+          var convertedDate = encodeURIComponent(tempNewVal.id);
+          var newUrl = url + convertedDate;
+          console.log(newUrl);
+          await fetchAPI.update( newUrl, tempNewVal);
           return null;
-  
+// ---------------------------------------------------------------------------- //
         case "delete":
           if (indexField === "") {
             throw new Error("indexField cannot be empty");
           }
           await indexedDBController.deleteARecord(db, store, keyPath);
-          setData(prevData => prevData.filter(item => item[indexField] !== keyPath));
+          setData((prevData) =>
+            prevData.filter((item) => item[indexField] !== keyPath)
+          );
+          var tempNewVal = { ...newVal };
+          delete tempNewVal[indexField];
+          tempNewVal.id = newVal[indexField];
+          var convertedDate = encodeURIComponent(tempNewVal.id);
+          var newUrl = url + convertedDate;
+          
+          await fetchAPI.delete(newUrl);
           return null;
-  
+// ---------------------------------------------------------------------------- //
         case "getlimit":
-          var response = await indexedDBController.getLimitRecords(db, store, index, limit);
+          var response = await indexedDBController.getLimitRecords(
+            db,
+            store,
+            index,
+            limit
+          );
+          setData(response);
+          return null;
+// ---------------------------------------------------------------------------- //
+        case "get":
+          if (keyPath === "") throw new Error("keyPath cannot be empty");
+          var response = await indexedDBController.getARecordFromIndex(
+            db,
+            store,
+            indexField,
+            keyPath
+          );
           setData(response);
           return null;
 
-        case "get":
-          if (keyPath === "") 
-            throw new Error("keyPath cannot be empty");
-          var response = await indexedDBController.getARecordFromIndex(db, store, indexField, keyPath);
-          setData(response);
-          return null;
-            
         default:
           throw new Error("Invalid type");
       }
@@ -103,5 +166,3 @@ export function useData({ store, index, keyPath, version = 1, limit= 1 }) {
 
   return [data, updateData];
 }
-
-

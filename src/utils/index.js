@@ -4,6 +4,7 @@ import { dateFormat, dateToISO, getCurrentTime, convertISOToUSA, convertUSAtoISO
 import { orderFormater } from './orderFormat';
 import { downloadOrderFormat } from './downloadOrderFormat';
 import { getRandomColor } from './randomColor';
+import fetchAPI from './fetchAPI';
 // export all utils here
 export {
     phoneFormat,
@@ -15,5 +16,6 @@ export {
     orderFormater,
     downloadOrderFormat,
     getRandomColor,
-    getLast4Digits
+    getLast4Digits,
+    fetchAPI,
 };
