@@ -1,4 +1,11 @@
 const sampleData = {
+  IncomeUpToDate: [
+    {
+      Date: new Date(2022, 11, 31).toLocaleDateString("en-us"),
+      Total: 1928,
+      UpdatedTime: new Date().getTime(),
+    },
+  ],
   Menu: [
     {
       Title: "Orange chicken bowl",
@@ -119,6 +126,7 @@ const sampleData = {
   ],
   OrdersV2: [
     {
+      promotion: 0,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -140,8 +148,11 @@ const sampleData = {
       notes: "I don't like spicy",
       status: false,
       orderID: 1,
+      nthOrderOfDay: 1,
     },
     {
+      promotion: 0,
+      nthOrderOfDay: 2,
       orderDate: "5/17/2023",
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -162,6 +173,8 @@ const sampleData = {
       orderID: 2,
     },
     {
+      promotion: 0,
+      nthOrderOfDay: 3,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -178,11 +191,13 @@ const sampleData = {
       total: 109,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 3,
       completedTime: "17:24",
     },
     {
+      promotion: 0,
+      nthOrderOfDay: 4,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -200,11 +215,13 @@ const sampleData = {
       total: 144,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 4,
       completedTime: "17:23",
     },
     {
+      promotion: 0,
+      nthOrderOfDay: 5,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -219,11 +236,13 @@ const sampleData = {
       total: 120,
       paymentType: "Cash",
       notes: "",
-      status: true,
+      status: false,
       orderID: 5,
       completedTime: "17:24",
     },
     {
+      promotion: 0,
+      nthOrderOfDay: 6,
       orderDate: new Date().toLocaleDateString('en-US'),
       deliverDate: new Date().toLocaleDateString('en-US'),
       customer: {
@@ -249,6 +268,7 @@ const sampleData = {
       phone: "123-456-7890",
       orderCount: 5,
       totalSpent: 100,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 2,
@@ -256,6 +276,7 @@ const sampleData = {
       phone: "555-123-4567",
       orderCount: 2,
       totalSpent: 50,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 3,
@@ -263,6 +284,7 @@ const sampleData = {
       phone: "555-555-1212",
       orderCount: 3,
       totalSpent: 75,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 4,
@@ -270,6 +292,7 @@ const sampleData = {
       phone: "987-654-3210",
       orderCount: 1,
       totalSpent: 25,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 5,
@@ -277,6 +300,7 @@ const sampleData = {
       phone: "555-888-9999",
       orderCount: 7,
       totalSpent: 175,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 6,
@@ -284,6 +308,7 @@ const sampleData = {
       phone: "555-777-1212",
       orderCount: 2,
       totalSpent: 50,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
     {
       customerID: 7,
@@ -291,6 +316,7 @@ const sampleData = {
       phone: "123-456-1230",
       orderCount: 5,
       totalSpent: 100,
+      registerationDate: new Date().toLocaleDateString('en-US'),
     },
   ],
 };

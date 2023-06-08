@@ -1,19 +1,20 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useReducer } from 'react';
 import Backdrop from '../../components/Backdrop';
 import CloseBtn from '../../components/CloseBtn';
 import {AiOutlineUser, AiOutlinePhone, AiOutlineIdcard} from 'react-icons/ai';
 import { useDebounce } from "./customHooks/useDebouce";
 import { dateFormat, phoneFormat } from '../../utils';
+import { use } from 'chai';
 
 /**
  * Function to filter the customers array based on the query
  * @param {string} query - The search query
- * @param {string} inputType - The input type to search on
+ * @param {string} type - The input type to search on
  * @returns {array} - The filtered array of customers
  */
-function autoComplete(customers, query, inputType) {
+function autoComplete(customers, query, type) {
   return customers.filter((customer) =>
-    customer[inputType].toLowerCase().includes(query.toLowerCase())
+    customer[type].toLowerCase().includes(query.toLowerCase())
   );
 }
 
@@ -21,75 +22,126 @@ function autoComplete(customers, query, inputType) {
  * Function to filter the customers array based on the query, but only returns the first result
  * @param {object} customers  - The array of customers
  * @param {string} query  - The search query
+ * @param {string} type  - The input type to search on
  * @returns {object} - The filtered array of customers
  */
-function exactMatch(customers, query) {
-    return customers.find((customer) => phoneFormat(customer.phone) === phoneFormat(query));
+function exactMatch(customers, query, type = "phone") {
+  if (type === "customerName") return customers.find((customer) => customer[type].toLowerCase() === query.toLowerCase());
+  return customers.find((customer) => phoneFormat(customer[type]) === phoneFormat(query));
 }
 
 function UserInfoForm(props) {
-    const [customers, setCustomers] = [props.customers, props.setCustomers]
-    const [customerName, setCustomerName] = useState("");
-    const [phone, setPhone] = useState("");
-    const debouncedQuery = useDebounce(customerName);
+    const [customers, setCustomers] = [props.customers, props.setCustomers] // customer list from parent
+    // const [customerName, setCustomerName] = useState("");
+    // const [phone, setPhone] = useState("");
+    // use reducer to handle multiple states, customerName and phone either must not be empty
+    const [customer, updateCustomer] = useReducer((state, action) => {
+      switch (action.type) {
+        case 'customerName':
+          return {...state, customerName: action.payload};
+        case 'phone':
+          return {...state, phone: action.payload};
+        case 'customerID':
+          return {...state, customerID: action.payload};
+        case 'all':
+          return action.payload;
+        default:
+          return state;
+      }
+    }, {customerName: '', phone: '', customerID: -1});
+
+    const debouncedQuery = useDebounce(customer.customerName);
     const [suggestions, setSuggestion] = useState([]);
-    const [customerID, setCustomerID] = useState(-1);
+    
 
     const nameRef = useRef(null);
-    let outline = customerID > 0 ? "success" : "primary";
+    let outline = customer.customerID > 0 ? "success" : "primary";
     
     function handleSelectSuggestion(suggestion) {
-        setCustomerName(suggestion.customerName);
-        setPhone(suggestion.phone);
-        setCustomerID(suggestion.customerID);
+        updateCustomer({type: 'customerName', payload: suggestion.customerName});
+        updateCustomer({type: 'phone', payload: suggestion.phone});
+        updateCustomer({type: 'customerID', payload: suggestion.customerID});
         setSuggestion([]);
     }
 
     async function handleSubmit(e) {
       e.preventDefault();
-      let newCustomerID = customerID;
+      // check either at least one of the fields is filled
+      if (customer.customerName === "" && customer.phone === "") {
+        alert("Please enter customer name or phone number");
+        return;
+      }
+
+      let _customerID = customer.customerID,
+          _customerName = customer.customerName,
+          _phone = customer.phone,
+          _registerationDate = '';
+      
+      // in case user hits enter without selecting a suggestion even though there is a exact match
+      if (customer.customerID === -1) {
+        const query = customer.customerName=== ""? customer.phone : customer.customerName;
+        const type = customer.customerName === "" ? "phone" : "customerName";
+        const results = exactMatch(customers, query, type);
+        if (results) {
+          _customerID = results.customerID;
+          _customerName = results.customerName;
+          _phone = results.phone;
+          _registerationDate = results.registerationDate;
+        }
+      }
+
       const newCustomer = { // create new customer object
-        customerName,
-        phone: phoneFormat(phone),
+        customerName : _customerName,
+        phone: phoneFormat(_phone),
         orderCount: 0,
         totalSpent: 0,
-        dateAdded: dateFormat(),
+        lastPurchase: '',  
+        registerationDate: _registerationDate,
       };
       // new customer
-      if (customerID === -1) {
-          newCustomerID = await setCustomers({ // add customer to database     
-              type: "add",
-              indexField: "customerID",
-              newVal: newCustomer,
-          }); 
+      if (_customerID === -1) {
+        newCustomer.registerationDate = dateFormat();
+        _customerID = await setCustomers({ // add customer to database     
+            type: "add",
+            indexField: "customerID",
+            newVal: newCustomer,
+        }); 
+        newCustomer.customerID = _customerID; 
+      } 
+      else {
+        newCustomer.customerID= _customerID;
+        await setCustomers({ // update customer to database     
+          type: "update",
+          indexField: "customerID",
+          indexValue: _customerID,
+          newVal: newCustomer,
+        });
       }
-      newCustomer.customerID = newCustomerID; 
-      setCustomerName("");
-      setPhone("");
-      
+
       props.onAddCustomerSubmit(newCustomer);
     }
 
     function handleInputPhone(e) {
         const value = e.target.value.replace(/\D/g, "")
-        if (value.length <= 10) {
-            setPhone(value);
+        if (value.length > 10) {
+            return;
         }
-        if (value.length === 10) {
+        if (value.length <= 10) {
             const results = exactMatch(customers, value);
-            console.log(results);
             if (results) {
-                setCustomerName(results.customerName);
-                setPhone(results.phone)
-                setCustomerID(results.customerID);
+                // updateCustomer({type: "customerName", payload: results.customerName === '' ? customerName : results.customerName });
+                // setPhone(results.phone === '' ? phone : results.phone)
+                // setCustomerID(results.customerID);
+                updateCustomer({type: 'all', payload: results});
                 outline = "success";
             }
+            else {
+              // setCustomerID(-1);
+              // setPhone(phoneFormat(value));
+              updateCustomer({type: 'customerID', payload: -1});
+              updateCustomer({type: 'phone', payload: phoneFormat(value)});
+            }   
         }
-        else {
-            setCustomerID(-1);
-            outline = "primary";
-        }
-
     }
     
     
@@ -97,15 +149,13 @@ function UserInfoForm(props) {
       if (debouncedQuery && document.activeElement === nameRef.current) {
           const results = autoComplete(customers, debouncedQuery, "customerName");
           setSuggestion(results);
-          if (results.length === 0) setCustomerID(-1);
+          if (results.length === 0) updateCustomer({type: 'customerID', payload: -1});
           
       } else {
           setSuggestion([]);
       }
       
   }, [debouncedQuery]);
-
-  
 
     return (
       <>
@@ -134,7 +184,7 @@ function UserInfoForm(props) {
             <div className="col">
               <label htmlFor="customerName" className="form-label">
                 <AiOutlineUser/>Customer Name
-                {customerID > 0 && (
+                {customer.customerID > 0 && (
                   <span className="badge bg-success">Existing Customer</span>
                 )}
               </label>
@@ -145,8 +195,8 @@ function UserInfoForm(props) {
                 id="customerName"
                 placeholder="Customer Name"
                 ref={nameRef}
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value.replace(/[^A-Za-z ]/g, ''))}
+                value={customer.customerName}
+                onChange={(e) => updateCustomer({ type: "customerName", payload: e.target.value.replace(/[^A-Za-z\s\u00C0-\u1EF9]/g, '')})}
                 autoComplete='off'
               />
               <style>
@@ -164,19 +214,13 @@ function UserInfoForm(props) {
                 className="list-group">
                 {suggestions.length > 0 &&
                   suggestions.map((suggestion) => (
-                    <li 
+                    <li data-test-id="suggestion-item"
                       className="list-group-item"
                       key={suggestion.customerID}
                       onClick={() => handleSelectSuggestion(suggestion)}
                     >
-                      <div className="row">
-                        <div className="col-6">
-                          <span>{suggestion.customerName}</span>
-                        </div>
-                        <div className="col-6">
-                          <span>{suggestion.phone}</span>
-                        </div>
-                      </div>
+                      {suggestion.customerName} &nbsp;
+                      {suggestion.phone}
                     </li>
                   ))}
               </ul>
@@ -192,7 +236,7 @@ function UserInfoForm(props) {
                 className="form-control"
                 id="phone"
                 placeholder="714-456-7890"
-                value={phone}
+                value={customer.phone}
                 onChange={handleInputPhone}
               />
             </div>

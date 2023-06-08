@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "jest --runInBand ",
-    "teste2e": "jest src/__tests__/e2e/*",
-    "postbuild": "purgecss --css dist/style.css --content dist/index.html dist/assets/*.js --output dist/",
+    "test:ci": "vitest",
+    "test:watch": "vitest",
+    "test": "vitest --run",
     "dev": "vite",
-    "build": "vite build && npm run postbuild",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,7 +16,8 @@
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^4.7.1"
+    "react-icons": "^4.7.1",
+    "react-router-dom": "^6.11.2"
   },
   "devDependencies": {
     "@babel/plugin-syntax-jsx": "^7.21.4",
@@ -28,13 +29,16 @@
     "@vitejs/plugin-react": "^3.0.0",
     "babel-jest": "^29.5.0",
     "babel-plugin-react-remove-properties": "^0.3.0",
+    "babel-plugin-transform-import-meta": "^2.2.0",
+    "babel-plugin-transform-vite-meta-env": "^1.0.3",
     "fake-indexeddb": "^4.0.1",
-    "jest": "^29.5.0",
     "puppeteer": "^20.4.0",
     "purgecss": "^5.0.0",
     "react-test-renderer": "^18.2.0",
     "vite": "^4.0.0",
     "vite-plugin-mkcert": "^1.10.1",
-    "vite-plugin-pwa": "^0.14.1"
+    "vite-plugin-purgecss": "^0.2.12",
+    "vite-plugin-pwa": "^0.14.1",
+    "vitest": "^0.31.2"
   }
 }

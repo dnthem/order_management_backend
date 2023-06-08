@@ -1,5 +1,5 @@
 // main file for utils
-import { phoneFormat } from './phoneFormat';
+import { phoneFormat, getLast4Digits } from './phoneFormat';
 import { dateFormat, dateToISO, getCurrentTime, convertISOToUSA, convertUSAtoISO } from './dateFormat';
 import { orderFormater } from './orderFormat';
 import { downloadOrderFormat } from './downloadOrderFormat';
@@ -14,5 +14,6 @@ export {
     getCurrentTime,
     orderFormater,
     downloadOrderFormat,
-    getRandomColor
+    getRandomColor,
+    getLast4Digits
 };
