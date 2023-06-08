@@ -1,13 +1,8 @@
 import { useState, useEffect } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
-import { STORES } from "../indexedDB/indexedDB";
 import { fetchAPI } from "../utils";
-const storeNames = Object.values(STORES).map((store) => store.name);
-const urls = {};
-storeNames.forEach((store) => {
-  urls[store] = `http://localhost:3000/${store}/`;
-});
+
 
 /**
  * Get all records from an object store with a particular value index
@@ -20,7 +15,7 @@ storeNames.forEach((store) => {
 export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
   const [data, setData] = useState([]);
   const { db } = GetDataBaseContext();
-  const url = urls[store];
+  const url = `http://localhost:3000/${store}/`;
 
   useEffect(() => {
     async function getData() {
@@ -114,7 +109,7 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
 
           var convertedDate = encodeURIComponent(tempNewVal.id);
           var newUrl = url + convertedDate;
-          console.log(newUrl);
+  
           await fetchAPI.update( newUrl, tempNewVal);
           return null;
 // ---------------------------------------------------------------------------- //
@@ -126,10 +121,7 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
           setData((prevData) =>
             prevData.filter((item) => item[indexField] !== keyPath)
           );
-          var tempNewVal = { ...newVal };
-          delete tempNewVal[indexField];
-          tempNewVal.id = newVal[indexField];
-          var convertedDate = encodeURIComponent(tempNewVal.id);
+          var convertedDate = encodeURIComponent(keyPath);
           var newUrl = url + convertedDate;
           
           await fetchAPI.delete(newUrl);
