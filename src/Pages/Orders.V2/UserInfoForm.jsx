@@ -4,7 +4,6 @@ import CloseBtn from '../../components/CloseBtn';
 import {AiOutlineUser, AiOutlinePhone, AiOutlineIdcard} from 'react-icons/ai';
 import { useDebounce } from "./customHooks/useDebouce";
 import { dateFormat, phoneFormat } from '../../utils';
-import { use } from 'chai';
 
 /**
  * Function to filter the customers array based on the query
@@ -32,9 +31,6 @@ function exactMatch(customers, query, type = "phone") {
 
 function UserInfoForm(props) {
     const [customers, setCustomers] = [props.customers, props.setCustomers] // customer list from parent
-    // const [customerName, setCustomerName] = useState("");
-    // const [phone, setPhone] = useState("");
-    // use reducer to handle multiple states, customerName and phone either must not be empty
     const [customer, updateCustomer] = useReducer((state, action) => {
       switch (action.type) {
         case 'customerName':
@@ -43,12 +39,14 @@ function UserInfoForm(props) {
           return {...state, phone: action.payload};
         case 'customerID':
           return {...state, customerID: action.payload};
+        case 'registerationDate':
+          return {...state, registerationDate: action.payload};
         case 'all':
           return action.payload;
         default:
           return state;
       }
-    }, {customerName: '', phone: '', customerID: -1});
+    }, {customerName: '', phone: '', customerID: -1, registerationDate: ''});
 
     const debouncedQuery = useDebounce(customer.customerName);
     const [suggestions, setSuggestion] = useState([]);
@@ -58,10 +56,8 @@ function UserInfoForm(props) {
     let outline = customer.customerID > 0 ? "success" : "primary";
     
     function handleSelectSuggestion(suggestion) {
-        updateCustomer({type: 'customerName', payload: suggestion.customerName});
-        updateCustomer({type: 'phone', payload: suggestion.phone});
-        updateCustomer({type: 'customerID', payload: suggestion.customerID});
-        setSuggestion([]);
+      updateCustomer({type: 'all', payload: suggestion});
+      setSuggestion([]);
     }
 
     async function handleSubmit(e) {
@@ -75,9 +71,9 @@ function UserInfoForm(props) {
       let _customerID = customer.customerID,
           _customerName = customer.customerName,
           _phone = customer.phone,
-          _registerationDate = '';
+          _registerationDate = customer.registerationDate;
       
-      // in case user hits enter without selecting a suggestion even though there is a exact match
+      // in case user hits enter without selecting a suggestion even though there is a perfect match
       if (customer.customerID === -1) {
         const query = customer.customerName=== ""? customer.phone : customer.customerName;
         const type = customer.customerName === "" ? "phone" : "customerName";
