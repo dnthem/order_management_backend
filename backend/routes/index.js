@@ -1,28 +1,19 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
+import { authenticateToken } from './jwt.js';
 import serverData from '../data.js';
 const router = express.Router();
 
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-  console.log('authHeader', authHeader);
-  const token = authHeader && authHeader.split(' ')[1];
-  console.log('token', token);
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.JWT_SECRET_TOKEN, (err, user) => {
-    console.log('err', err);
-
-    if (err) return res.sendStatus(403);
-
-    req.user = user;
-
-    next();
-  });
-}
 
 router.get('/', authenticateToken, (req, res) => {
   console.log(req.user);
-  res.send(`Hello ${req.user.username}`);
+  const resultString = `
+<pre>
+  Hello, ${req.user.name}
+  email: ${req.user.email}
+  Admin: ${req.user.isAdmin}
+</pre>
+  `
+  res.send(resultString);
 });
 
 // router.get('/:store', (req, res) => {
