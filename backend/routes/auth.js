@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateAccessToken, authenticateToken } from './jwt.js';
+import { generateAccessToken, authenticateToken } from '../utils/jwt.js';
 import {db} from '../db.js';
 import path from 'path';
 
@@ -31,6 +31,21 @@ router.get('/login', authenticateToken, (req, res) => {
 
 router.post('/login', findUser, (req, res) => {
   res.json({ accessToken : generateAccessToken(req.user) });
+});
+
+router.post('/signup', (req, res) => {
+  const user = {
+    id: db.users.length + 1,
+    name: req.body.name,
+    username: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    isAdmin: false,
+  };
+
+  console.log(user);
+  db.users.push(user);
+  res.json({ accessToken : generateAccessToken(user) });
 });
 
 
