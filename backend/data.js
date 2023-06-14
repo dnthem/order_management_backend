@@ -1,4 +1,5 @@
 const serverData = {
+  "Users": [],
   "Income": [
     {
       "id": "1/1/2023",
