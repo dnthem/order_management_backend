@@ -12,6 +12,7 @@ import {AiOutlineShoppingCart, AiOutlineUser} from "react-icons/ai";
 import {RiSettings5Line} from 'react-icons/ri'
 import useToggle from "./customHooks/useToggle";
 import Customers from "./Pages/Customers/Customers";
+import useLocalStorage from "./customHooks/useLocalStorage";
 const ctx = createContext();
 
 
@@ -21,8 +22,9 @@ export function GetDataBaseContext() {
 }
 function App(props) {
   const [db, ] = useState(props.db);
+  const [jwtToken, setJwtToken] = useLocalStorage("jwtToken", "");
   const [sideBarToggle, setSideBarToggle] = useToggle(false);
-  const value = { db };
+  const value = { db, jwtToken, setJwtToken };
 
   const iconStyle = {
     color: "#545454",
