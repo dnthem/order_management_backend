@@ -23,6 +23,8 @@ router.get(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
+    console.log(`get ${req.params.store}`);
+
     const store = req.params.store;
     if (!Object.keys(db).includes(store))
       return res.status(404).send({ message: `${store} Not Found` });
@@ -34,7 +36,9 @@ router.get(
       ],
     });
     if (data) {
-      res.send(data);
+      const result = data.map((item) => item.toJSON());
+      console.log(result);
+      res.send(result);
     } else {
       res.status(404).send({ message: `Not Found` });
     }
@@ -46,12 +50,15 @@ router.get(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
+    console.log(`get one from ${req.params.store} with id ${req.params.id}`);
     const store = req.params.store;
     const Id = req.params.id;
     try {
       const data = await db[store].findOne({
-        $and: [{ userID: req.user._id }, { _id: Id }],
+        $and: [{ userID: req.user._id }, { id: Id }],
       });
+      if (!data)
+        return res.status(404).send({ message: `Item Not Found` });
       res.send(data);
     } catch (error) {
       res.status(404).send({ message: `Not Found` });
@@ -64,10 +71,11 @@ router.post(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
+    console.log(`create new ${req.params.store}`);
+    console.log(req.body)
     const store = req.params.store;
     try {
       if (Object.keys(db).includes(store)) {
-        console.log(req.user._id)
         const newData = new db[store]({userID: req.user._id});
         updateBasedOnStore(store, newData, req.body);
         console.log("Create new data in store ", store, " with data \n", newData);
@@ -89,11 +97,12 @@ router.put(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
+    console.log(`update ${req.params.store} with id ${req.params.id}`);
     const store = req.params.store;
     const Id = req.params.id;
     if (Object.keys(db).includes(store)) {
       const data = await db[store].findOne({
-        $and: [{ userID: req.user._id }, { _id: Id }],
+        $and: [{ userID: req.user._id }, { id: Id }],
       });
       if (data) {
         // update with payload
@@ -119,11 +128,12 @@ router.delete(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
+    console.log(`delete ${req.params.store} with id ${req.params.id}`);
     const store = req.params.store;
     const Id = req.params.id;
     if (Object.keys(db).includes(store)) {
       await db[store].deleteOne({
-        $and: [{ userID: req.user._id }, { _id: Id }],
+        $and: [{ userID: req.user._id }, { id: Id }],
       });
 
       // send 200 - ok
@@ -134,6 +144,27 @@ router.delete(
   }
 );
 
+if (process.env.NODE_ENV !== "production") {
+  router.delete("/DeleteAll",
+    authenticateToken,
+    async (req, res) => {
+    // delete all data of the user in all stores
+    try {
+      await Menu.deleteMany({ userID: req.user._id });
+      await Customers.deleteMany({ userID: req.user._id });
+      await Income.deleteMany({ userID: req.user._id });
+      await IncomeUpToDate.deleteMany({ userID: req.user._id });
+      await Orders.deleteMany({ userID: req.user._id });
+      res.status(200).send("Deleted");
+    } catch(error) {
+      console.log(error.message)
+      res.status(500).send({ message: error.message || `Not Found`});
+    }
+
+    
+  });
+}
+
 function updateBasedOnStore(store, obj, body) {
   switch (store) {
     case "Menu":
@@ -142,6 +173,7 @@ function updateBasedOnStore(store, obj, body) {
       obj.Price = body.Price ?? obj.Price;
       obj.Description = body.Description ?? obj.Description;
       obj.Image = body.image ?? obj.Image;
+      obj.Hidden = body.Hidden ?? obj.Hidden;
       break;
     case "Orders":
       obj.status = body.status ?? obj.status;
@@ -154,9 +186,9 @@ function updateBasedOnStore(store, obj, body) {
       obj.paymentType = body.paymentType ?? obj.paymentType;
       obj.promotion = body.promotion ?? obj.promotion;
       obj.deliverDate = body.deliverDate ?? obj.deliverDate;
-      orderDate = body.orderDate ?? obj.orderDate;
+      obj.orderDate = body.orderDate ?? obj.orderDate;
       break;
-    case "Customer":
+    case "Customers":
       obj.customerName = body.customerName ?? obj.customerName;
       obj.phone = body.phone ?? obj.phone;
       obj.orderCount = body.orderCount ?? obj.orderCount;

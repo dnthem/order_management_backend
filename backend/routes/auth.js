@@ -2,6 +2,7 @@ import express from 'express';
 import { generateAccessToken, authenticateToken } from '../utils/jwt.js';
 import {Users} from '../db/mongodb.js';
 import path from 'path';
+import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
@@ -12,17 +13,20 @@ async function findUser(req, res, next) {
     if (user) {
       console.log(user)
       // password check
-      if (user.password === req.body.password) {
+      const match = await bcrypt.compare(req.body.password, user.password);
+      if (match) {
         req.user = {
           name: user.name,
           username: user.username,
           email: user.email,
           _id: user._id,
         };
+
+        console.log('req.user', req.user);
         next();
       }
       else {
-        res.status(401).send({ message: 'Invalid Password' });
+        res.status(401).send({ message: 'Username or Password is incorrect' });
       }
       
     }
@@ -42,12 +46,15 @@ router.post('/login', findUser, (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
+
   try {
+    const saltRounds = 10;
+    const hashPassword = await bcrypt.hash(req.body.password, saltRounds);
     const user = await Users.create({
       name: req.body.name,
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      password: hashPassword,
     });
     console.log(user);
     res.json({ accessToken : generateAccessToken({

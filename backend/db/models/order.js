@@ -12,7 +12,7 @@ const orderSchema = new mongoose.Schema({
   },
   orderDate: {
     type: Date,
-    default: Date.now,
+    default: new Date(),
   },
   deliverDate: {
     type: Date,
@@ -26,7 +26,7 @@ const orderSchema = new mongoose.Schema({
   // cart is a list of menu and quanity
   cart: [
     {
-      menu: {
+      item: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Menu",
       },
@@ -49,10 +49,7 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  comletedTime: {
-    type: Date,
-    default: Date.now,
-  },
+  comletedTime: Date, 
   paymentType: {
     type: String,
     enum: ["Cash", "Zelle", "Vemmo"],
@@ -75,6 +72,7 @@ orderSchema.pre("save", async function (next) {
     next(err);
   }
 });
+
 
 const Orders = mongoose.model("Order", orderSchema);
 
