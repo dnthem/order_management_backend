@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const menuSchema = new mongoose.Schema({
+  id : {
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -25,7 +29,10 @@ const menuSchema = new mongoose.Schema({
     default: false
   },
   Image: String,
+
+
 });
+
 
 
 const Menu = mongoose.model("Menu", menuSchema);

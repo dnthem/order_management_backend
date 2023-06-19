@@ -23,6 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
 const orginList = [
+  'http://127.0.0.1:5500',
   'http://localhost:3000',
   'http://192.168.86.248:5173/',
 ];
@@ -35,6 +36,10 @@ await db.connect();
 
 app.use('/', authRoutes);
 app.use('/', indexRoutes);
+
+app.use("/*", (req, res) => {
+  res.status(404).send("Path not found");
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
