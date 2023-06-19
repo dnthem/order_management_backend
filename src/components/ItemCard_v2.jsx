@@ -8,7 +8,7 @@ function ItemCardV2(props) {
     const [edit, setEdit] = useState(false);
     const [itemName, setItemName] = useState(props.Title);
     const [itemPrice, setItemPrice] = useState(props.Price);
-    const [itemContent, setItemContent] = useState(props.Content);
+    const [itemDescription, setItemDescription] = useState(props.Description);
     const [itemPhoto, setItemPhoto] = useState(props.Photo);
     const [itemCount, setItemCount] = useState(props.Count);
     const [itemHidden, setItemHidden] = useState(props.Hidden);
@@ -17,18 +17,18 @@ function ItemCardV2(props) {
     const saveHandler = (e) => {
       const Title = itemName;
       const Price = itemPrice;
-      const Content = itemContent;
+      const Description = itemDescription;
       const Photo = itemPhoto // imageRef.current.files[0];
 
       const newProp = {...cardProps}
 
       newProp.Title = Title? Title: newProp.Title;
       newProp.Price = Price? Number(Price): Number(newProp.Price);
-      newProp.Content = Content? Content: newProp.Content;
+      newProp.Description = Description? Description: newProp.Description;
       newProp.Photo = !(Photo === null || typeof Photo === 'undefined')? Photo: newProp.Photo;
       // update database
       const newData = {
-        Content: newProp.Content,
+        Description: newProp.Description,
         Photo: newProp.Photo,
         Title: newProp.Title,
         Price: newProp.Price,
@@ -60,7 +60,7 @@ function ItemCardV2(props) {
     const hideHandler = () => {
 
       const newData = {
-        Content: itemContent,
+        Description: itemDescription,
         Photo: itemPhoto,
         Title: itemName,
         Price: itemPrice,
@@ -94,7 +94,7 @@ function ItemCardV2(props) {
 
         </h6>
 
-        <input type="textarea" className="form-control border-0 bg-transparent" disabled={!edit} id="exampleFormControlTextarea1" rows="3" placeholder="description here..." value={itemContent} onChange={(e) => setItemContent(e.target.value)}/>
+        <input type="textarea" className="form-control border-0 bg-transparent" disabled={!edit} id="exampleFormControlTextarea1" rows="3" placeholder="description here..." value={itemDescription} onChange={(e) => setItemDescription(e.target.value)}/>
 
         <div className="d-grid gap-2">
           <div className="d-flex justify-content-between">

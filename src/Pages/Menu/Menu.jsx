@@ -75,7 +75,7 @@ function Menu(props) {
               cardID={e.id}
               Title={e.Title}
               Price={e.Price}
-              Content={e.Content}
+              Description={e.Description}
               Photo={e.Photo}
               updateMenu={updateMenu}
               Count={e.Count}
