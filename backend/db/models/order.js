@@ -29,10 +29,12 @@ const orderSchema = new mongoose.Schema({
       item: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Menu",
+        isNew: true,
       },
       quantity: {
         type: Number,
         default: 1,
+        isNew: true,
       }
     }
   ],
@@ -44,7 +46,7 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  note: String,
+  notes: String,
   nthOrderOfDay: {
     type: Number,
     default: 0,
@@ -58,12 +60,17 @@ const orderSchema = new mongoose.Schema({
   
 });
 
+const autoPopulate = async function (next) {
+  this.populate("cart.item", {_id: 1, Title: 1, Price: 1}).populate("customer", {_id: 1, customerName: 1, phone: 1});
+  next();
+};
+
 // calculate total price
 orderSchema.pre("save", async function (next) {
   try {
     let total = 0;
     for (let i = 0; i < this.cart.length; i++) {
-      const menu = await this.model("Menu").findById(this.cart[i].menu);
+      const menu = await this.model("Menu").findById(this.cart[i].item);
       total += menu.Price * this.cart[i].quantity;
     }
     this.total = total - this.promotion;
@@ -72,6 +79,10 @@ orderSchema.pre("save", async function (next) {
     next(err);
   }
 });
+
+orderSchema.pre("findOne", autoPopulate);
+orderSchema.pre("find", autoPopulate);
+
 
 
 const Orders = mongoose.model("Order", orderSchema);

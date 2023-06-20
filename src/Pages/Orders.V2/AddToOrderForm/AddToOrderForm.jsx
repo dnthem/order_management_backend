@@ -55,8 +55,8 @@ function AddToOrderForm(props) {
             const item = menu.find(item => item.id === id);
             const newCart = {
                 id: item.id,
-                name: item.Title,
-                price: item.Price,
+                Title: item.Title,
+                Price: item.Price,
                 quantity: 1,
             };
             updatedCart.push(newCart);

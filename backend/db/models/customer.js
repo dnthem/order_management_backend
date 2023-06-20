@@ -7,14 +7,7 @@ const customerSchema = new mongoose.Schema({
     required: true,
   },
   customerName: String,
-  phone: {
-    type: String,
-    validate: {
-      validator: function (value) {
-        return value.length === 10;
-      }
-    }
-  },
+  phone: String,
   orderCount: {
     type: Number,
     default: 0,

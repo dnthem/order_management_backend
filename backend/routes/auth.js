@@ -35,6 +35,22 @@ async function findUser(req, res, next) {
   }
 }
 
+async function checkExistingUser(req, res, next) {
+  console.log('checkExistingUser')
+  try {
+    const user = await Users.findOne({ username: req.body.username });
+    if (user) {
+      res.status(409).send({ message: 'Username already exists' });
+    }
+    else {
+      next();
+    }
+  } catch (error) {
+    res.status(404).send({ message: error.message || 'User Not Found' })
+  }
+}
+
+
 
 router.get('/login', authenticateToken, (req, res) => {
   console.log('Login page');
@@ -45,7 +61,7 @@ router.post('/login', findUser, (req, res) => {
   res.json({ accessToken : generateAccessToken(req.user) });
 });
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', checkExistingUser, async (req, res) => {
 
   try {
     const saltRounds = 10;
