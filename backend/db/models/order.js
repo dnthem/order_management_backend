@@ -22,7 +22,10 @@ const orderSchema = new mongoose.Schema({
       }
     }
   },
-  status: Boolean,
+  status: {
+    type: Boolean,
+    default: false,
+  },
   // cart is a list of menu and quanity
   cart: [
     {
