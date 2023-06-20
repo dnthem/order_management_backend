@@ -23,25 +23,34 @@ router.get(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
-    console.log(`get ${req.params.store}`);
+    try {
+      console.log(`get ${req.params.store}`);
 
-    const store = req.params.store;
-    if (!Object.keys(db).includes(store))
-      return res.status(404).send({ message: `${store} Not Found` });
-    const data = await db[store].find({
-      $and: [
-        {
-          userID: req.user._id,
-        }
-      ],
-    });
-    if (data) {
-      const result = data.map((item) => item.toJSON());
-      console.log(result);
-      res.send(result);
-    } else {
-      res.status(404).send({ message: `Not Found` });
+      const store = req.params.store;
+      if (!Object.keys(db).includes(store))
+        return res.status(404).send({ message: `${store} Not Found` });
+      const data = await db[store].find({
+        $and: [
+          {
+            userID: req.user._id,
+          }
+        ],
+      }, {
+        userID: 0,
+        __v: 0
+      });
+      if (data) {
+        const result = data.map((item) => item.toJSON());
+        console.log(result);
+        res.send(result);
+      } else {
+        res.status(404).send({ message: `Not Found` });
+      }
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send({ message: error.message });
     }
+    
   }
 );
 
@@ -56,6 +65,9 @@ router.get(
     try {
       const data = await db[store].findOne({
         $and: [{ userID: req.user._id }, { _id: Id }],
+      }, {
+        userID: 0,
+        __v: 0
       });
       if (!data)
         return res.status(404).send({ message: `Item Not Found` });
@@ -63,7 +75,7 @@ router.get(
       
       res.send(data);
     } catch (error) {
-      res.status(404).send({ message: `Not Found` });
+      res.status(500).send({ message: error.message });
     }
   }
 );
@@ -88,7 +100,7 @@ router.post(
       }
     } catch (error) {
       console.log(error.message)
-      res.status(404).send({ message: error.message || `Not Found` });
+      res.status(500).send({ message: error.message });
     }
     
   } 
@@ -99,29 +111,35 @@ router.put(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
-    console.log(`update ${req.params.store} with id ${req.params.id}`);
-    const store = req.params.store;
-    const Id = req.params.id;
-    if (Object.keys(db).includes(store)) {
-      const data = await db[store].findOne({
-        $and: [{ userID: req.user._id }, { _id: Id }],
-      });
-      if (data) {
-        // update with payload
-        updateBasedOnStore(store, data, req.body);
-        await data.save();
-        // send 200 - ok
-        res.status(200).send(data);
+    try {
+      console.log(`update ${req.params.store} with id ${req.params.id}`);
+      const store = req.params.store;
+      const Id = req.params.id;
+      if (Object.keys(db).includes(store)) {
+        const data = await db[store].findOne({
+          $and: [{ userID: req.user._id }, { _id: Id }],
+        });
+        if (data) {
+          // update with payload
+          updateBasedOnStore(store, data, req.body);
+          await data.save();
+          // send 200 - ok
+          res.status(200).send(data);
+        } else {
+          // add new
+          const newData = await db[store].create(JSON.parse(req.body));
+  
+          // send 201 - created
+          res.status(201).send(newData);
+        }
       } else {
-        // add new
-        const newData = await db[store].create(JSON.parse(req.body));
-
-        // send 201 - created
-        res.status(201).send(newData);
+        res.status(404).send({ message: `${store} Not Found` });
       }
-    } else {
-      res.status(404).send({ message: `${store} Not Found` });
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send({ message: error.message });
     }
+    
   }
 );
 
@@ -130,19 +148,25 @@ router.delete(
   authenticateToken,
   capStoreMiddleWare,
   async (req, res) => {
-    console.log(`delete ${req.params.store} with id ${req.params.id}`);
-    const store = req.params.store;
-    const Id = req.params.id;
-    if (Object.keys(db).includes(store)) {
-      await db[store].deleteOne({
-        $and: [{ userID: req.user._id }, { _id: Id }],
-      });
-
-      // send 200 - ok
-      res.status(200).send("Deleted");
-    } else {
-      res.status(404).send({ message: `${store} Not Found` });
+    try {
+      console.log(`delete ${req.params.store} with id ${req.params.id}`);
+      const store = req.params.store;
+      const Id = req.params.id;
+      if (Object.keys(db).includes(store)) {
+        await db[store].deleteOne({
+          $and: [{ userID: req.user._id }, { _id: Id }],
+        });
+  
+        // send 200 - ok
+        res.status(200).send("Deleted");
+      } else {
+        res.status(404).send({ message: `${store} Not Found` });
+      }
+    } catch (error) {
+      console.log(error.message)
+      res.status(500).send({ message: error.message });
     }
+    
   }
 );
 
@@ -160,10 +184,8 @@ if (process.env.NODE_ENV !== "production") {
       res.status(200).send("Deleted");
     } catch(error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message || `Not Found`});
+      res.status(500).send({ message: error.message });
     }
-
-    
   });
 }
 

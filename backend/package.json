@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "build": "rollup server.js -d ./dist"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/register": "^7.22.5",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "rollup": "^3.25.1"
   }
 }
