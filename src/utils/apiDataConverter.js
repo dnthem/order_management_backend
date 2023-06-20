@@ -12,7 +12,7 @@ export function convertOrderToAPI(order) {
   return output;
 }
 
-export function convertAPItoIndexDB(APIOrder) {
+export function convertAPItoOrder(APIOrder) {
   const output = structuredClone(APIOrder);
   delete output._id;
   output.orderID = APIOrder._id;

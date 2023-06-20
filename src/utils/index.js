@@ -6,6 +6,8 @@ import { downloadOrderFormat } from './downloadOrderFormat';
 import { getRandomColor } from './randomColor';
 import fetchAPI from './fetchAPI';
 import { 
+    convertOrderToAPI,
+    convertAPItoOrder,
     convertAPItoCustomer, 
     convertAPItoIncome,  
     convertAPItoIncomeUpToDate,
@@ -30,6 +32,8 @@ export {
     getRandomColor,
     getLast4Digits,
     fetchAPI,
+    convertOrderToAPI,
+    convertAPItoOrder,
     convertAPItoCustomer, 
     convertAPItoIncome,  
     convertAPItoIncomeUpToDate,
