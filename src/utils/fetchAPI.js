@@ -1,7 +1,14 @@
 const fetchAPI = {
   get: async (url) => {
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+
+      });
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -18,7 +25,8 @@ const fetchAPI = {
       const response = await fetch(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
       });
@@ -38,7 +46,8 @@ const fetchAPI = {
       const response = await fetch(url, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + localStorage.getItem('token')
         },
         body: JSON.stringify(data)
       });
@@ -56,7 +65,11 @@ const fetchAPI = {
   delete: async (url) => {
     try {
       const response = await fetch(url, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ' + localStorage.getItem('token')
+        }
       });
       if (!response.ok) {
         throw new Error('Failed to delete data');

@@ -5,6 +5,18 @@ import { orderFormater } from './orderFormat';
 import { downloadOrderFormat } from './downloadOrderFormat';
 import { getRandomColor } from './randomColor';
 import fetchAPI from './fetchAPI';
+import { 
+    convertAPItoCustomer, 
+    convertAPItoIncome,  
+    convertAPItoIncomeUpToDate,
+    convertAPItoMenu,
+    convertCustomerToAPI,
+    convertIncomeToAPI,
+    convertIncomeUpToDateToAPI,
+    convertMenuToAPI,
+    covertToAPI,
+    convertFromAPI,
+} from './apiDataConverter';
 // export all utils here
 export {
     phoneFormat,
@@ -18,4 +30,14 @@ export {
     getRandomColor,
     getLast4Digits,
     fetchAPI,
+    convertAPItoCustomer, 
+    convertAPItoIncome,  
+    convertAPItoIncomeUpToDate,
+    convertAPItoMenu,
+    convertCustomerToAPI,
+    convertIncomeToAPI,
+    convertIncomeUpToDateToAPI,
+    convertMenuToAPI,
+    covertToAPI,
+    convertFromAPI,
 };
