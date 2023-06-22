@@ -4,7 +4,7 @@ import {
   Menu,
   Customers,
   Income,
-  IncomeUpToDate,
+  Incomeuptodate,
   Orders,
 } from "../db/mongodb.js";
 import { capitalize } from "../utils/utils.js";
@@ -13,7 +13,7 @@ const db = {
   Menu,
   Customers,
   Income,
-  IncomeUpToDate,
+  Incomeuptodate,
   Orders,
 };
 const router = express.Router();
@@ -86,11 +86,11 @@ router.post(
   capStoreMiddleWare,
   async (req, res) => {
     console.log(`create new ${req.params.store}`);
-    console.log(req.body.cart)
     const store = req.params.store;
     try {
       if (Object.keys(db).includes(store)) {
-        const newData = new db[store]({userID: req.user._id});
+        const  newData = new db[store]({userID: req.user._id, _id: req.body._id });
+        
         updateBasedOnStore(store, newData, req.body);
         console.log("Create new data in store ", store, " with data \n", newData);
         await newData.save();
@@ -113,6 +113,7 @@ router.put(
   async (req, res) => {
     try {
       console.log(`update ${req.params.store} with id ${req.params.id}`);
+      console.log('/-----------------------------------/');
       const store = req.params.store;
       const Id = req.params.id;
       if (Object.keys(db).includes(store)) {
@@ -179,7 +180,7 @@ if (process.env.NODE_ENV !== "production") {
       await Menu.deleteMany({ userID: req.user._id });
       await Customers.deleteMany({ userID: req.user._id });
       await Income.deleteMany({ userID: req.user._id });
-      await IncomeUpToDate.deleteMany({ userID: req.user._id });
+      await Incomeuptodate.deleteMany({ userID: req.user._id });
       await Orders.deleteMany({ userID: req.user._id });
       res.status(200).send("Deleted");
     } catch(error) {
@@ -201,7 +202,7 @@ function updateBasedOnStore(store, obj, body) {
       break;
     case "Orders":
       obj.status = body.status ?? obj.status;
-      obj.cart = JSON.parse(`${body.cart}`) ?? obj.cart;
+      obj.cart = body.cart ?? obj.cart;
       obj.customer = body.customer ?? obj.customer;
       obj.total = body.total ?? obj.total;
       obj.notes = body.notes ?? obj.notes;
@@ -215,7 +216,7 @@ function updateBasedOnStore(store, obj, body) {
       break;
     case "Customers":
       obj.customerName = body.customerName ?? obj.customerName;
-      obj.phone = JSON.parse(`${body.phone}`) ?? obj.phone;
+      obj.phone = body.phone ?? obj.phone;
       obj.orderCount = body.orderCount ?? obj.orderCount;
       obj.totalSpent = body.totalSpent ?? obj.totalSpent;
       obj.registerationDate = body.registerationDate ?? obj.registerationDate;
@@ -226,7 +227,7 @@ function updateBasedOnStore(store, obj, body) {
       obj.Total = body.Total ?? obj.Total;
       break;
 
-    case "IncomeUpToDate":
+    case "Incomeuptodate":
       obj.Date = body.Date ?? obj.Date;
       obj.Total = body.Total ?? obj.Total;
       obj.UpdatedTime = body.UpdatedTime ?? obj.UpdatedTime;

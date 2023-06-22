@@ -16,7 +16,7 @@ import {
     convertIncomeToAPI,
     convertIncomeUpToDateToAPI,
     convertMenuToAPI,
-    covertToAPI,
+    convertToAPI,
     convertFromAPI,
 } from './apiDataConverter';
 // export all utils here
@@ -42,6 +42,6 @@ export {
     convertIncomeToAPI,
     convertIncomeUpToDateToAPI,
     convertMenuToAPI,
-    covertToAPI,
+    convertToAPI,
     convertFromAPI,
 };

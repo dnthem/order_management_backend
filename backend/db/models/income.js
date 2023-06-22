@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const incomeSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true,
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

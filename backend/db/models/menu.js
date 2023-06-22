@@ -1,15 +1,16 @@
 import mongoose from "mongoose";
 
 const menuSchema = new mongoose.Schema({
+  _id: {
+    type: Number,
+    required: true,
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
   },
-  Title: {
-    required: true,
-    type: String,
-  },
+  Title: String,
   Count: {
     type: Number,
     default: 0,

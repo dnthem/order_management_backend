@@ -67,14 +67,14 @@ export function convertAPItoCustomer(APICustomer) {
 
 export function convertIncomeToAPI(income) {
   const output = structuredClone(income);
-  output._id = output.id;
+  output._id = output.Date;
   delete output.id;
   return output;
 }
 
 export function convertAPItoIncome(APIIncome) {
   const output = structuredClone(APIIncome);
-  output.id = APIIncome._id;
+  output.Date = APIIncome._id;
   delete output._id;
   return output;
 }
@@ -96,17 +96,17 @@ export function convertAPItoIncomeUpToDate(APIIncomeUpToDate) {
 }
 
 
-export function covertToAPI({ type, data }) {
-  switch (type) {
-    case 'order':
+export function convertToAPI({ store, data }) {
+  switch (store.toLowerCase()) {
+    case 'orders':
       return convertOrderToAPI(data);
     case 'menu':
       return convertMenuToAPI(data);
-    case 'customer':
+    case 'customers':
       return convertCustomerToAPI(data);
     case 'income':
       return convertIncomeToAPI(data);
-    case 'incomeUpToDate':
+    case 'incomeuptodate':
       return convertIncomeUpToDateToAPI(data);
     default:
       return data;
@@ -114,17 +114,17 @@ export function covertToAPI({ type, data }) {
 
 }
 
-export function convertFromAPI({ type, data }) {
-  switch (type) {
-    case 'order':
-      return convertAPItoIndexDB(data);
+export function convertFromAPI({ store, data }) {
+  switch (store.toLowerCase()) {
+    case 'orders':
+      return convertAPItoOrder(data);
     case 'menu':
       return convertAPItoMenu(data);
-    case 'customer':
+    case 'customers':
       return convertAPItoCustomer(data);
     case 'income':
       return convertAPItoIncome(data);
-    case 'incomeUpToDate':
+    case 'incomeuptodate':
       return convertAPItoIncomeUpToDate(data);
     default:
       return data;

@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const incomeUpToDateSchema = new mongoose.Schema({
+  _id: {
+    type: Number,
+    default: 1,
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -10,17 +14,10 @@ const incomeUpToDateSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  Total: {
-    type: Number,
-    default: 0,
-    min: 0,
-  },
-  UpdatedTime: {
-    type: Date,
-    default: Date.now,
-  },
+  Total: Number,
+  UpdatedTime: Number,
 });
 
-const IncomeUpToDate = mongoose.model("IncomeUpToDate", incomeUpToDateSchema);
+const Incomeuptodate = mongoose.model("IncomeUpToDate", incomeUpToDateSchema);
 
-export default IncomeUpToDate;
+export default Incomeuptodate;

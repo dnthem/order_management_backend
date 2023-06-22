@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
-import { fetchAPI } from "../utils";
+import { fetchAPI, convertToAPI } from "../utils";
 
 
 /**
@@ -76,11 +76,17 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
             throw new Error("indexField cannot be empty");
           }
           const res = await indexedDBController.addData(db, store, newVal);
+          newVal[indexField] = res;
           setData((prevData) => [
             ...prevData,
-            { ...newVal, [indexField]: res },
+            newVal,
           ]);
-          await fetchAPI.post(url, { ...newVal, id: res });
+
+          await fetchAPI.post(url, convertToAPI({
+            store,
+            data: newVal
+          }));
+
           return res;
 // ---------------------------------------------------------------------------- //
         case "update":
@@ -90,11 +96,17 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
           
           if (data.length === 0) {
             const res = await indexedDBController.addData(db, store, newVal);
+            newVal[indexField] = res;
             setData((prevData) => [
               ...prevData,
-              { ...newVal, [indexField]: res },
+              newVal,
             ]);
-            await fetchAPI.post(url, { ...newVal, id: res });
+            var newUrl = url + encodeURIComponent(newVal[indexField]);
+            await fetchAPI.post(url, convertToAPI({
+              store,
+              data: newVal 
+            }));
+
             return null;
           }
           await indexedDBController.updateARecord(db, store, newVal);
@@ -103,14 +115,12 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
               item[indexField] === newVal[indexField] ? newVal : item
             )
           );
-          var tempNewVal = { ...newVal };
-          delete tempNewVal[indexField];
-          tempNewVal.id = newVal[indexField];
-
-          var convertedDate = encodeURIComponent(tempNewVal.id);
-          var newUrl = url + convertedDate;
+          var newUrl = url + encodeURIComponent(newVal[indexField]);
   
-          await fetchAPI.update( newUrl, tempNewVal);
+          await fetchAPI.update( newUrl, convertToAPI({
+            store,
+            data: newVal
+            }));
           return null;
 // ---------------------------------------------------------------------------- //
         case "delete":

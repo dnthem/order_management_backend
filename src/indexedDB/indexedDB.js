@@ -16,7 +16,7 @@ export const STORES = {
     keyPath: 'customerID',
   },
   ORDERSV2: {
-    name: 'OrdersV2',
+    name: 'Orders',
     keyPath: 'orderID',
   },
   ITEMCOUNT: {

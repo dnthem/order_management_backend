@@ -181,7 +181,7 @@ function OrdersV2() {
       id: 1,
       Date: dateFormat(),
       Total: (incomeUpToDate[0]?.Total ?? 0) + order.total,
-      UpdateTime: new Date().getTime(),
+      UpdatedTime: new Date().getTime(),
     };
     await setIncomeUpToDate({
       type: "update",

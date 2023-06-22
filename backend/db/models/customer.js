@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema({
+  _id: Number,
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -17,10 +18,10 @@ const customerSchema = new mongoose.Schema({
     default: 0,
   },
   registerationDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: new Date(),
   },
-  lastPurchase: Date
+  lastPurchase: String,
 });
 
 function phoneFormat(value) {

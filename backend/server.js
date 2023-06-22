@@ -23,9 +23,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
 const orginList = [
-  'http://127.0.0.1:5500',
-  'http://localhost:3000',
+  'http://127.0.0.1:5173',
+  'http://localhost:5173',
   'http://192.168.86.248:5173/',
+  'http://192.168.86.72:5173/'
 ];
 app.use(cors({
   origin: orginList,
@@ -34,8 +35,18 @@ app.use(cors({
 await db.connect();
 
 
+const midle = (req, res, next) => {
+  console.log('midle');
+  console.log(req.body);
+  if (req.params.store === 'itemCount') {
+    return;
+  }
+  next();
+}
+
+
 app.use('/', authRoutes);
-app.use('/', indexRoutes);
+app.use('/', midle, indexRoutes);
 
 app.use("/*", (req, res) => {
   res.status(404).send("Path not found");

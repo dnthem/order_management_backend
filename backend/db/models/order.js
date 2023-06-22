@@ -1,6 +1,10 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
+  _id: {
+    type: Number,
+    required: true,
+  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -10,18 +14,8 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  orderDate: {
-    type: Date,
-    default: new Date(),
-  },
-  deliverDate: {
-    type: Date,
-    validate: {
-      validator: function (value) {
-        return value > this.orderDate;
-      }
-    }
-  },
+  orderDate: String,
+  deliverDate: String,
   status: {
     type: Boolean,
     default: false,
@@ -30,7 +24,7 @@ const orderSchema = new mongoose.Schema({
   cart: [
     {
       item: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Number,
         ref: "Menu",
         isNew: true,
       },
@@ -42,7 +36,7 @@ const orderSchema = new mongoose.Schema({
     }
   ],
   customer: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Number,
     ref: "Customer",
   },
   total: {
