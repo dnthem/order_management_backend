@@ -8,6 +8,7 @@ import {
   getIncomeTrending,
   incomeChartConverter,
   dataConverterMenu,
+  calculateTotalItems,
 } from "./DataConverter";
 import { BsCurrencyDollar, BsFillBarChartFill } from "react-icons/bs";
 import { RiDashboard3Line } from "react-icons/ri";
@@ -28,9 +29,9 @@ function Dashboard(props) {
     index: "customerID",
   });
 
-  const [itemCount] = useData({
-    store: "ItemCount",
-    index: "Date",
+  const [todayOrders] = useData({
+    store: "Orders",
+    index: "deliverDate",
     keyPath: new Date().toLocaleDateString("en-us"),
   });
 
@@ -57,7 +58,7 @@ function Dashboard(props) {
 
   const incomeChart = incomeChartConverter(income);
   const menuChart = dataConverterMenu(menu);
-
+  const totalItemSoldToday = calculateTotalItems(todayOrders);
 
   const handleIncomeOnChange = (e) => {
     setIncome({
@@ -104,7 +105,7 @@ function Dashboard(props) {
         <CardInfoDB
           dataTestId="total-items-sold-today"
           title="Total items sold today"
-          value={itemCount[0]?.Count ?? 0}
+          value={totalItemSoldToday?? 0}
           icon={<BsFillBarChartFill size={30} />}
         />
 

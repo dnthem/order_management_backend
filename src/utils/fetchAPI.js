@@ -5,7 +5,8 @@ const fetchAPI = {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token')
+          'authorization': 'Bearer ' + localStorage.getItem('token'),
+          'origin': 'http://192.168.86.23:5173',
         }
 
       });
@@ -26,7 +27,8 @@ const fetchAPI = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token')
+          'authorization': 'Bearer ' + localStorage.getItem('token'),
+          'origin': 'http://192.168.86.23:5173',
         },
         body: JSON.stringify(data)
       });
@@ -47,7 +49,8 @@ const fetchAPI = {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token')
+          'authorization': 'Bearer ' + localStorage.getItem('token'),
+          'origin': 'http://192.168.86.23:5173',
         },
         body: JSON.stringify(data)
       });
@@ -68,7 +71,8 @@ const fetchAPI = {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token')
+          'authorization': 'Bearer ' + localStorage.getItem('token'),
+          'origin': 'http://192.168.86.23:5173',
         }
       });
       if (!response.ok) {

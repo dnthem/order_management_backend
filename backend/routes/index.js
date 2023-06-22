@@ -63,7 +63,7 @@ router.get(
     const store = req.params.store;
     const Id = req.params.id;
     try {
-      const data = await db[store].findOne({
+      const data = await db[store].find({
         $and: [{ userID: req.user._id }, { _id: Id }],
       }, {
         userID: 0,
@@ -159,7 +159,7 @@ router.delete(
         });
   
         // send 200 - ok
-        res.status(200).send("Deleted");
+        res.status(200).send({ message: "Deleted"});
       } else {
         res.status(404).send({ message: `${store} Not Found` });
       }

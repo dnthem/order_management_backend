@@ -36,12 +36,6 @@ function OrdersV2() {
     keyPath: new Date().toLocaleDateString("en-us"),
   });
 
-  const [itemCount, setItemCount] = useData({
-    store: STORES.ITEMCOUNT.name,
-    index: STORES.ITEMCOUNT.keyPath,
-    keyPath: new Date().toLocaleDateString("en-us"),
-  });
-
   const [incomeUpToDate, setIncomeUpToDate] = useData({
     store: STORES.INCOMEUPTODATE.name,
     index: STORES.INCOMEUPTODATE.keyPath,
@@ -161,19 +155,6 @@ function OrdersV2() {
       type: "update",
       indexField: STORES.INCOME.keyPath,
       newVal: incomeData,
-    });
-
-    // update item count
-    const itemCountData = {
-      Date: new Date().toLocaleDateString("en-us"),
-      Count:
-        (itemCount[0]?.Count ?? 0) +
-        order.cart.reduce((acc, item) => acc + item.quantity, 0),
-    };
-    await setItemCount({
-      type: "update",
-      indexField: STORES.ITEMCOUNT.keyPath,
-      newVal: itemCountData,
     });
 
     // update income up to date

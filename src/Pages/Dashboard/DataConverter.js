@@ -36,7 +36,21 @@ function incomeChartConverter(data) {
     }
 }
 
+function calculateTotalItems(orders) {
+    let totalItems = 0;
+  
+    for (let order of orders) {
+      if (order.status === true) {
+        for (let item of order.cart) {
+          totalItems += item.quantity;
+        }
+      }
+    }
+  
+    return totalItems;
+  }
 export {
+    calculateTotalItems,
     incomeChartConverter,
     dataConverterMenu,
     getTotalItemSold,

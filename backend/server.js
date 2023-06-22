@@ -25,12 +25,17 @@ app.use(express.static(path.join(path.resolve(), 'public')));
 const orginList = [
   'http://127.0.0.1:5173',
   'http://localhost:5173',
-  'http://192.168.86.248:5173/',
-  'http://192.168.86.72:5173/'
+  'http://localhost:3000',
+  'http://192.168.86.248:5173',
+  'http://192.168.86.23:5173'
 ];
+
+
 app.use(cors({
   origin: orginList,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
+
 
 await db.connect();
 
