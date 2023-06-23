@@ -1,0 +1,118 @@
+import { Link } from "react-router-dom";
+import { fetchAPI } from "../../utils";
+import { useState } from "react";
+import Loader from "../../components/Loaders/Loader";
+import useLocalStorage from "../../customHooks/useLocalStorage";
+function LogIn() {
+  const [user] = useLocalStorage("user", null);
+  if (user) {
+    window.location.href = "/";
+  }
+  const [loginInfo, setLoginInfo] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const { username, password } = loginInfo;
+    
+      const data = await fetchAPI.post("http://localhost:3000/login", { username, password });
+      if (data.error) {
+        setError(data.error);
+        setLoading(false);
+      } else {
+        
+        setLoading(false);
+        setLoginInfo({ username: "", password: "" });
+        setError("");
+        localStorage.setItem("token", data.accessToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("Login Success");
+        window.location.href = "/";
+      }
+    } catch (error) {
+      setLoading(false);
+      alert(error.message);
+    }
+  };
+
+
+  return (
+    <>
+      {loading && <Loader/>}
+      <div className="row justify-content-center">
+      <div className="col-lg-5">
+        <div className="card shadow-lg border-0 rounded-lg mt-5">
+          <div className="card-header">
+            <h3 className="text-center font-weight-light my-4">Login</h3>
+          </div>
+          <div className="card-body">
+            <form>
+              <div className="form-floating mb-3">
+                <input
+                  className="form-control"
+                  type="email"
+                  placeholder="username"
+                  aria-label="username"
+                  name="username"
+                  value={loginInfo.username}
+                  onChange={handleChange}
+                />
+                <label htmlFor="inputEmail">User Name</label>
+              </div>
+              <div className="form-floating mb-3">
+                <input
+                  className="form-control"
+                  type="password"
+                  placeholder="Password"
+                  aria-label="Password"
+                  name="password"
+                  value={loginInfo.password}
+                  onChange={handleChange}
+                />
+                <label htmlFor="inputPassword">Password</label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  id="inputRememberPassword"
+                  type="checkbox"
+                  value=""
+                />
+                <label className="form-check-label" htmlFor="inputRememberPassword">
+                  Remember Password
+                </label>
+              </div>
+              <div className="d-flex align-items-center justify-content-between mt-4 mb-0">
+                <Link className="small" to='/forgotpassword'>
+                  Forgot Password?
+                </Link>
+                <button onClick={handleSubmit} className="btn btn-primary">
+                  Login
+                </button>
+              </div>
+            </form>
+          </div>
+          <div className="card-footer text-center py-3">
+            <div className="small">
+              <Link to='/signup'>Don't have an account? Sign up!</Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </>
+
+  );
+}
+
+export default LogIn;

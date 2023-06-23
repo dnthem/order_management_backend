@@ -5,14 +5,13 @@ import Menu from "./Pages/Menu/Menu"
 import Settings from "./Pages/Settings/Settings";
 import OrdersV2 from "./Pages/Orders.V2/OrdersV2";
 import { Route, Routes, Link } from "react-router-dom";
-import { FaBars, FaTachometerAlt, FaHistory} from "react-icons/fa";
-import {MdMenuBook} from 'react-icons/md';
-import {AiOutlineShoppingCart, AiOutlineUser} from "react-icons/ai";
-
-import {RiSettings5Line} from 'react-icons/ri'
+import { FaBars } from "react-icons/fa";
 import useToggle from "./customHooks/useToggle";
 import Customers from "./Pages/Customers/Customers";
-import useLocalStorage from "./customHooks/useLocalStorage";
+import SideNavFooter from "./SideNavFooter/SideNavFooter";
+import SideNavMenu from "./SideNavMenu/SideNavMenu";
+import LogIn from "./Pages/User/Login";
+import Signup from "./Pages/User/Signup";
 const ctx = createContext();
 
 
@@ -22,9 +21,8 @@ export function GetDataBaseContext() {
 }
 function App(props) {
   const [db, ] = useState(props.db);
-  const [jwtToken, setJwtToken] = useLocalStorage("jwtToken", "");
   const [sideBarToggle, setSideBarToggle] = useToggle(false);
-  const value = { db, jwtToken, setJwtToken };
+  const value = { db };
 
   const iconStyle = {
     color: "#545454",
@@ -39,49 +37,9 @@ function App(props) {
     </nav>
     <div id="layoutSidenav">
       <div id="layoutSidenav_nav">
-        <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-            <div className="sb-sidenav-menu">
-                <div className="nav">
-                    <Link to="/dashboard" className="btn nav-link" id="Dashboard">
-                        <div className="sb-nav-link-icon">
-                          <FaTachometerAlt style={iconStyle}/>
-                        </div>
-                        Dashboard
-                    </Link>
-                    <div className="sb-sidenav-menu-heading">Main</div>
-                    <Link to="/menu" id="Menu" className="nav-link btn">
-                      <div className="sb-nav-link-icon">
-                        <MdMenuBook style={iconStyle}/> 
-                      </div>
-                      Menu
-                    </Link>
-                    <Link to="/orders" id="Orders" className="btn nav-link">
-                      <div className="sb-nav-link-icon">
-                        <AiOutlineShoppingCart style={iconStyle}/>
-                      </div>
-                      Orders
-                    </Link>
-                    <Link to="/history" id="History" className="btn nav-link">
-                      <div className="sb-nav-link-icon">
-                        <FaHistory style={iconStyle}/>
-                      </div>
-                      History
-                    </Link>
-                    <Link to="/customers" id="Customers" className="btn nav-link">
-                      <div className="sb-nav-link-icon">
-                        <AiOutlineUser style={iconStyle}/>
-                      </div>
-                      Customers
-                    </Link>
-                    <Link to="/settings" id="Setting" className="btn nav-link">
-                      <div className="sb-nav-link-icon">
-                        <RiSettings5Line style={iconStyle}/>
-                      </div>
-                      Setting
-                    </Link>
-                    
-                </div>
-            </div>
+        <nav className="sb-sidenav accordion sb-sidenav-dark">
+            <SideNavMenu/>
+            <SideNavFooter/>
         </nav>
       </div>
         <div id="layoutSidenav_content">
@@ -95,6 +53,8 @@ function App(props) {
               <Route path="/history" element={<History/>} />
               <Route path="/settings" element={<Settings/>} />
               <Route path="/customers" element={<Customers/>} />
+              <Route path="/login" element={<LogIn/>} />
+              <Route path='/signup' element={<Signup/>} />
             </Routes>
             </ctx.Provider>
           </main>
