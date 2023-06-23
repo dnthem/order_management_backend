@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAPI } from "../../utils";
+import { API_URL } from "../../Constants";
 function Signup() {
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -17,6 +18,12 @@ function Signup() {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      if (!userInfo.name || !userInfo.username || !userInfo.email || !userInfo.password || !userInfo.passwordConfirm) {
+        alert("Please fill all the fields");
+        return;
+      }
+
+
       if (userInfo.password !== userInfo.passwordConfirm) {
         alert("Password and Confirm Password must be the same");
         return;
@@ -24,7 +31,7 @@ function Signup() {
 
       const payload = { ...userInfo };
       delete payload.passwordConfirm;
-      const data = await fetchAPI.post("http://localhost:3000/signup", payload);
+      const data = await fetchAPI.post(`${API_URL}/signup`, payload);
       if (data.error) {
         alert(data.error);
       } else {

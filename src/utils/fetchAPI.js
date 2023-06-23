@@ -1,3 +1,5 @@
+import { ORIGIN } from '../constants';
+
 const fetchAPI = {
   get: async (url) => {
     try {
@@ -6,12 +8,13 @@ const fetchAPI = {
         headers: {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ' + localStorage.getItem('token'),
-          'origin': 'http://192.168.86.23:5173',
+          origin: ORIGIN,
         }
 
       });
+      const responseData = await response.json();
       if (!response.ok) {
-        throw new Error('Failed to fetch data');
+        throw new Error(responseData.error.message);
       }
       const data = await response.json();
       return data;
@@ -28,14 +31,14 @@ const fetchAPI = {
         headers: {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ' + localStorage.getItem('token'),
-          'origin': 'http://192.168.86.23:5173',
+          origin: ORIGIN,
         },
         body: JSON.stringify(data)
       });
-      if (!response.ok) {
-        throw new Error('Failed to post data');
-      }
       const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.error.message);
+      }
       return responseData;
     } catch (error) {
       console.error('Error posting data:', error);
@@ -50,14 +53,14 @@ const fetchAPI = {
         headers: {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ' + localStorage.getItem('token'),
-          'origin': 'http://192.168.86.23:5173',
+          origin: ORIGIN,
         },
         body: JSON.stringify(data)
       });
-      if (!response.ok) {
-        throw new Error('Failed to update data');
-      }
       const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.error.message);
+      }
       return responseData;
     } catch (error) {
       console.error('Error updating data:', error);
@@ -72,13 +75,13 @@ const fetchAPI = {
         headers: {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ' + localStorage.getItem('token'),
-          'origin': 'http://192.168.86.23:5173',
+          origin: ORIGIN,
         }
       });
-      if (!response.ok) {
-        throw new Error('Failed to delete data');
-      }
       const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(responseData.error.message);
+      }
       return responseData;
     } catch (error) {
       console.error('Error deleting data:', error);

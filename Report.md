@@ -1,5 +1,9 @@
 # Report
 
+## Date: 06/23/2023
+## Today goals:
+- 
+
 ## Date: 06/22/2023
 
 ### Summary:

@@ -3,6 +3,7 @@ import { fetchAPI } from "../../utils";
 import { useState } from "react";
 import Loader from "../../components/Loaders/Loader";
 import useLocalStorage from "../../customHooks/useLocalStorage";
+import { API_URL } from "../../Constants";
 function LogIn() {
   const [user] = useLocalStorage("user", null);
   if (user) {
@@ -24,11 +25,17 @@ function LogIn() {
       e.preventDefault();
       setLoading(true);
       const { username, password } = loginInfo;
+      if (!username || !password) {
+        alert("Please fill all the fields");
+        setLoading(false);
+        return;
+      }
     
-      const data = await fetchAPI.post("http://localhost:3000/login", { username, password });
+      const data = await fetchAPI.post(`${API_URL}/login`, { username, password });
       if (data.error) {
         setError(data.error);
         setLoading(false);
+        alert(data.error);
       } else {
         
         setLoading(false);
