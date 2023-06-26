@@ -22,6 +22,8 @@ const incomeSchema = new mongoose.Schema({
   }
 });
 
+incomeSchema.index({ userID: 1, _id: 1 }, { unique: true });
+
 const Income = mongoose.model("Income", incomeSchema);
 
 export default Income;

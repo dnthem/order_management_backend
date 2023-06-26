@@ -89,6 +89,7 @@ router.post(
     const store = req.params.store;
     try {
       if (Object.keys(db).includes(store)) {
+        console.log('user ID: ', req.user._id);
         const  newData = new db[store]({userID: req.user._id, _id: req.body._id });
         
         updateBasedOnStore(store, newData, req.body);

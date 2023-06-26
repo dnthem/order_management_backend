@@ -28,6 +28,8 @@ const menuSchema = new mongoose.Schema({
   Image: String
 });
 
+menuSchema.index({ userID: 1, _id: 1 }, { unique: true });
+
 
 const Menu = mongoose.model("Menu", menuSchema);
 

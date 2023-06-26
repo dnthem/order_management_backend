@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { fetchAPI } from "../../utils";
 import { API_URL } from "../../constants";
+import indexedDBController, { STORES } from "../../indexedDB/indexedDB";
 import Loader from "../../components/Loaders/Loader";
 function Signup() {
   const [userInfo, setUserInfo] = useState({
@@ -23,21 +24,6 @@ function Signup() {
   
       for (const key in STORES) {
         promises.push(indexedDBController.deleteAllRecord(db, STORES[key].name));
-      }
-  
-      await Promise.all(promises);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-  
-
-  const fetchAll = async () => {
-    try {
-      const promises = [];
-  
-      for (const key in STORES) {
-        promises.push(databaseDownloader({ db, store: STORES[key].name }));
       }
   
       await Promise.all(promises);
@@ -68,7 +54,6 @@ function Signup() {
         alert(data.error);
       } else {
         await deleteAll();
-        await fetchAll();
         localStorage.setItem("token", data.accessToken);
         localStorage.setItem("user", JSON.stringify(data.user));
         window.location.href = "/";

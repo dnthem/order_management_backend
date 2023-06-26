@@ -24,6 +24,8 @@ const customerSchema = new mongoose.Schema({
   lastPurchase: String,
 });
 
+customerSchema.index({ userID: 1, _id: 1 }, { unique: true });
+
 function phoneFormat(value) {
   return value.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
 }

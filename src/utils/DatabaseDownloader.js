@@ -1,13 +1,23 @@
-import { API_URL } from '../constants';
-import indexedDBController from '../indexedDB/indexedDB';
-import fetchAPI from './fetchAPI';
+import { API_URL } from "../constants";
+import indexedDBController from "../indexedDB/indexedDB";
+import { convertFromAPI } from "./apiDataConverter";
+import fetchAPI from "./fetchAPI";
 
-export default async function databaseDownloader({db , store }) {
+export default async function databaseDownloader({ db, store }) {
   try {
-    const data = await fetchAPI.get(API_URL + '/' + store);
+    const data = await fetchAPI.get(API_URL + "/" + store);
+    if (data.error) {
+      throw data.error;
+    }
 
-    await indexedDBController.addListDataToStore(db, store, data);
-  }catch(error) {
-    alert ('Error: ' + error);
-}
+    // convert data to indexedDB format
+    const convertedData = convertFromAPI({
+      store,
+      data
+    });
+
+    await indexedDBController.addListDataToStore(db, store, convertedData);
+  } catch (error) {
+    alert("Error: " + error);
+  }
 }

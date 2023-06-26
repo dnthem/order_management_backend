@@ -25,32 +25,25 @@ function LogIn() {
   };
 
   const deleteAll = async () => {
-    try {
-      const promises = [];
-  
-      for (const key in STORES) {
-        promises.push(indexedDBController.deleteAllRecord(db, STORES[key].name));
-      }
-  
-      await Promise.all(promises);
-    } catch (error) {
-      alert(error.message);
+    const promises = [];
+
+    for (const key in STORES) {
+      promises.push(indexedDBController.deleteAllRecord(db, STORES[key].name));
     }
+
+    await Promise.all(promises);
   };
   
 
   const fetchAll = async () => {
-    try {
-      const promises = [];
-  
-      for (const key in STORES) {
-        promises.push(databaseDownloader({ db, store: STORES[key].name }));
-      }
-  
-      await Promise.all(promises);
-    } catch (error) {
-      alert(error.message);
+    const promises = [];
+
+    for (const key in STORES) {
+      promises.push(databaseDownloader({ db, store: STORES[key].name }));
     }
+
+    await Promise.all(promises);
+
   };
   
 

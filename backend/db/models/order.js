@@ -57,6 +57,8 @@ const orderSchema = new mongoose.Schema({
   
 });
 
+orderSchema.index({ userID: 1, _id: 1 }, { unique: true });
+
 const autoPopulate = async function (next) {
   this.populate("cart.item", {_id: 1, Title: 1, Price: 1}).populate("customer", {_id: 1, customerName: 1, phone: 1});
   next();

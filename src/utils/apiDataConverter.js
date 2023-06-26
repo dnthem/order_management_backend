@@ -1,6 +1,9 @@
 
 /* Order */
 export function convertOrderToAPI(order) {
+  if (Array.isArray(order)) 
+    return order.map(item => convertOrderToAPI(item));
+
   const output = structuredClone(order);
   delete output.orderID;
   output._id = order.orderID;
@@ -13,8 +16,15 @@ export function convertOrderToAPI(order) {
 }
 
 export function convertAPItoOrder(APIOrder) {
+  if (Array.isArray(APIOrder))
+    return APIOrder.map(item => convertAPItoOrder(item));
+  
+
   const output = structuredClone(APIOrder);
   delete output._id;
+
+  console.log(APIOrder);
+  console.log(output)
   output.orderID = APIOrder._id;
   output.customer = {
     customerID: APIOrder.customer._id,
@@ -33,6 +43,9 @@ export function convertAPItoOrder(APIOrder) {
 /* Menu */
 
 export function convertMenuToAPI(menu) {
+  if (Array.isArray(menu))
+    return menu.map(item => convertMenuToAPI(item));
+
   const output = structuredClone(menu);
   output._id = output.id;
   delete output.id;
@@ -40,6 +53,9 @@ export function convertMenuToAPI(menu) {
 }
 
 export function convertAPItoMenu(APIMenu) {
+  if (Array.isArray(APIMenu))
+    return APIMenu.map(item => convertAPItoMenu(item));
+
   const output = structuredClone(APIMenu);
   output.id = APIMenu._id;
   delete output._id;
@@ -49,6 +65,9 @@ export function convertAPItoMenu(APIMenu) {
 /* Customer */
 
 export function convertCustomerToAPI(customer) {
+  if (Array.isArray(customer))
+    return customer.map(item => convertCustomerToAPI(item));
+
   const output = structuredClone(customer);
   output._id = output.customerID;
   delete output.customerID;
@@ -56,6 +75,9 @@ export function convertCustomerToAPI(customer) {
 }
 
 export function convertAPItoCustomer(APICustomer) {
+  if (Array.isArray(APICustomer))
+    return APICustomer.map(item => convertAPItoCustomer(item));
+
   const output = structuredClone(APICustomer);
   output.customerID = APICustomer._id;
   delete output._id;
@@ -66,6 +88,9 @@ export function convertAPItoCustomer(APICustomer) {
 /* income */
 
 export function convertIncomeToAPI(income) {
+  if (Array.isArray(income))
+    return income.map(item => convertIncomeToAPI(item));
+
   const output = structuredClone(income);
   output._id = output.Date;
   delete output.id;
@@ -73,6 +98,9 @@ export function convertIncomeToAPI(income) {
 }
 
 export function convertAPItoIncome(APIIncome) {
+  if (Array.isArray(APIIncome))
+    return APIIncome.map(item => convertAPItoIncome(item));
+
   const output = structuredClone(APIIncome);
   output.Date = APIIncome._id;
   delete output._id;
@@ -82,6 +110,9 @@ export function convertAPItoIncome(APIIncome) {
 /* income up to date */
 
 export function convertIncomeUpToDateToAPI(incomeUpToDate) {
+  if (Array.isArray(incomeUpToDate))
+    return incomeUpToDate.map(item => convertIncomeUpToDateToAPI(item));
+
   const output = structuredClone(incomeUpToDate);
   output._id = output.id;
   delete output.id;
@@ -89,6 +120,9 @@ export function convertIncomeUpToDateToAPI(incomeUpToDate) {
 }
 
 export function convertAPItoIncomeUpToDate(APIIncomeUpToDate) {
+  if (Array.isArray(APIIncomeUpToDate))
+    return APIIncomeUpToDate.map(item => convertAPItoIncomeUpToDate(item));
+
   const output = structuredClone(APIIncomeUpToDate);
   output.id = APIIncomeUpToDate._id;
   delete output._id;

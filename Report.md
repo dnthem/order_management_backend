@@ -17,6 +17,20 @@
     - data will be saved to local indexedDB on every user's action.
     - data will be saved to database when user wants to switch to online mode
 
+### Potential issues:
+- When user logs in, all data will be loaded from database to local indexedDB. This may cause performance issue when the database is large. 
+  - Solution: 
+    - Load only the data that is needed for the current page
+    - Load the rest of the data in the background
+    - Load the data in chunks
+    - Load the data in the background and cache it in local indexedDB
+    - Load the data in the background and cache it in local indexedDB in chunks
+    - Load the data in the background and cache it in local indexedDB in chunks and only load the data that is needed for the current page
+- Should set expriation time for authenication token
+  - Solution: 
+    - Set expriation time for authenication token -> refresh token -> new authenication token
+
+
 ## Date: 06/22/2023
 
 ### Summary:

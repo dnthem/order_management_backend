@@ -46,13 +46,10 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
       const menu  = db.createObjectStore(STORES.MENU.name, { keyPath: STORES.MENU.keyPath, autoIncrement: true });
       const customers = db.createObjectStore(STORES.CUSTOMERS.name, { keyPath: STORES.CUSTOMERS.keyPath, autoIncrement: true });
       const orderV2 = db.createObjectStore(STORES.ORDERSV2.name, { keyPath: STORES.ORDERSV2.keyPath, autoIncrement: true });
-      const itemCount = db.createObjectStore(STORES.ITEMCOUNT.name, { keyPath: STORES.ITEMCOUNT.keyPath });
 
       incomeUpToDate.createIndex("id", "id", { unique: true });
 
       income.createIndex("Date", "Date", { unique: true });
-
-      itemCount.createIndex("Date", "Date", { unique: true });
 
       orderV2.createIndex("orderID", "orderID", { unique: true });
       orderV2.createIndex("customerID", "customer.customerID", { unique: false });
@@ -61,12 +58,9 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
 
       customers.createIndex('customerID', 'customerID', { unique: true });
       customers.createIndex('phone', 'phone', { unique: false });
-
-
       menu.createIndex('id', 'id', { unique: true });
       
-
-      if (import.meta.env.MODE !== 'development') {
+      if (import.meta.env.VITE_INDEXEDDB_SAMPLE_DATA === 'true') {
         sampleData['Menu'].forEach(e => menu.add(e));
         localStorage.setItem('nthOrderOfDay', sampleData['OrdersV2'].length);
         localStorage.setItem('isnewday', new Date().toLocaleDateString('en-us'));

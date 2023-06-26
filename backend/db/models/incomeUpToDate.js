@@ -18,6 +18,8 @@ const incomeUpToDateSchema = new mongoose.Schema({
   UpdatedTime: Number,
 });
 
+incomeUpToDateSchema.index({ userID: 1, _id: 1 }, { unique: true });
+
 const Incomeuptodate = mongoose.model("IncomeUpToDate", incomeUpToDateSchema);
 
 export default Incomeuptodate;
