@@ -32,7 +32,7 @@ function phoneFormat(value) {
 
 customerSchema.pre("save", function (next) {
   console.log("Pre save");
-  if (this.customerName === "" || this.phone === "") {
+  if (this.customerName === "" && this.phone === "") {
     throw new Error("Name or phone is required");
   }
 

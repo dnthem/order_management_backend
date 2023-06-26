@@ -2,7 +2,7 @@ import { useState } from "react";
 import { GetDataBaseContext } from "../../App";
 import DownloadBtn from "../../components/Downloadbtn";
 import Header from "../../components/Header";
-import indexedDBController from "../../indexedDB/indexedDB";
+import indexedDBController, { STORES } from "../../indexedDB/indexedDB";
 import {FaHistory} from 'react-icons/fa';
 import { downloadOrderFormat } from "../../utils";
 function History(props) {
@@ -15,7 +15,7 @@ function History(props) {
         // The conversion below will lose 1 day, thus adding a whole day to it => 8.64e+7 ms = 1 day
         const date = new Date(e.target.valueAsNumber + 8.64e+7).toLocaleDateString('en-us');
         try {
-            const data = await indexedDBController.getListOfRecords(db, 'OrdersV2', 'deliverDate', date);
+            const data = await indexedDBController.getListOfRecords(db, STORES.ORDERSV2.name, 'deliverDate', date);
             setOrders(data);
             setDate(date);
             if (typeof data === 'undefined')
