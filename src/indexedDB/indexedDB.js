@@ -19,10 +19,6 @@ export const STORES = {
     name: 'Orders',
     keyPath: 'orderID',
   },
-  ITEMCOUNT: {
-    name: 'ItemCount',
-    keyPath: 'Date',
-  },
   INCOMEUPTODATE: {
     name: 'IncomeUpToDate',
     keyPath: 'id',
@@ -68,9 +64,10 @@ indexedDBController.createDB = function (indexedDB,  dbName, version = undefined
 
 
       menu.createIndex('id', 'id', { unique: true });
-      sampleData['Menu'].forEach(e => menu.add(e));
+      
 
-      if (import.meta.env.MODE === 'development') {
+      if (import.meta.env.MODE !== 'development') {
+        sampleData['Menu'].forEach(e => menu.add(e));
         localStorage.setItem('nthOrderOfDay', sampleData['OrdersV2'].length);
         localStorage.setItem('isnewday', new Date().toLocaleDateString('en-us'));
         sampleData['IncomeUpToDate'].forEach(e => incomeUpToDate.add(e));

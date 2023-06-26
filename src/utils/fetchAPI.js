@@ -13,11 +13,7 @@ const fetchAPI = {
 
       });
       const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.error.message);
-      }
-      const data = await response.json();
-      return data;
+      return responseData;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;
@@ -36,9 +32,6 @@ const fetchAPI = {
         body: JSON.stringify(data)
       });
       const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.error.message);
-      }
       return responseData;
     } catch (error) {
       console.error('Error posting data:', error);
@@ -58,9 +51,6 @@ const fetchAPI = {
         body: JSON.stringify(data)
       });
       const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.error.message);
-      }
       return responseData;
     } catch (error) {
       console.error('Error updating data:', error);
@@ -79,9 +69,6 @@ const fetchAPI = {
         }
       });
       const responseData = await response.json();
-      if (!response.ok) {
-        throw new Error(responseData.error.message);
-      }
       return responseData;
     } catch (error) {
       console.error('Error deleting data:', error);

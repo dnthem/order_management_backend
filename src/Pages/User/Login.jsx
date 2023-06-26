@@ -3,8 +3,12 @@ import { fetchAPI } from "../../utils";
 import { useState } from "react";
 import Loader from "../../components/Loaders/Loader";
 import useLocalStorage from "../../customHooks/useLocalStorage";
-import { API_URL } from "../../Constants";
+import { API_URL } from "../../constants";
+import indexedDBController, { STORES } from "../../indexedDB/indexedDB";
+import databaseDownloader from "../../utils/DatabaseDownloader";
+import { GetDataBaseContext } from "../../App";
 function LogIn() {
+  const { db } = GetDataBaseContext();
   const [user] = useLocalStorage("user", null);
   if (user) {
     window.location.href = "/";
@@ -20,6 +24,36 @@ function LogIn() {
     setLoginInfo({ ...loginInfo, [e.target.name]: e.target.value });
   };
 
+  const deleteAll = async () => {
+    try {
+      const promises = [];
+  
+      for (const key in STORES) {
+        promises.push(indexedDBController.deleteAllRecord(db, STORES[key].name));
+      }
+  
+      await Promise.all(promises);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  
+
+  const fetchAll = async () => {
+    try {
+      const promises = [];
+  
+      for (const key in STORES) {
+        promises.push(databaseDownloader({ db, store: STORES[key].name }));
+      }
+  
+      await Promise.all(promises);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+  
+
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
@@ -34,23 +68,29 @@ function LogIn() {
       const data = await fetchAPI.post(`${API_URL}/login`, { username, password });
       if (data.error) {
         setError(data.error);
-        setLoading(false);
         alert(data.error);
       } else {
         
-        setLoading(false);
+        
         setLoginInfo({ username: "", password: "" });
         setError("");
         localStorage.setItem("token", data.accessToken);
         localStorage.setItem("user", JSON.stringify(data.user));
+
+        await deleteAll();
+        await fetchAll();
+        
         alert("Login Success");
         window.location.href = "/";
       }
     } catch (error) {
-      setLoading(false);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
+
+
 
 
   return (

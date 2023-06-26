@@ -25,13 +25,11 @@ async function findUser(req, res, next) {
         console.log('req.user', req.user);
         next();
       }
-      else {
-        res.status(401).send({ message: 'Username or Password is incorrect' });
-      }
-      
+    } else {
+      res.status(401).send({ error : 'Username or Password is incorrect' });
     }
   } catch (error) {
-    res.status(404).send({ message: error.message || 'User Not Found' })
+    res.status(404).send({ message: error.message })
   }
 }
 
@@ -40,13 +38,13 @@ async function checkExistingUser(req, res, next) {
   try {
     const user = await Users.findOne({ username: req.body.username });
     if (user) {
-      res.status(409).send({ message: 'Username already exists' });
+      res.status(409).send({ error : 'Username already exists' });
     }
     else {
       next();
     }
   } catch (error) {
-    res.status(404).send({ message: error.message || 'User Not Found' })
+    res.status(404).send({ error: error.message || 'User Not Found' })
   }
 }
 
@@ -89,7 +87,7 @@ router.post('/signup', checkExistingUser, async (req, res) => {
     });
   }
   catch (error) {
-    res.status(400).send({ message: error.message || 'Invalid User Data' });
+    res.status(400).send({ error: error.message || 'Invalid User Data' });
   }
 });
 

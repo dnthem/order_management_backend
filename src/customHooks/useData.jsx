@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { GetDataBaseContext } from "../App";
 import indexedDBController from "../indexedDB/indexedDB";
 import { fetchAPI, convertToAPI } from "../utils";
-import { BASE_URL } from "../Constants";
+import { API_URL } from "../constants";
 
 
 /**
@@ -17,7 +17,7 @@ export function useData({ store, index, keyPath, version = 1, limit = 1 }) {
   const [data, setData] = useState([]);
   const { db } = GetDataBaseContext();
 
-  const url = `${BASE_URL}/${store}/`;
+  const url = `${API_URL}/${store}/`;
 
   useEffect(() => {
     async function getData() {
