@@ -44,11 +44,11 @@ router.get(
         console.log(result);
         res.send(result);
       } else {
-        res.status(404).send({ message: `Not Found` });
+        res.status(404).send({ error: `Not Found` });
       }
     } catch (error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
     
   }
@@ -70,12 +70,12 @@ router.get(
         __v: 0
       });
       if (!data)
-        return res.status(404).send({ message: `Item Not Found` });
+        return res.status(404).send({ error: `Item Not Found` });
       
       
       res.send(data);
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
   }
 );
@@ -96,11 +96,11 @@ router.post(
         await newData.save();
         res.status(201).send(newData);
       } else {
-        res.status(404).send({ message: `${store} Not Found` });
+        res.status(404).send({ error: `${store} Not Found` });
       }
     } catch (error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
     
   } 
@@ -134,11 +134,11 @@ router.put(
           res.status(201).send(newData);
         }
       } else {
-        res.status(404).send({ message: `${store} Not Found` });
+        res.status(404).send({ error: `${store} Not Found` });
       }
     } catch (error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
     
   }
@@ -161,11 +161,11 @@ router.delete(
         // send 200 - ok
         res.status(200).send({ message: "Deleted"});
       } else {
-        res.status(404).send({ message: `${store} Not Found` });
+        res.status(404).send({ error: `${store} Not Found` });
       }
     } catch (error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
     
   }
@@ -185,7 +185,7 @@ if (process.env.NODE_ENV !== "production") {
       res.status(200).send("Deleted");
     } catch(error) {
       console.log(error.message)
-      res.status(500).send({ message: error.message });
+      res.status(500).send({ error: error.message });
     }
   });
 }
