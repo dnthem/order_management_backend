@@ -22,9 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
-const orginList = [
-  'http://localhost:5173',
-];
+const orginList = JSON.parse(process.env.ORIGIN_LIST);
 
 
 app.use(cors({

@@ -13,6 +13,7 @@ function Signup() {
     passwordConfirm: "",
   });
   const [loading, setLoading] = useState(false);
+  const { db } = indexedDBController;
 
   const handleChange = (e) => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
