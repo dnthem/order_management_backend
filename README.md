@@ -1,61 +1,27 @@
-# Customers:
+# Order-management-system
 
-#### Goals:
+## Description
 
-- [x] Seperate customers information from dashboard into a single section/page/route
-- [x] Allow CRUD on customers
-- [x] Update related tests
+This is a simple order management system. It allows you to perform create, edit, delete and view operations on orders, products, and customer informations.
+It also allows you to view the order history of a day.
 
-# First sprint:
+## Installation
 
-### Dashboard-log:
+1. Clone the repository
+2. Run `npm install` to install the dependencies
+3. CD into the directory `backend` and run `npm install` to install the dependencies
+4. Make sure you have MongoDB installed and running. In the `backend` directory, run `npm run dev` to start the server (port 3000). 
+5. cd back to the root directory and run `npm run build` to build the app
+6. Run `npm run preview` to start the app 
+7. Some environment variables might need to be set up
 
-#### Goals:
-- [x] Income chart - options: 7 days (default), 30 days, all
-- [x] Most ordered Items - top 7
-- [x] Adding sing number data
+## Usage
 
-### Menu-log:
-
-#### Goals:
-- [x] Newly added item appears at the begining of the list
-- [x] Changed appearance of remove and edit buttons
-- [x] Added Cancel button when editting items info
-
-### Orders-log:
-
-#### Goals:
-- [x] Scrollable for each table
-- [x] Highlight added items -> When an item is selected, on the completed orders that item should be highlighted
-
-
-## First Mile Stone: 
-
-- Completed basic requirements:
-  - Menu management - allows adding new items to menu - create/edit/remove items
-  - Order management - allows adding completed orders - tracking sold items - their quantities - save orders, complete, and save to locals
-  - Dashboard - displays income chart - most ordered items - income up-to-date, and total sold items
-
-------------------------------------
-
-# Second sprint:
-
-## Goals: 
-- History tab:
-   - Allow user to select orders in the past
-
-- Setting tab:
-     - Save a specific order to local
-     - Save every orders to local
-     - Save menu to local
-     - Save Income to local
-     - Load orders to database
-     - Load menu to database
-     - Load income to database
-
-### History-log:
-- Allow user to select orders in the past
-
-
-### Order-log:
-- Refactor download button
+1. To create a new item or product, click on the `Add` button on the top right corner of the **menu page**. Then, click `edit` to edit the item or product. Click `remove` to delete the item or product.
+2. You can even hide the item or product by clicking on the `hide` button. This will hide the item or product from the order page.
+3. To create a new order, click on the `Add` button on the top right corner of the **Order page**. Then, a customer infomation form will pop up. Fill in the form and click 'submit' to continue to order section. Here, you can add item to card, edit item quantity, remove item from card, and submit the order.
+4. In the main **Order page**, you can view the current acctive orders. You can choose to edit, complete, or delete the order. You can also view the completed orders and the total sales of the day.
+5. In **Order history page**, you can view the order history of a day. You can also view the total sales of the day.
+6. In **Customer page**, you can view the customer information. You can also edit or delete the customer information.
+7. In **Settings page**, you can delete, download, or upload the database
+8. In **Dashboard page**, you can view the total sales of the day, the total number of orders, the total number of customers, number of items sold, revenue chart, and the top items sold.
