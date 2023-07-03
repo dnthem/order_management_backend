@@ -26,7 +26,7 @@ const orginList = JSON.parse(process.env.ORIGIN_LIST);
 
 
 app.use(cors({
-  origin: orginList,
+  origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 

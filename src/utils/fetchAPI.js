@@ -1,80 +1,39 @@
 import { ORIGIN } from '../constants';
 
-const fetchAPI = {
-  get: async (url) => {
-    try {
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token'),
-          origin: ORIGIN,
-        }
+async function fetchTemplate (url, data, method)  {
+  try {
+    const headers = {
+      'Content-Type': 'application/json',
+      'authorization': 'Bearer ' + localStorage.getItem('token'),
+      origin: ORIGIN,
+    };
 
-      });
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  },
+    const requestOptions = {
+      method: method,
+      headers: headers,
+    };
 
-  post: async (url, data) => {
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token'),
-          origin: ORIGIN,
-        },
-        body: JSON.stringify(data)
-      });
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error posting data:', error);
-      throw error;
+    if (data) {
+      requestOptions.body = JSON.stringify(data);
     }
-  },
 
-  update: async (url, data) => {
-    try {
-      const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token'),
-          origin: ORIGIN,
-        },
-        body: JSON.stringify(data)
-      });
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error updating data:', error);
-      throw error;
-    }
-  },
-
-  delete: async (url) => {
-    try {
-      const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          'authorization': 'Bearer ' + localStorage.getItem('token'),
-          origin: ORIGIN,
-        }
-      });
-      const responseData = await response.json();
-      return responseData;
-    } catch (error) {
-      console.error('Error deleting data:', error);
-      throw error;
-    }
+    const response = await fetch(url, requestOptions);
+    const responseData = await response.json();
+    return responseData;
+  } catch (error) {
+    console.error(`Error ${method} data:`, error);
+    throw error;
   }
+};
+
+const fetchAPI = {
+  get: async (url) => fetchTemplate(url, null, 'GET'),
+
+  post: async (url, data) => fetchTemplate(url, data, 'POST'),
+
+  update: async (url, data) => fetchTemplate(url, data, 'PUT'),
+
+  delete: async (url) => fetchTemplate(url, null, 'DELETE'),
 };
 
 export default fetchAPI;

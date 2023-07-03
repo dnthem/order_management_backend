@@ -45,8 +45,6 @@ async function init() {
   const DB = await registerIndexedDB();
   Render(DB);
   closeDB(DB);
-
-
 }
 
 window.addEventListener("DOMContentLoaded", init);

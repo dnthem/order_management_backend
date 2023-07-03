@@ -72,7 +72,7 @@ function LogIn() {
 
         await deleteAll();
         await fetchAll();
-        
+        setError("")
         alert("Login Success");
         window.location.href = "/";
       }
@@ -83,8 +83,7 @@ function LogIn() {
     }
   };
 
-
-
+  const border = error !== "" ? "form-floating mb-3 border border-danger border-2 rounded" : "form-floating mb-3";
 
   return (
     <>
@@ -97,7 +96,7 @@ function LogIn() {
           </div>
           <div className="card-body">
             <form>
-              <div className="form-floating mb-3">
+              <div className={border}>
                 <input
                   className="form-control"
                   type="email"
@@ -109,7 +108,7 @@ function LogIn() {
                 />
                 <label htmlFor="inputEmail">User Name</label>
               </div>
-              <div className="form-floating mb-3">
+              <div className={border}>
                 <input
                   className="form-control"
                   type="password"

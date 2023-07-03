@@ -11,7 +11,6 @@ async function findUser(req, res, next) {
   try {
     const user = await Users.findOne({ username: req.body.username });
     if (user) {
-      console.log(user)
       // password check
       const match = await bcrypt.compare(req.body.password, user.password);
       if (match) {
@@ -24,6 +23,8 @@ async function findUser(req, res, next) {
 
         console.log('req.user', req.user);
         next();
+      } else {
+        res.status(401).send({ error : 'Username or Password is incorrect' });
       }
     } else {
       res.status(401).send({ error : 'Username or Password is incorrect' });
