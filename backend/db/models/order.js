@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema({
-  _id: {
-    type: Number,
-    required: true,
-  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -24,7 +20,7 @@ const orderSchema = new mongoose.Schema({
   cart: [
     {
       item: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Menu",
         isNew: true,
       },
@@ -36,7 +32,7 @@ const orderSchema = new mongoose.Schema({
     }
   ],
   customer: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Customer",
   },
   total: {

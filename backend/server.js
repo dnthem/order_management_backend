@@ -34,18 +34,9 @@ app.use(cors({
 await db.connect();
 
 
-const midle = (req, res, next) => {
-  console.log('midle');
-  console.log(req.body);
-  if (req.params.store === 'itemCount') {
-    return;
-  }
-  next();
-}
-
 
 app.use('/', authRoutes);
-app.use('/', midle, indexRoutes);
+app.use('/', indexRoutes);
 
 app.use("/*", (req, res) => {
   res.status(404).send("Path not found");

@@ -1,10 +1,6 @@
 import mongoose from "mongoose";
 
 const incomeSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    required: true,
-  },
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -12,7 +8,7 @@ const incomeSchema = new mongoose.Schema({
   },
   Date: {
     type: Date,
-    default: Date.now,
+    default: new Date().toLocaleDateString("en-US"),
     unique: true,
   },
   Total: {

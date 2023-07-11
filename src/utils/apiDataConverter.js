@@ -1,4 +1,3 @@
-
 /* Order */
 export function convertOrderToAPI(order) {
   if (Array.isArray(order)) 
@@ -22,9 +21,6 @@ export function convertAPItoOrder(APIOrder) {
 
   const output = structuredClone(APIOrder);
   delete output._id;
-
-  console.log(APIOrder);
-  console.log(output)
   output.orderID = APIOrder._id;
   output.customer = {
     customerID: APIOrder.customer._id,
@@ -102,7 +98,7 @@ export function convertAPItoIncome(APIIncome) {
     return APIIncome.map(item => convertAPItoIncome(item));
 
   const output = structuredClone(APIIncome);
-  output.Date = APIIncome._id;
+  output.Date = new Date(APIIncome.Date).toLocaleDateString("en-US");
   delete output._id;
   return output;
 }

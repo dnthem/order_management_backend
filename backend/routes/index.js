@@ -90,7 +90,7 @@ router.post(
     try {
       if (Object.keys(db).includes(store)) {
         console.log('user ID: ', req.user._id);
-        const  newData = new db[store]({userID: req.user._id, _id: req.body._id });
+        const  newData = new db[store]({userID: req.user._id});
         
         updateBasedOnStore(store, newData, req.body);
         console.log("Create new data in store ", store, " with data \n", newData);
@@ -100,7 +100,7 @@ router.post(
         res.status(404).send({ error: `${store} Not Found` });
       }
     } catch (error) {
-      console.log(error.message)
+      console.log('post error: ' + error.message)
       res.status(500).send({ error: error.message });
     }
     
@@ -138,7 +138,7 @@ router.put(
         res.status(404).send({ error: `${store} Not Found` });
       }
     } catch (error) {
-      console.log(error.message)
+      console.log('put error: ' + error.message)
       res.status(500).send({ error: error.message });
     }
     

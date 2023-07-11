@@ -19,6 +19,9 @@ async function fetchTemplate (url, data, method)  {
 
     const response = await fetch(url, requestOptions);
     const responseData = await response.json();
+    if (responseData.error)
+      throw new Error(responseData.error);
+
     return responseData;
   } catch (error) {
     console.error(`Error ${method} data:`, error);
@@ -26,6 +29,11 @@ async function fetchTemplate (url, data, method)  {
   }
 };
 
+/**
+ * @description A wrapper for fetch API. If the response is not ok, it will throw an error.
+ * @param {string} url The url to fetch
+ * @param {object} data The data to send (optional)
+ */
 const fetchAPI = {
   get: async (url) => fetchTemplate(url, null, 'GET'),
 

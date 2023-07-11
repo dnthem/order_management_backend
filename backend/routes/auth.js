@@ -24,12 +24,15 @@ async function findUser(req, res, next) {
         console.log('req.user', req.user);
         next();
       } else {
+        console.log('Password is incorrect');
         res.status(401).send({ error : 'Username or Password is incorrect' });
       }
     } else {
+      console.log('Username is incorrect');
       res.status(401).send({ error : 'Username or Password is incorrect' });
     }
   } catch (error) {
+    console.log('error', error);
     res.status(404).send({ message: error.message })
   }
 }
@@ -83,7 +86,7 @@ router.post('/signup', checkExistingUser, async (req, res) => {
       _id: user._id,
     }
     res.json({ 
-      accessToken : generateAccessToken({retUser}),
+      accessToken : generateAccessToken(retUser),
       user: retUser
     });
   }

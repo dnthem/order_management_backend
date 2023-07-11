@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const customerSchema = new mongoose.Schema({
-  _id: Number,
   userID: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -19,7 +18,7 @@ const customerSchema = new mongoose.Schema({
   },
   registerationDate: {
     type: String,
-    default: new Date(),
+    default: new Date().toLocaleDateString("en-US"),
   },
   lastPurchase: String,
 });
