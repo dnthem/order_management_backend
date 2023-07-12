@@ -1,5 +1,25 @@
 import { ORIGIN } from '../constants';
 
+function handleErrors(status, response) {
+  if (status >= 200 && status < 300) {
+    return;
+  }
+  switch (response.error) {
+    case 'Token expired':
+    case 'Invalid token':
+    case 'Unauthenticated user':
+      alert(response.error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = '/login';
+      break;
+  
+    default:
+      throw new Error(response.error);
+  }
+     
+}
+
 async function fetchTemplate (url, data, method)  {
   try {
     const headers = {
@@ -19,8 +39,7 @@ async function fetchTemplate (url, data, method)  {
 
     const response = await fetch(url, requestOptions);
     const responseData = await response.json();
-    if (responseData.error)
-      throw new Error(responseData.error);
+    handleErrors(response.status, responseData);
 
     return responseData;
   } catch (error) {

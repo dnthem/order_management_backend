@@ -10,10 +10,13 @@ export function authenticateToken(req, res, next) {
     if (err) {
       switch (err.name) {
         case 'TokenExpiredError':
+          console.log('token expired');
           return res.status(401).send({ error: 'Token expired' });
         case 'JsonWebTokenError':
+          console.log('invalid token');
           return res.status(401).send({ error: 'Invalid token' });
         default:
+          console.log('unauthenticated user');
           return res.status(401).send({ error: 'Unauthenticated user' });
       }
     }
