@@ -42,12 +42,6 @@ function SideNavMenu() {
           </div>
           Customers
         </Link>
-        <Link to="/settings" id="Setting" className="btn nav-link">
-          <div className="sb-nav-link-icon">
-            <RiSettings5Line style={iconStyle} />
-          </div>
-          Setting
-        </Link>
       </div>
     </div>
   );

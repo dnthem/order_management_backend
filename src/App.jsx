@@ -51,7 +51,7 @@ function App(props) {
               <Route path="/orders" element={<OrdersV2/>} />
               <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/history" element={<History/>} />
-              <Route path="/settings" element={<Settings/>} />
+              {/* <Route path="/settings" element={<Settings/>} /> */}
               <Route path="/customers" element={<Customers/>} />
               <Route path="/login" element={<LogIn/>} />
               <Route path='/signup' element={<Signup/>} />
