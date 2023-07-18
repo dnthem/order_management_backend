@@ -2,7 +2,6 @@ import { createContext, useContext, useState } from "react"
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import History from "./Pages/History/History";
 import Menu from "./Pages/Menu/Menu"
-import Settings from "./Pages/Settings/Settings";
 import OrdersV2 from "./Pages/Orders.V2/OrdersV2";
 import { Route, Routes, Link } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
@@ -51,7 +50,6 @@ function App(props) {
               <Route path="/orders" element={<OrdersV2/>} />
               <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/history" element={<History/>} />
-              {/* <Route path="/settings" element={<Settings/>} /> */}
               <Route path="/customers" element={<Customers/>} />
               <Route path="/login" element={<LogIn/>} />
               <Route path='/signup' element={<Signup/>} />

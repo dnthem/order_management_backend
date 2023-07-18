@@ -1,8 +1,6 @@
 import { FaTachometerAlt, FaHistory } from "react-icons/fa";
 import { MdMenuBook } from "react-icons/md";
 import { AiOutlineShoppingCart, AiOutlineUser } from "react-icons/ai";
-
-import { RiSettings5Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 function SideNavMenu() {
   const iconStyle = {
