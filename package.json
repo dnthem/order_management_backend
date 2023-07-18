@@ -4,9 +4,13 @@
   "description": "",
   "main": "server.js",
   "type": "module",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "nodemon server.js",
-    "build": "rollup server.js -d ./dist"
+    "build": "rollup server.js -d ./dist",
+    "start": "pm2 start ./dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +34,7 @@
     "@babel/preset-env": "^7.22.5",
     "@babel/register": "^7.22.5",
     "nodemon": "^2.0.22",
-    "rollup": "^3.25.1"
+    "rollup": "^3.25.1",
+    "pm2": "^5.3.0"
   }
 }
