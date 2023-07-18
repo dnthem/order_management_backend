@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
 app.use(cors({
-  origin: ['https://fix-usedata--order-management-api.netlify.app/'],
+  origin: 'https://fix-usedata--order-management-api.netlify.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
