@@ -88,8 +88,6 @@ export function convertIncomeToAPI(income) {
     return income.map(item => convertIncomeToAPI(item));
 
   const output = structuredClone(income);
-  output._id = output.Date;
-  delete output.id;
   return output;
 }
 
@@ -99,7 +97,6 @@ export function convertAPItoIncome(APIIncome) {
 
   const output = structuredClone(APIIncome);
   output.Date = new Date(APIIncome.Date).toLocaleDateString("en-US");
-  delete output._id;
   return output;
 }
 

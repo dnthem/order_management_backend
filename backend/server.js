@@ -22,18 +22,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
-const orginList = JSON.parse(process.env.ORIGIN_LIST);
-
-
 app.use(cors({
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
-
 await db.connect();
-
-
 
 app.use('/', authRoutes);
 app.use('/', indexRoutes);
