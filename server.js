@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
 app.use(cors({
-  origin: '*',
+  origin: JSON.parse(process.env.CORS_ORIGIN),
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }));
 
