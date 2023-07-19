@@ -18,12 +18,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 const app = express();
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
-app.use(cors({
-  origin: 'https://order-management-api.netlify.app',
+app.options('*', cors({
+  origin: 'https://order-management-api.netlify.app/'
 }));
 
 await db.connect();
