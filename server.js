@@ -28,6 +28,14 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+
+app.options('*', (req, res) => {
+  res.set('Access-Control-Allow-Origin', process.env.CORS_ORIGIN);
+  res.set('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.send('OK');
+});
+
 await db.connect();
 
 app.use('/', authRoutes);
