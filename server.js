@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
 
 app.use(cors({
-  origin: 'https://order-management-api.netlify.app',
+  origin: true,
 }));
 
 await db.connect();
