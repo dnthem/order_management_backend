@@ -33,6 +33,10 @@ app.options('*', (req, res) => {
   res.set('Access-Control-Allow-Origin', process.env.CORS_ORIGIN);
   res.set('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT, PATCH, OPTIONS');
   res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  // check if request from allowed origin
+  if (req.headers.origin !== process.env.CORS_ORIGIN) {
+    return res.status(403).send('Forbidden');
+  }
   res.send('OK');
 });
 
@@ -42,7 +46,7 @@ app.use('/', authRoutes);
 app.use('/', indexRoutes);
 
 app.use("/*", (req, res) => {
-  res.status(404).send("Path not found");
+  res.redirect(process.env.CORS_ORIGIN)
 });
 
 const port = process.env.PORT || 3000;
