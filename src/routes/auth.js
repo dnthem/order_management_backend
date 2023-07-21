@@ -1,5 +1,5 @@
 import express from 'express';
-import { generateAccessToken, authenticateToken } from '../utils/jwt.js';
+import { generateAccessToken, authenticateToken } from '../utils/index.js';
 import {Users} from '../db/mongodb.js';
 import path from 'path';
 import bcrypt from 'bcrypt';

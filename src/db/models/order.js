@@ -78,6 +78,44 @@ orderSchema.pre("save", async function (next) {
 orderSchema.pre("findOne", autoPopulate);
 orderSchema.pre("find", autoPopulate);
 
+orderSchema.statics.customUpdate = async function (body, id) {
+  try {
+    // 'this' refers to the model (Order) itself
+    const { userID, promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
+    const result = await this.updateOne(
+      { userID: userID, _id: id },
+      { promotion: promotion, orderDate: orderDate, deliverDate: deliverDate, status: status, cart: cart, customer: customer, total: total, notes: notes, nthOrderOfDay: nthOrderOfDay, comletedTime: comletedTime, paymentType: paymentType }
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+orderSchema.statics.addEntry = async function (body, userID) {
+  try {
+    // 'this' refers to the model (Order) itself
+    const { promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
+    const result = await new this({
+      userID: userID,
+      promotion: promotion,
+      orderDate: orderDate,
+      deliverDate: deliverDate,
+      status: status,
+      cart: cart,
+      customer: customer,
+      total: total,
+      notes: notes,
+      nthOrderOfDay: nthOrderOfDay,
+      comletedTime: comletedTime,
+      paymentType: paymentType
+    });
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
 
 
 const Orders = mongoose.model("Order", orderSchema);

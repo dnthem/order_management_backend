@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Menu from "./models/menu.js";
-import Orders from "./models/order.js";
-import Customers from "./models/customer.js";
-import Income from "./models/income.js";
-import Incomeuptodate from "./models/incomeUpToDate.js";
-import Users from "./models/user.js";
+import { 
+  Menu,
+  Orders,
+  Customers,
+  Income,
+  Incomeuptodate,
+  Users,  
+} from "./models/index.js";
 
 dotenv.config();
 

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import { phoneFormat } from "../../utils/index.js";
 const customerSchema = new mongoose.Schema({
   userID: {
     type: mongoose.Schema.Types.ObjectId,
@@ -25,9 +25,7 @@ const customerSchema = new mongoose.Schema({
 
 customerSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
-function phoneFormat(value) {
-  return value.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3");
-}
+
 
 customerSchema.pre("save", function (next) {
   console.log("Pre save");
@@ -41,6 +39,35 @@ customerSchema.pre("save", function (next) {
 
   next();
 });
+
+customerSchema.statics.customUpdate = async function (body, id) {
+  try {
+    // 'this' refers to the model (Customer) itself
+    const { userID, customerName, phone } = body;
+    const result = await this.updateOne(
+      { userID: userID, _id: id },
+      { customerName: customerName, phone: phone }
+    );
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+customerSchema.statics.addEntry = async function (body, userID) {
+  try {
+    // 'this' refers to the model (Customer) itself
+    const { customerName, phone } = body;
+    const result = await new this({
+      userID: userID,
+      customerName: customerName,
+      phone: phone,
+    });
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
 
 const Customers = mongoose.model("Customer", customerSchema);
 

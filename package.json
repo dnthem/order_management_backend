@@ -8,8 +8,8 @@
     "node": "18.x"
   },
   "scripts": {
-    "dev": "nodemon server.js",
-    "build": "rollup server.js -d ./dist",
+    "dev": "nodemon ./src/server.js",
+    "build": "rollup ./src/server.js -d ./dist",
     "start": "node ./dist/server.js"
   },
   "keywords": [],
@@ -33,6 +33,8 @@
     "@babel/core": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/register": "^7.22.5",
+    "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-node-resolve": "^15.1.0",
     "nodemon": "^2.0.22",
     "rollup": "^3.25.1"
   }

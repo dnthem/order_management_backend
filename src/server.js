@@ -4,7 +4,6 @@ dotenv.config();
 import path from 'path';
 import { router as authRoutes } from './routes/auth.js';
 import { router as indexRoutes } from './routes/index.js';
-import cors from 'cors';
 import * as db from './db/mongodb.js';
 
 if (process.env.NODE_ENV !== 'production') {

@@ -1,5 +1,10 @@
 import jwt from 'jsonwebtoken';
-import { shortenToken } from './utils.js';
+
+function shortenToken(token) {
+  if (!token) return token;
+  return token.slice(0, 5) + '...' + token.slice(-5);
+}
+
 
 export function authenticateToken(req, res, next) {
   const authHeader = req.headers.authorization;
