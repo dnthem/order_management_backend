@@ -22,7 +22,6 @@ incomeUpToDateSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
 incomeUpToDateSchema.statics.customUpdate = async function (body, id, userID) {
   try {
-    // 'this' refers to the model (IncomeUpToDate) itself
     const { Date, Total, UpdatedTime } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
@@ -36,7 +35,6 @@ incomeUpToDateSchema.statics.customUpdate = async function (body, id, userID) {
 
 incomeUpToDateSchema.statics.addEntry = async function (body, userID) {
   try {
-    // 'this' refers to the model (IncomeUpToDate) itself
     const { Date, Total, UpdatedTime } = body;
     const result = await new this({
       userID: userID,

@@ -28,8 +28,6 @@ menuSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
 menuSchema.statics.customUpdate = async function (body, id, userID) {
   try {
-    console.log("body: ", body);
-    // 'this' refers to the model (Menu) itself
     const { Title, Count, Price, Description, Hidden, Image } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
@@ -43,7 +41,6 @@ menuSchema.statics.customUpdate = async function (body, id, userID) {
 
 menuSchema.statics.addEntry = async function (body, userID) {
   try {
-    // 'this' refers to the model (Menu) itself
     const {Title, Count, Price, Description, Hidden, Image } = body;
     const result = await new this({
       userID: userID,

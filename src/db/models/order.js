@@ -80,7 +80,6 @@ orderSchema.pre("find", autoPopulate);
 
 orderSchema.statics.customUpdate = async function (body, id, userID) {
   try {
-    // 'this' refers to the model (Order) itself
     const { promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
@@ -94,7 +93,6 @@ orderSchema.statics.customUpdate = async function (body, id, userID) {
 
 orderSchema.statics.addEntry = async function (body, userID) {
   try {
-    // 'this' refers to the model (Order) itself
     const { promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
     const result = await new this({
       userID: userID,

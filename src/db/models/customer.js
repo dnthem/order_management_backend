@@ -25,8 +25,6 @@ const customerSchema = new mongoose.Schema({
 
 customerSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
-
-
 customerSchema.pre("save", function (next) {
   console.log("Pre save");
   if (this.customerName === "" && this.phone === "") {
@@ -42,7 +40,6 @@ customerSchema.pre("save", function (next) {
 
 customerSchema.statics.customUpdate = async function (body, id, userID) {
   try {
-    // 'this' refers to the model (Customer) itself
     const { customerName, phone } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
@@ -56,7 +53,6 @@ customerSchema.statics.customUpdate = async function (body, id, userID) {
 
 customerSchema.statics.addEntry = async function (body, userID) {
   try {
-    // 'this' refers to the model (Customer) itself
     const { customerName, phone } = body;
     const result = await new this({
       userID: userID,

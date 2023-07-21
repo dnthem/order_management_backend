@@ -26,7 +26,7 @@ router.get(
       const store = req.params.store;
       if (!Object.keys(db).includes(store)) {
         displayHttpInfo("GET", `${store}`, 404);
-        return res.status(404).send({ message: `${store} Not Found` });
+        return res.status(404).send({ error : `${store} Not Found` });
       }
       const data = await db[store].find(
         {
