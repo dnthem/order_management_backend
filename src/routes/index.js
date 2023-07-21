@@ -174,9 +174,11 @@ if (process.env.NODE_ENV !== "production") {
       await Income.deleteMany({ userID: req.user._id });
       await Incomeuptodate.deleteMany({ userID: req.user._id });
       await Orders.deleteMany({ userID: req.user._id });
+      displayHttpInfo("DELETE", `DeleteAll`, 200);
       res.status(200).send("Deleted");
     } catch (error) {
       console.log(error.message);
+      displayHttpInfo("DELETE", `DeleteAll`, 500);
       res.status(500).send({ error: error.message });
     }
   });
