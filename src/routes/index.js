@@ -122,7 +122,7 @@ router.put(
     const Id = req.params.id;
     try {
       if (store in db) {
-        await db[store].customUpdate(req.body, Id);
+        await db[store].customUpdate(req.body, Id, req.user._id);
 
         displayHttpInfo("PUT", `${store}/${Id}`, 200);
         res.status(200).send({ message: "Updated" });

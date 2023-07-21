@@ -40,10 +40,10 @@ customerSchema.pre("save", function (next) {
   next();
 });
 
-customerSchema.statics.customUpdate = async function (body, id) {
+customerSchema.statics.customUpdate = async function (body, id, userID) {
   try {
     // 'this' refers to the model (Customer) itself
-    const { userID, customerName, phone } = body;
+    const { customerName, phone } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
       { customerName: customerName, phone: phone }

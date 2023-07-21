@@ -26,10 +26,11 @@ const menuSchema = new mongoose.Schema({
 
 menuSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
-menuSchema.statics.customUpdate = async function (body, id) {
+menuSchema.statics.customUpdate = async function (body, id, userID) {
   try {
+    console.log("body: ", body);
     // 'this' refers to the model (Menu) itself
-    const { userID, Title, Count, Price, Description, Hidden, Image } = body;
+    const { Title, Count, Price, Description, Hidden, Image } = body;
     const result = await this.updateOne(
       { userID: userID, _id: id },
       { Title: Title, Count: Count, Price: Price, Description: Description, Hidden: Hidden, Image: Image }

@@ -20,10 +20,10 @@ const incomeSchema = new mongoose.Schema({
 
 incomeSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
-incomeSchema.statics.customUpdate = async function (body, date) {
+incomeSchema.statics.customUpdate = async function (body, date, userID) {
   try {
     // 'this' refers to the model (Income) itself
-    const { userID, _id, Total } = body;
+    const { _id, Total } = body;
     const result = await this.updateOne(
       { userID: userID, Date: new Date(date), _id: _id },
       { Total: Total }
