@@ -21,7 +21,7 @@ const menuSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  Image: String
+  Image: String,
 });
 
 menuSchema.index({ userID: 1, _id: 1 }, { unique: true });
