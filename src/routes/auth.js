@@ -45,6 +45,7 @@ async function checkExistingUser(req, res, next) {
       res.status(409).send({ error : 'Username already exists' });
     }
     else {
+      console.log('next')
       next();
     }
   } catch (error) {

@@ -4,7 +4,13 @@ dotenv.config();
 import path from 'path';
 import { router as authRoutes } from './routes/auth.js';
 import { router as indexRoutes } from './routes/index.js';
+import { router as menuRoutes } from './routes/menuRoute.js';
+import { router as orderRoutes } from './routes/orderRoute.js';
+import { router as customerRoutes } from './routes/customerRoute.js';
+import { router as userRoutes } from './routes/userRoute.js';
+
 import * as db from './db/mongodb.js';
+import { displayHttpInfo } from './utils/index.js';
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
@@ -21,7 +27,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
-
+app.use(displayHttpInfo);
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -42,7 +48,12 @@ app.options('*', (req, res) => {
 await db.connect();
 
 app.use('/', authRoutes);
-app.use('/', indexRoutes);
+//app.use('/', indexRoutes);
+app.use('/menu', menuRoutes);
+app.use('/users', userRoutes);
+app.use('/customers', customerRoutes);
+app.use('/orders', orderRoutes);
+
 
 app.use("/*", (req, res) => {
   res.redirect(process.env.CORS_ORIGIN)
