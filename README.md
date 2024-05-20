@@ -24,7 +24,9 @@ Instalation:
 - Clone the repo
 - Run `npm install` to install all the dependencies
 - Run `npm start` to start the server
+- You can either use mongodb locally like mongodb community server or use a cloud service like [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
 - Set up the environment variables in `.env` file
+  
   ```
    NODE_ENV='development'
    MONGODB_URI='mongodb://127.0.0.1:27017/ordersManagement'
