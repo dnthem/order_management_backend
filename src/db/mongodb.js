@@ -4,7 +4,7 @@ import {
   Menu,
   Orders,
   Customers,
-  Income,
+  Incomes,
   Incomeuptodate,
   Users,  
 } from "./models/index.js";
@@ -27,7 +27,7 @@ export {
   Menu,
   Orders,
   Customers,
-  Income,
+  Incomes,
   Incomeuptodate,
   Users,
 };

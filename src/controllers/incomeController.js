@@ -1,53 +1,27 @@
 import { Income } from  "../db/models/index.js";
+import asyncHandler from 'express-async-handler';
 
 const IncomeController = {
-  // add a new income
-  async addIncome(req, res) {
-    try {
-      const { amount, date } = req.body;
-      const newIncome = new Income({ amount, date });
-      await newIncome.save();
-      res.status(201).send(newIncome);
-    } catch (error) {
-      res.status(500).send({ error: error.message });
-    }
-  },
-
-  // update an income
-  async updateIncome(req, res) {
+  // get a single income
+  get_income: asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      await Income.findByIdAndUpdate
-        (id
-          , req.body
-          , { new: true }
-        );
-      res.status(200).send({ message: "Updated" });
+      const income = await Income.findById({id});
+      res.status(200).send(income);
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  }),
 
-  // delete an income
-  async deleteIncome(req, res) {
+  // get all income
+  get_all_income: asyncHandler(async (req, res) => {
     try {
-      const { id } = req.params;
-      await Income.findByIdAndDelete(id);
-      res.status(200).send({ message: "Deleted" });
-    } catch (error) {
-      res.status(500).send({ error: error.message });
-    }
-  },
-
-  // get all incomes
-  async getAllIncomes(req, res) {
-    try {
-      const incomes = await Income.find();
+      const incomes = await Income.find({ userID: req.user._id });
       res.status(200).send(incomes);
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  }),
 
 }
 

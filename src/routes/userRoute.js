@@ -3,8 +3,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/", UserController.createUser);
-router.put("/:id", UserController.updateUser);
-router.delete("/:id", UserController.deleteUser);
+router.post('/login', UserController.post_login);
+router.post('/signup', UserController.post_create_user);
 
 export { router };

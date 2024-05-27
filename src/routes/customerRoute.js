@@ -3,10 +3,10 @@ import CustomerController from '../controllers/customerController.js';
 
 const router = express.Router();
 
-router.get('/', CustomerController.getAllCustomers);
-router.get('/:id', CustomerController.getCustomer);
-router.post('/', CustomerController.addCustomer);
-router.put('/:id', CustomerController.updateCustomer);
-router.delete('/:id', CustomerController.deleteCustomer);
+router.get('/', CustomerController.get_all_customers);
+router.get('/:id', CustomerController.get_a_customer);
+router.post('/', CustomerController.post_create_customer);
+router.patch('/:id', CustomerController.patch_update_customer);
+router.delete('/:id', CustomerController.delete_customer);
 
 export { router };

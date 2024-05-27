@@ -31,6 +31,12 @@ export function authenticateToken(req, res, next) {
   });
 }
 
+
+/**
+ * 
+ * @param {Object | String | Buffer} payload object to be signed
+ * @returns 
+ */
 export function generateAccessToken(payload) {
   const options = {
     expiresIn: JWT_EXPIRATION_TIME,

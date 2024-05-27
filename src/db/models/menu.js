@@ -6,56 +6,30 @@ const menuSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  Title: String,
-  Count: {
+  title: {
+    type: String,
+    required: true,
+  },
+  count: {
     type: Number,
     default: 0,
   },
-  Price: {
+  price: {
     type: Number,
     default: 0,
     min: 0,
+    required: true,
   },
-  Description: String,
-  Hidden: {
+  description: String,
+  hidden: {
     type: Boolean,
     default: false
   },
-  Image: String,
+  imageUrl: String,
 });
 
 menuSchema.index({ userID: 1, _id: 1 }, { unique: true });
 
-menuSchema.statics.customUpdate = async function (body, id, userID) {
-  try {
-    const { Title, Count, Price, Description, Hidden, Image } = body;
-    const result = await this.updateOne(
-      { userID: userID, _id: id },
-      { Title: Title, Count: Count, Price: Price, Description: Description, Hidden: Hidden, Image: Image }
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
-
-menuSchema.statics.addEntry = async function (body, userID) {
-  try {
-    const {Title, Count, Price, Description, Hidden, Image } = body;
-    const result = await new this({
-      userID: userID,
-      Title: Title,
-      Count: Count,
-      Price: Price,
-      Description: Description,
-      Hidden: Hidden,
-      Image: Image
-    });
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
 
 
 const Menu = mongoose.model("Menu", menuSchema);

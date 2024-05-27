@@ -1,51 +1,61 @@
-import { Customers, Menu, Income, Incomeuptodate, Orders } from "../db/models/index.js";
+import { Customers, Menu, Incomes, Incomeuptodate, Orders } from "../db/models/index.js";
+import asyncHandler from 'express-async-handler';
+import { body, validationResult } from 'express-validator';
 const OrderController = {
   // add a new order
-  async addOrder(req, res) {
+  post_create_order: [
+    asyncHandler(async (req, res) =>{
     try {
-      const newOrder = new Orders(req.body);
-      await newOrder.save();
-
+      const newOrder = new Orders({
+        userID: req.user._id,
+        ...req.body
+      }).populate('cart.itemId');
       // update total price
       let total = 0;
       for (let i = 0; i < newOrder.cart.length; i++) {
-        const menu = await Menu.findById(newOrder.cart[i].item);
-        total += menu.Price * newOrder.cart[i].quantity;
+        const item = newOrder.cart[i].itemId;
+        total += item.price * newOrder.cart[i].quantity;
       }
+
       newOrder.total = total - newOrder.promotion;
-      newOrder.save();
+      await newOrder.save();
 
       res.status(201).send(newOrder);
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  })
+],
 
   // update an order
-  async updateOrder(req, res) {
-    try {
-      const { id } = req.params;
-      await Orders.findByIdAndUpdate
-        (id
-          , req.body
-          , { new: true }
-        );
+  patch_update_order: [
+    asyncHandler(async (req, res) => {
+      try {
+        const { id } = req.params;
+        const newUpdated =await Orders.findByIdAndUpdate
+          (id
+            , req.body
+            , { new: true }
+          );
+        res.status(200).json(newUpdated)
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
+    })
+  ],
 
-      res.status(200).send({ message: "Updated" });
-    } catch (error) {
-      res.status(500).send({ error: error.message });
-    }
-  },
-
-  // complete an order
-  async completeOrder(req, res) {
+  /**
+   * complete an order
+   * Route: POST: /api/orders/:id/complete
+   */
+  post_complete_order: asyncHandler( async (req, res)  => {
     try {
       const { id } = req.params;
       const order = await Orders.findById(id);
       order.status = true;
       order.save();
       // update customer order count and total spent
-      const customer = await Customers.findById(order.customer);
+      const customer = await Customers.findById(order.customerId);
       customer.orderCount += 1;
       customer.totalSpent += order.total;
       customer.lastPurchase = order.orderDate;
@@ -59,7 +69,7 @@ const OrderController = {
       }
 
       // update income
-      const income = await Income.findOne();
+      const income = await Incomes.findOne();
       income.totalIncome += order.total;
       income.save();
 
@@ -73,9 +83,9 @@ const OrderController = {
     catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  }),
   // delete an order
-  async deleteOrder(req, res) {
+  delete_order: asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
       await Orders.findByIdAndDelete(id);
@@ -83,28 +93,29 @@ const OrderController = {
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  }),
 
   // get all orders
-  async getAllOrders(req, res) {
+  get_all_orders: asyncHandler(async (req, res) => {
     try {
-      const orders = await Orders.find();
+      const userID = req.user._id;
+      const orders = await Orders.find({ userID });
       res.status(200).send(orders);
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  },
+  }),
 
   // get an order
-  async getOrder(req, res) {
+  get_an_order: asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const order = await Orders.findById(id);
+      const order = await Orders.find({ userID: req.user._id, _id: id });
       res.status(200).send(order);
     } catch (error) {
       res.status(500).send({ error: error.message });
     }
-  }
+  }),
 
 }
 
