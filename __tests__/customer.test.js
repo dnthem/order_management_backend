@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import request from 'supertest';
-import mongoose from 'mongoose';
+import { connect, disconnect, dropDatabase } from '../__helper__/mongodb.memory.test.helper.js';
 import app from '../src/server.js';
 import { Customers } from '../src/db/models/index.js';
 
@@ -16,14 +16,9 @@ const USER_TEST_OBJ = {
 }
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
-
-  await mongoose.connection.dropDatabase();
+  await connect();
+  console.log('Database connected');
+  await dropDatabase();
   console.log('Database dropped');
   server = app.listen(4000, () => {
     console.log('Server is running on port 4000');
@@ -31,7 +26,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  await disconnect();
   server.close();
 });
 

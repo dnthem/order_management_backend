@@ -8,8 +8,8 @@ This is the backend for Order Management System [here](https://github.com/dnthem
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
   - [Routes Description](#routes-description)
+    - [Routes:](#routes)
     - [Authentication Route](#authentication-route)
-    - [Index Route](#index-route)
   - [Error Handling](#error-handling)
   - [License](#license)
 
@@ -37,32 +37,12 @@ Instalation:
 
 ## Routes Description
 
+### Routes:
+
 ### Authentication Route
 
 The authentication route manages user signup and login procedures using JSON Web Tokens (JWT) for secure backend access. Upon signup or login, a token is generated and stored by the client, and subsequent requests include this token for authentication.
 
-### Index Route
-
-The index route handles all the stores/collections and provides various functionalities:
-
-**GET: /:store**
-- Retrieves all the data from the specified store.
-- Returns the data in an array format.
-
-**GET: /:store/:id**
-- Retrieves a single document from the specified store based on the provided ID.
-- Returns the data in JSON format.
-
-**POST: /:store**
-- Creates a new document in the specified store.
-- Accepts data in JSON format in the request body.
-
-**PUT: /:store/:id**
-- Updates the entire document identified by the provided ID in the specified store.
-- Accepts data in JSON format in the request body.
-
-**DELETE: /:store/:id**
-- Deletes a single document from the specified store based on the provided ID.
 
 ## Error Handling
 

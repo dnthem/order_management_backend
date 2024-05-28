@@ -1,36 +1,26 @@
 import { describe, expect, test, beforeAll, afterAll } from '@jest/globals';
 import app from '../src/server.js';
 import request from 'supertest';
-import mongoose from 'mongoose';
-
+import { connect, disconnect } from '../__helper__/mongodb.memory.test.helper.js';
 
 let ACCESS_TOKEN = '';
 let menu = [];
 let customers = [];
 let orders = [];
 let server;
-
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
-  
-  await mongoose.connection.dropDatabase();
-  console.log('Database dropped');
+  await connect();
   server = app.listen(4000, () => {
     console.log('Server is running on port 4000');
   });
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  await disconnect();
   server.close();
 });
 
-describe('2: Fail tests', () => {
+describe('Fail tests', () => {
   test('register', async () => {
     const body = {
       email: 'testemail.com',

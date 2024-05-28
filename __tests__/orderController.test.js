@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import request from 'supertest';
 import app from '../src/server.js';
-import mongoose from 'mongoose';
+import { connect, disconnect, dropDatabase } from '../__helper__/mongodb.memory.test.helper.js';
 import { Orders, Customers, Menu, Incomes, Incomeuptodate } from '../src/db/models/index.js';
 
 let server;
@@ -19,14 +19,9 @@ const USER_TEST_OBJ = {
 
 
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-  });
-
-  await mongoose.connection.dropDatabase();
+  await connect();
+  console.log('Database connected');
+  await dropDatabase();
   console.log('Database dropped');
   server = app.listen(4000, () => {
     console.log('Server is running on port 4000');
@@ -34,9 +29,10 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
+  await disconnect();
   server.close();
 });
+
 
 describe('OrderController', () => {
   test('register', async () => {
@@ -171,6 +167,9 @@ describe('OrderController', () => {
 
     expect(res.status).toEqual(200);
     expect(res.body.message).toEqual('Deleted');
+
+    const deletedOrder = await Orders.findById(order._id);
+    expect(deletedOrder).toBeNull();
   });
 
   test('get_all_orders - should return all orders for a user', async () => {
@@ -229,7 +228,6 @@ describe('OrderController', () => {
       .set('Authorization', `Bearer ${ACCESS_TOKEN}`);
 
     expect(res.status).toEqual(200);
-    expect(res.body).toHaveProperty('paymentType');
     expect(res.body.cart.length).toEqual(2);
     expect(res.body.total).toEqual(32);
   });

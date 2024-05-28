@@ -11,9 +11,11 @@ import {
 
 dotenv.config();
 
-const uri = process.env.MONGODB_URI;
-
+const uri = process.env.NODE_ENV === "test" 
+    ? 'mongodb://127.0.0.1:21557/'
+    : process.env.MONGO_URL;
 async function connect() {
+  
   try {
     await mongoose.connect(uri);
     console.log("MongoDB connected");

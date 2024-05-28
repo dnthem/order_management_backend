@@ -1,6 +1,5 @@
 import express from 'express';
 import dotenv from 'dotenv';
-dotenv.config();
 import path from 'path';
 import { router as menuRoutes } from './routes/menuRoute.js';
 import { router as orderRoutes } from './routes/orderRoute.js';
@@ -8,19 +7,21 @@ import { router as customerRoutes } from './routes/customerRoute.js';
 import { router as userRoutes } from './routes/userRoute.js';
 import { router as incomeRoutes } from './routes/incomeRoute.js';
 import { authenticateToken } from './utils/jwt.js';
-
-import * as db from './db/mongodb.js';
 import logger from 'morgan';
 import cookieParser from 'cookie-parser';
+
+dotenv.config();
+if (process.env.NODE_ENV === 'test') {
+  console.log = function () { }; // disable console.log
+}
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 } else {
   console.log('Looks like we are in production mode!');
-    // disable console.log
-    console.log = function() {};
+  // disable console.log
+  console.log = function () { };
 }
-
 
 const app = express();
 
@@ -29,8 +30,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(path.resolve(), 'public')));
-app.use(logger('dev'));
-app.use(function(req, res, next) {
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(logger('dev'));
+}
+
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", process.env.CORS_ORIGIN);
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
@@ -47,10 +52,9 @@ app.options('*', (req, res) => {
   res.send('OK');
 });
 
-db.connect().catch(error => console.log(error));
 
 app.post('/', (req, res) => {
-  const { a , b} = req.body;
+  const { a, b } = req.body;
   res.status(200).json(a + b);
 });
 
@@ -67,8 +71,8 @@ app.use("/*", (req, res) => {
 
 app.use((err, req, res, next) => {
   // handle error
-  console.error(err);
-  res.status(res.statusCode || 500).send({ error: err.message });
+  console.log(err);
+  res.status(err.status || 500).send({ error: err.message });
 });
 
 

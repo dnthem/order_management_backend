@@ -19,6 +19,11 @@ const findUserWithSameEmail = async (email) => {
   }
 }
 
+/**
+ * Controller for handling user-related operations.
+ *
+ * @namespace UserController
+ */
 const UserController = {
   // Login
   post_login: [
@@ -30,37 +35,33 @@ const UserController = {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      try {
-        const user = await Users.findOne({ username: req.body.username });
-        if (!user) {
-          return res.status(401).send({ error: 'Username or Password is incorrect' });
-        }
-
-        const match = await bcrypt.compare(req.body.password, user.password);
-        if (!match) {
-          return res.status(401).send({ error: 'Username or Password is incorrect' });
-        }
-
-        res.status(200).json({
-          accessToken: generateAccessToken({
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            name: user.name,
-          }),
-          user: {
-            _id: user._id,
-            username: user.username,
-            email: user.email,
-            name: user.name,
-          }
-        });
-      } catch (error) {
-        res.status(500).send({ error: error.message });
+      const user = await Users.findOne({ username: req.body.username });
+      if (!user) {
+        return res.status(401).send({ error: 'Username or Password is incorrect' });
       }
+
+      const match = await bcrypt.compare(req.body.password, user.password);
+      if (!match) {
+        return res.status(401).send({ error: 'Username or Password is incorrect' });
+      }
+
+      res.status(200).json({
+        accessToken: generateAccessToken({
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          name: user.name,
+        }),
+        user: {
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          name: user.name,
+        }
+      });
     })
   ],
-  
+
 
   // create a new user AKA: signup
   // should use session to create a new user AKA: transaction in mongodb
@@ -75,39 +76,35 @@ const UserController = {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      try {
-        const hashPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
-        const newUser = new Users({
-          username: req.body.username,
-          password: hashPassword,
-          email: req.body.email,
-          name: req.body.name,
-        });
-        await newUser.save();
+      const hashPassword = await bcrypt.hash(req.body.password, SALT_ROUNDS);
+      const newUser = new Users({
+        username: req.body.username,
+        password: hashPassword,
+        email: req.body.email,
+        name: req.body.name,
+      });
+      await newUser.save();
 
-        // create other documents
-        await new Incomes({ userID: newUser._id }).save();
-        await new Incomeuptodate({ userID: newUser._id }).save();
-        
-        // Q: what is the advantage of using JWT here?
-        // A: JWT is used to authenticate the user and provide access to the application
-        res.status(201).json({
-          accessToken: generateAccessToken({
-            _id: newUser._id,
-            username: newUser.username,
-            email: newUser.email,
-            name: newUser.name,
-          }),
-          user: {
-            _id: newUser._id,
-            username: newUser.username,
-            email: newUser.email,
-            name: newUser.name,
-          }
-        })
-      } catch (error) {
-        res.status(500).send({ error: error.message });
-      }
+      // create other documents
+      await new Incomes({ userID: newUser._id }).save();
+      await new Incomeuptodate({ userID: newUser._id }).save();
+
+      // Q: what is the advantage of using JWT here?
+      // A: JWT is used to authenticate the user and provide access to the application
+      res.status(201).json({
+        accessToken: generateAccessToken({
+          _id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          name: newUser.name,
+        }),
+        user: {
+          _id: newUser._id,
+          username: newUser.username,
+          email: newUser.email,
+          name: newUser.name,
+        }
+      });
     })
   ],
 
@@ -120,48 +117,39 @@ const UserController = {
         return res.status(400).json({ errors: errors.array() });
       }
 
-      try {
-        const { id } = req.params;
-        const updatedUser = await Users.findByIdAndUpdate
-          (id
-            , { name: req.body.name }
-            , { new: true }
-          );
-        res.status(200).json(updatedUser);
-      } catch (error) {
-        res.status(500).send({ error: error.message });
-      }
+      const { id } = req.params;
+      const updatedUser = await Users.findByIdAndUpdate
+        (id
+          , { name: req.body.name }
+          , { new: true }
+        );
+      res.status(200).json(updatedUser);
     })
   ],
 
   // delete a user
   delete_user: asyncHandler(async (req, res) => {
-    try {
-      const { id } = req.params;
-      const user = Users.findOne({ _id: id });
+    const { id } = req.params;
+    const user = Users.findOne({ _id: id });
 
-      if (!user) {
-        return res.status(404).send({ message: "User not found" });
-      }
-
-      await Users.findByIdAndDelete(id);
-
-      // delete incomes document
-      await Incomes.deleteMany({ userID: id });
-      // delete incomesuptodate document
-      await Incomeuptodate.deleteMany({ userID: id });
-      // delete all orders
-      await Orders.deleteMany({ userID: id });
-      // delete all customers
-      await Customers.deleteMany({ userID: id });
-      // delete all menus
-      await Menu.deleteMany({ userID: id });
-
-      res.status(200).send({ message: "Deleted" });
-
-    } catch (error) {
-      res.status(500).send({ error: error.message });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
     }
+
+    await Users.findByIdAndDelete(id);
+
+    // delete incomes document
+    await Incomes.deleteMany({ userID: id });
+    // delete incomesuptodate document
+    await Incomeuptodate.deleteMany({ userID: id });
+    // delete all orders
+    await Orders.deleteMany({ userID: id });
+    // delete all customers
+    await Customers.deleteMany({ userID: id });
+    // delete all menus
+    await Menu.deleteMany({ userID: id });
+
+    res.status(200).send({ message: "Deleted" });
   }),
 
 
