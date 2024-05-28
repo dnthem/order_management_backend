@@ -8,8 +8,7 @@ This is the backend for Order Management System [here](https://github.com/dnthem
   - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
   - [Routes Description](#routes-description)
-    - [Authentication Route](#authentication-route)
-    - [Index Route](#index-route)
+    - [Routes:](#routes)
   - [Error Handling](#error-handling)
   - [License](#license)
 
@@ -37,32 +36,38 @@ Instalation:
 
 ## Routes Description
 
-### Authentication Route
+### Routes:
 
-The authentication route manages user signup and login procedures using JSON Web Tokens (JWT) for secure backend access. Upon signup or login, a token is generated and stored by the client, and subsequent requests include this token for authentication.
+- `/users`
+  - `POST /users/login` - Login user
+  - `POST /users/logout` - Logout user
 
-### Index Route
+- `/orders`
+  - `GET /orders` - Get all orders
+  - `GET /orders/:id` - Get order by id
+  - `POST /orders` - Create a new order
+  - `PATCH /orders/:id` - Update order by id
+  - `DELETE /orders/:id` - Delete order by id
+  - `POST /orders/:id/complete` - Complete order by id
 
-The index route handles all the stores/collections and provides various functionalities:
+- `/menu`
+  - `GET /menu` - Get all menu items
+  - `GET /menu/:id` - Get menu item by id
+  - `POST /menu` - Create a new menu item
+  - `PATCH /menu/:id` - Update menu item by id
+  - `DELETE /menu/:id` - Delete menu item by id
 
-**GET: /:store**
-- Retrieves all the data from the specified store.
-- Returns the data in an array format.
+- `/customers`
+  - `GET /customers` - Get all customers
+  - `GET /customers/:id` - Get customer by id
+  - `POST /customers` - Create a new customer
+  - `PATCH /customers/:id` - Update customer by id
+  - `DELETE /customers/:id` - Delete customer by id
 
-**GET: /:store/:id**
-- Retrieves a single document from the specified store based on the provided ID.
-- Returns the data in JSON format.
+- `/incomes`
+  - `GET /incomes` - Get all incomes
+  - `GET /incomes/:id` - Get income by id
 
-**POST: /:store**
-- Creates a new document in the specified store.
-- Accepts data in JSON format in the request body.
-
-**PUT: /:store/:id**
-- Updates the entire document identified by the provided ID in the specified store.
-- Accepts data in JSON format in the request body.
-
-**DELETE: /:store/:id**
-- Deletes a single document from the specified store based on the provided ID.
 
 ## Error Handling
 

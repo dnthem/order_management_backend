@@ -10,8 +10,14 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  orderDate: String,
-  deliverDate: String,
+  orderDate: {
+    type: Date,
+    default: Date.now,
+    required: true,
+  },
+  deliverDate: {
+    type: Date
+  },
   status: {
     type: Boolean,
     default: false,
@@ -19,7 +25,7 @@ const orderSchema = new mongoose.Schema({
   // cart is a list of menu and quanity
   cart: [
     {
-      item: {
+      itemId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Menu",
         isNew: true,
@@ -31,20 +37,19 @@ const orderSchema = new mongoose.Schema({
       }
     }
   ],
-  customer: {
+  customerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Customer",
+    required: true,
   },
   total: {
     type: Number,
     default: 0,
   },
   notes: String,
-  nthOrderOfDay: {
-    type: Number,
-    default: 0,
-  },
-  comletedTime: Date, 
+  comletedTime: {
+    type: Date,
+  }, 
   paymentType: {
     type: String,
     enum: ["Cash", "Zelle", "Vemmo"],
@@ -52,68 +57,6 @@ const orderSchema = new mongoose.Schema({
   },
   
 });
-
-orderSchema.index({ userID: 1, _id: 1 }, { unique: true });
-
-const autoPopulate = async function (next) {
-  this.populate("cart.item", {_id: 1, Title: 1, Price: 1}).populate("customer", {_id: 1, customerName: 1, phone: 1});
-  next();
-};
-
-// calculate total price
-orderSchema.pre("save", async function (next) {
-  try {
-    let total = 0;
-    for (let i = 0; i < this.cart.length; i++) {
-      const menu = await this.model("Menu").findById(this.cart[i].item);
-      total += menu.Price * this.cart[i].quantity;
-    }
-    this.total = total - this.promotion;
-    next();
-  } catch (err) {
-    next(err);
-  }
-});
-
-orderSchema.pre("findOne", autoPopulate);
-orderSchema.pre("find", autoPopulate);
-
-orderSchema.statics.customUpdate = async function (body, id, userID) {
-  try {
-    const { promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
-    const result = await this.updateOne(
-      { userID: userID, _id: id },
-      { promotion: promotion, orderDate: orderDate, deliverDate: deliverDate, status: status, cart: cart, customer: customer, total: total, notes: notes, nthOrderOfDay: nthOrderOfDay, comletedTime: comletedTime, paymentType: paymentType }
-    );
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
-
-orderSchema.statics.addEntry = async function (body, userID) {
-  try {
-    const { promotion, orderDate, deliverDate, status, cart, customer, total, notes, nthOrderOfDay, comletedTime, paymentType } = body;
-    const result = await new this({
-      userID: userID,
-      promotion: promotion,
-      orderDate: orderDate,
-      deliverDate: deliverDate,
-      status: status,
-      cart: cart,
-      customer: customer,
-      total: total,
-      notes: notes,
-      nthOrderOfDay: nthOrderOfDay,
-      comletedTime: comletedTime,
-      paymentType: paymentType
-    });
-    return result;
-  } catch (error) {
-    throw error;
-  }
-};
-
 
 
 const Orders = mongoose.model("Order", orderSchema);
