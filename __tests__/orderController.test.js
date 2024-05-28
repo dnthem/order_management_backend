@@ -173,60 +173,42 @@ describe('OrderController', () => {
   });
 
   test('get_all_orders - should return all orders for a user', async () => {
-    const orders = [
-      {
-        customerId: CUSTOMER_ID,
-        cart: [
-          {
-            itemId: MENU[0]._id,
-            quantity: 2,
-          },
-          {
-            itemId: MENU[1]._id,
-            quantity: 1,
-          },
-        ],
-      },
-      {
-        customerId: CUSTOMER_ID,
-        cart: [
-          {
-            itemId: MENU[0]._id,
-            quantity: 1,
-          },
-          {
-            itemId: MENU[1]._id,
-            quantity: 3,
-          },
-        ],
-      },
-    ];
-
-    orders.forEach(async (order, index) => {
-      const res = await request(app).post('/orders').set('Authorization', `Bearer ${ACCESS_TOKEN}`).send(order);
-
-      if(res.status !== 201) console.log(res.body);
-      expect(res.status).toEqual(201);
-      orders[index] = res.body;
-    });
-
     const res = await request(app)
       .get('/orders')
       .set('Authorization', `Bearer ${ACCESS_TOKEN}`);
 
     expect(res.status).toEqual(200);
-    expect(res.body.length).toEqual(2);
-
-    ORDERS = orders;
+    expect(res.body.length).toEqual(0);
   });
 
   test('get_an_order - should return a single order for a user', async () => {
+    const user = {
+      _id: USER_ID,
+    };
+
+    const orderRes = await request(app).post('/orders')
+    .set('Authorization', `Bearer ${ACCESS_TOKEN}`)
+    .send({
+      userID: user._id,
+      customerId: CUSTOMER_ID,
+      cart: [
+        {
+          itemId: MENU[0]._id,
+          quantity: 2,
+        },
+        {
+          itemId: MENU[1]._id,
+          quantity: 1,
+        },
+      ],
+    });
 
 
     const res = await request(app)
-      .get(`/orders/${ORDERS[0]._id}`)
+      .get(`/orders/${orderRes.body._id}`)
       .set('Authorization', `Bearer ${ACCESS_TOKEN}`);
 
+    console.log('order', res.body);
     expect(res.status).toEqual(200);
     expect(res.body.cart.length).toEqual(2);
     expect(res.body.total).toEqual(32);

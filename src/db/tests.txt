@@ -35,11 +35,3 @@
     "Description": "Who knows",
     "Hidden": false
 }
-
-{
-    "Title": "Johny Item",
-    "Count": 10,
-    "Price": 22,
-    "Description": "I don't give a F***",
-    "Hidden": false
-}
