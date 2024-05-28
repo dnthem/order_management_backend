@@ -9,7 +9,6 @@ This is the backend for Order Management System [here](https://github.com/dnthem
   - [Getting Started](#getting-started)
   - [Routes Description](#routes-description)
     - [Routes:](#routes)
-    - [Authentication Route](#authentication-route)
   - [Error Handling](#error-handling)
   - [License](#license)
 
@@ -39,9 +38,35 @@ Instalation:
 
 ### Routes:
 
-### Authentication Route
+- `/users`
+  - `POST /users/login` - Login user
+  - `POST /users/logout` - Logout user
 
-The authentication route manages user signup and login procedures using JSON Web Tokens (JWT) for secure backend access. Upon signup or login, a token is generated and stored by the client, and subsequent requests include this token for authentication.
+- `/orders`
+  - `GET /orders` - Get all orders
+  - `GET /orders/:id` - Get order by id
+  - `POST /orders` - Create a new order
+  - `PATCH /orders/:id` - Update order by id
+  - `DELETE /orders/:id` - Delete order by id
+  - `POST /orders/:id/complete` - Complete order by id
+
+- `/menu`
+  - `GET /menu` - Get all menu items
+  - `GET /menu/:id` - Get menu item by id
+  - `POST /menu` - Create a new menu item
+  - `PATCH /menu/:id` - Update menu item by id
+  - `DELETE /menu/:id` - Delete menu item by id
+
+- `/customers`
+  - `GET /customers` - Get all customers
+  - `GET /customers/:id` - Get customer by id
+  - `POST /customers` - Create a new customer
+  - `PATCH /customers/:id` - Update customer by id
+  - `DELETE /customers/:id` - Delete customer by id
+
+- `/incomes`
+  - `GET /incomes` - Get all incomes
+  - `GET /incomes/:id` - Get income by id
 
 
 ## Error Handling
