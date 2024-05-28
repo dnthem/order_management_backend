@@ -68,7 +68,6 @@ Instalation:
   - `GET /incomes` - Get all incomes
   - `GET /incomes/:id` - Get income by id
 
-
 ## Error Handling
 
 In cases where the client's request does not fit into the above categories, the API responds with a JSON object containing only one property named "error" and an appropriate error message.
