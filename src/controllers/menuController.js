@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler';
 const MenuController = {
   // add a new menu item
   post_create_menuItem: [
-    body('title').isLength({ min: 5 }).trim().escape().withMessage('title must be at least 5 characters'),
+    body('title').isLength({ min: 1 }).trim().escape().withMessage('title must be at least 1 characters'),
     body('price').isNumeric().withMessage('Price must be a number'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
@@ -26,8 +26,8 @@ const MenuController = {
   ],
 
   // update a menu item
-  path_update_menuItem: [
-    body('title').isLength({ min: 5 }).trim().escape().withMessage('title must be at least 5 characters'),
+  patch_update_menuItem: [
+    body('title').isLength({ min: 1 }).trim().escape().withMessage('title must be at least 1 characters'),
     body('price').isNumeric().withMessage('Price must be a number'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
@@ -73,7 +73,7 @@ const MenuController = {
   get_a_menuItem: asyncHandler(async (req, res) => {
     try {
       const { id } = req.params;
-      const menuItem = await Menu.find({ userID: req.user._id, _id: id });
+      const menuItem = await Menu.findOne({ userID: req.user._id, _id: id });
       res.status(200).send(menuItem);
     } catch (error) {
       res.status(500).send({ error: error.message });

@@ -34,7 +34,7 @@ export function authenticateToken(req, res, next) {
 
 /**
  * 
- * @param {Object | String | Buffer} payload object to be signed
+ * @param {Object | String | Buffer} payload object
  * @returns 
  */
 export function generateAccessToken(payload) {

@@ -5,7 +5,7 @@ const CustomerController = {
   // add a new customer
   post_create_customer: [
     body('customerName').isLength({ min: 5 }).trim().escape().withMessage('Name must be at least 5 characters'),
-    body('phone').isMobilePhone('en-US').withMessage('Phone number must be valid'),
+    body('phone').isMobilePhone().withMessage('Phone number must be valid'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

@@ -6,6 +6,7 @@ import { router as menuRoutes } from './routes/menuRoute.js';
 import { router as orderRoutes } from './routes/orderRoute.js';
 import { router as customerRoutes } from './routes/customerRoute.js';
 import { router as userRoutes } from './routes/userRoute.js';
+import { router as incomeRoutes } from './routes/incomeRoute.js';
 import { authenticateToken } from './utils/jwt.js';
 
 import * as db from './db/mongodb.js';
@@ -46,16 +47,19 @@ app.options('*', (req, res) => {
   res.send('OK');
 });
 
-await db.connect();
+db.connect().catch(error => console.log(error));
 
-
+app.post('/', (req, res) => {
+  const { a , b} = req.body;
+  res.status(200).json(a + b);
+});
 
 app.use('/users', userRoutes);
 app.use(authenticateToken);
 app.use('/menu', menuRoutes);
 app.use('/customers', customerRoutes);
 app.use('/orders', orderRoutes);
-
+app.use('/incomes', incomeRoutes)
 
 app.use("/*", (req, res) => {
   res.redirect(process.env.CORS_ORIGIN)
@@ -67,7 +71,5 @@ app.use((err, req, res, next) => {
   res.status(res.statusCode || 500).send({ error: err.message });
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Serve at http://localhost:${port}`);
-});
+
+export default app;

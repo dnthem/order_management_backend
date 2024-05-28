@@ -18,9 +18,6 @@ const incomeSchema = new mongoose.Schema({
   }
 });
 
-incomeSchema.index({ userID: 1, _id: 1 }, { unique: true });
-
-
 const Incomes = mongoose.model("Income", incomeSchema);
 
 

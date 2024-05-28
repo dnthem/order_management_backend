@@ -16,8 +16,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   deliverDate: {
-    type: Date,
-    required: true,
+    type: Date
   },
   status: {
     type: Boolean,

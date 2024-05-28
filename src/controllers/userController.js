@@ -92,7 +92,12 @@ const UserController = {
         // Q: what is the advantage of using JWT here?
         // A: JWT is used to authenticate the user and provide access to the application
         res.status(201).json({
-          accessToken: generateAccessToken(newUser),
+          accessToken: generateAccessToken({
+            _id: newUser._id,
+            username: newUser.username,
+            email: newUser.email,
+            name: newUser.name,
+          }),
           user: {
             _id: newUser._id,
             username: newUser.username,
