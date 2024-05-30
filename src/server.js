@@ -49,12 +49,6 @@ app.options('*', (req, res) => {
   res.send('OK');
 });
 
-
-app.post('/', (req, res) => {
-  const { a, b } = req.body;
-  res.status(200).json(a + b);
-});
-
 app.use('/users', userRoutes);
 app.use(authenticateToken);
 app.use('/menu', menuRoutes);

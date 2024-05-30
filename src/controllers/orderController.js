@@ -89,12 +89,24 @@ const OrderController = {
     }
 
     // update income
-    const income = await Incomes.findOne();
+    let income;
+    
+    income = await Incomes.findOne({ 
+      userID: req.user._id, 
+      date: new Date().toISOString().split('T')[0]
+    });
+
+    if (!income) {
+      income = new Incomes({
+        total: order.total,
+        userID: req.user._id,
+      });
+    }
     income.total += order.total;
     await income.save();
 
     // update income up to date
-    const incomeUpToDate = await Incomeuptodate.findOne();
+    const incomeUpToDate = await Incomeuptodate.findOne({ userID: req.user._id});
     incomeUpToDate.total += order.total;
     incomeUpToDate.updatedDate = new Date().toISOString().split('T')[0];
     await incomeUpToDate.save();

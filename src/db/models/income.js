@@ -9,7 +9,6 @@ const incomeSchema = new mongoose.Schema({
   date: {
     type: String,
     default: () => new Date().toISOString().split('T')[0],
-    unique: true,
   },
   total: {
     type: Number,

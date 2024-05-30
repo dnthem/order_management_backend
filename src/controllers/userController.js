@@ -2,7 +2,7 @@ import { Users, Incomes, Incomeuptodate, Orders, Customers, Menu } from '../db/m
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 import bcrypt from 'bcrypt';
-import { generateAccessToken } from '../utils/jwt.js';
+import { authenticateToken, generateAccessToken } from '../utils/jwt.js';
 const SALT_ROUNDS = 10; // bcrypt salt rounds
 
 const findUserWithSameUsername = async (username) => {
@@ -25,6 +25,14 @@ const findUserWithSameEmail = async (email) => {
  * @namespace UserController
  */
 const UserController = {
+
+  get_preflight: [
+    authenticateToken,
+    asyncHandler(async (req, res) => {
+      res.status(200);
+    })
+  ],
+
   // Login
   post_login: [
     body('username').isLength({ min: 5 }).trim().escape().withMessage('Username must be at least 5 characters'),
@@ -86,11 +94,12 @@ const UserController = {
       await newUser.save();
 
       // create other documents
-      await new Incomes({ userID: newUser._id }).save();
       await new Incomeuptodate({ userID: newUser._id }).save();
 
       // Q: what is the advantage of using JWT here?
       // A: JWT is used to authenticate the user and provide access to the application
+      console.log('newUser', newUser);
+
       res.status(201).json({
         accessToken: generateAccessToken({
           _id: newUser._id,
@@ -151,8 +160,6 @@ const UserController = {
 
     res.status(200).send({ message: "Deleted" });
   }),
-
-
 }
 
 export default UserController;
