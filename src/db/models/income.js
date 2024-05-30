@@ -17,6 +17,9 @@ const incomeSchema = new mongoose.Schema({
   }
 });
 
+// set index for userID and date
+incomeSchema.index({ userID: 1, date: 1 }, { unique: true });
+
 const Incomes = mongoose.model("Income", incomeSchema);
 
 

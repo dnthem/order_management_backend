@@ -46,7 +46,7 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  notes: String,
+  note: String,
   comletedTime: {
     type: Date,
   }, 

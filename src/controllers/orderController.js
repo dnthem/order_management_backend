@@ -59,7 +59,7 @@ const OrderController = {
 
       newUpdated.total = total - (newUpdated.promotion || 0);
 
-      (await newUpdated.save()).populate;
+      await newUpdated.save();
 
       res.status(200).send(newUpdated);
     })
@@ -98,10 +98,10 @@ const OrderController = {
 
     if (!income) {
       income = new Incomes({
-        total: order.total,
         userID: req.user._id,
       });
     }
+
     income.total += order.total;
     await income.save();
 

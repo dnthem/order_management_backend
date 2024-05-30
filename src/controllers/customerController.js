@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler';
 const CustomerController = {
   // add a new customer
   post_create_customer: [
-    body('customerName').isLength({ min: 5 }).trim().escape().withMessage('Name must be at least 5 characters'),
+    body('customerName').isLength({ min: 1 }).trim().escape().withMessage('Name must be at least 1 characters'),
     body('phone').isMobilePhone().withMessage('Phone number must be valid'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
@@ -24,7 +24,7 @@ const CustomerController = {
 
   // update a customer
   patch_update_customer: [
-    body('customerName').isLength({ min: 5 }).trim().escape().withMessage('Name must be at least 5 characters'),
+    body('customerName').isLength({ min: 1 }).trim().escape().withMessage('Name must be at least 1 characters'),
     body('phone').isMobilePhone('en-US').withMessage('Phone number must be valid'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
