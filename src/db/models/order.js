@@ -11,12 +11,12 @@ const orderSchema = new mongoose.Schema({
     default: 0,
   },
   orderDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
     required: true,
   },
   deliverDate: {
-    type: Date
+    type: String
   },
   status: {
     type: Boolean,

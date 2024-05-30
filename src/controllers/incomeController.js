@@ -1,4 +1,4 @@
-import { Incomes } from "../db/models/index.js";
+import { Incomes, Incomeuptodate } from "../db/models/index.js";
 import asyncHandler from 'express-async-handler';
 
 /**
@@ -15,8 +15,22 @@ const IncomeController = {
 
   // get all income
   get_all_income: asyncHandler(async (req, res) => {
-    const incomes = await Incomes.find({ userID: req.user._id });
+    const { limit } = req.query;
+
+    let incomes;
+
+    if (limit) {
+      incomes = await Incomes.find({ userID: req.user._id }).limit(parseInt(limit));
+    } else {
+      incomes = await Incomes.find({ userID: req.user._id });
+    }
+
     res.status(200).send(incomes);
+  }),
+
+  get_income_uptodate: asyncHandler(async (req, res) => {
+    const income = await Incomeuptodate.findOne({ userID: req.user._id });
+    res.status(200).send(income);
   }),
 
 }

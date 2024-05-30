@@ -23,8 +23,8 @@ const MenuController = {
 
   // update a menu item
   patch_update_menuItem: [
-    body('title').isLength({ min: 1 }).trim().escape().withMessage('title must be at least 1 characters'),
-    body('price').isNumeric().withMessage('Price must be a number'),
+    // body('title').isLength({ min: 1 }).trim().escape().withMessage('title must be at least 1 characters').exists(),
+    // body('price').isNumeric().withMessage('Price must be a number'),
     asyncHandler(async (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {

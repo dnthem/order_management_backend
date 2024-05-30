@@ -20,8 +20,8 @@ const customerSchema = new mongoose.Schema({
     default: 0,
   },
   registerationDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
   },
   lastPurchase: {
     type: Date,

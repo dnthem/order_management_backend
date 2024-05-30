@@ -96,12 +96,12 @@ describe('IncomeController', () => {
       new Incomes({
         userID: USER_TEST_OBJ._id,
         total: 1000,
-        date: new Date(),
+        date: new Date(2024,1,1).toISOString().split('T')[0],
       }),
       new Incomes({
         userID: USER_TEST_OBJ._id,
         total: 2000,
-        date: new Date(2024,5,2),
+        date: new Date(2024,5,1).toISOString().split('T')[0],
       }),
     ];
 

@@ -12,8 +12,8 @@ const incomeUpToDateSchema = new mongoose.Schema({
     min: 0,
   },
   updatedDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
     required: true,
   },
 });
