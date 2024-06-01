@@ -2,7 +2,16 @@ import { Customers, Menu, Incomes, Incomeuptodate, Orders } from "../db/models/i
 import asyncHandler from 'express-async-handler';
 import { body, validationResult } from 'express-validator';
 const OrderController = {
-  // add a new order
+  
+  /**
+   * Create an order
+   * Route: POST: /api/orders
+   * @param {Array} cart - Array of items in the cart
+   * @param {String} customerId - Customer ID
+   * @param {Number} promotion - Promotion amount
+   * @param {String} deliverDate - Delivery date
+   * @return {Object} created order
+   */
   post_create_order: [
 
     body('cart').isArray().withMessage('Cart must be an array'),
@@ -41,7 +50,12 @@ const OrderController = {
     })
   ],
 
-  // update an order
+  /**
+   * Update an order
+   * Route: PATCH: /api/orders/:id
+   * @param {String} id - Order ID
+   * @return {Object} updated order
+   */
   patch_update_order: [
     asyncHandler(async (req, res) => {
       const { id } = req.params;
@@ -158,11 +172,38 @@ const OrderController = {
     res.status(200).send(orders);
   }),
 
-  // get an order
+  /**
+   * Route: GET: /orders/:id
+   * Get a single order
+   **/
   get_an_order: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const order = await Orders.findOne({ userID: req.user._id, _id: id });
     res.status(200).send(order);
+  }),
+
+
+  /**
+   * Route: GET: /orders/:id/cart-items
+   */
+  get_items_in_cart: asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const order = await Orders.findOne({ userID: req.user._id, _id: id });
+    res.status(200).send(order.cart);
+  }),
+
+  /**
+   * Route: GET: /orders/:id/cart-items/:itemId
+   */
+  get_item_in_cart: asyncHandler(async (req, res) => {
+    const { id, itemId } = req.params;
+    const order = await Orders.findOne({ userID: req.user._id, _id: id }).populate('cart.itemId');
+    const item = order.cart.find(item => item.itemId._id.toString() === itemId);
+    if (!item) {
+      return res.status(404).send({ message: "Item not found" });
+    }
+
+    res.status(200).send(item);
   }),
 
 }

@@ -26,6 +26,11 @@ const findUserWithSameEmail = async (email) => {
  */
 const UserController = {
 
+  /**
+   * Preflight request - used to check if the user is authenticated
+   * Route: GET /users/preflight
+   * @returns {object} - status 200 if authenticated
+   */
   get_preflight: [
     authenticateToken,
     asyncHandler(async (req, res) => {
@@ -33,7 +38,13 @@ const UserController = {
     })
   ],
 
-  // Login
+  /**
+   * Login a user
+   * Route: POST /users/login
+   * @param {string} username - username
+   * @param {string} password - password
+   * @returns {object} - user object
+  */
   post_login: [
     body('username').isLength({ min: 5 }).trim().escape().withMessage('Username must be at least 5 characters'),
     body('password').isLength({ min: 5 }).trim().escape().withMessage('Password must be at least 5 characters'),
@@ -73,6 +84,15 @@ const UserController = {
 
   // create a new user AKA: signup
   // should use session to create a new user AKA: transaction in mongodb
+  /**
+   * create a user
+   * Route: POST /users/signup
+   * @param {string} username - username
+   * @param {string} password - password
+   * @param {string} email - email
+   * @param {string} name - name
+   * @returns {object} - user object
+   */
   post_create_user: [
     body('username').custom(findUserWithSameUsername).isLength({ min: 5 }).trim().escape().withMessage('Username must be at least 5 characters'),
     body('password').isLength({ min: 5 }).trim().escape().withMessage('Password must be at least 5 characters'),
@@ -117,7 +137,12 @@ const UserController = {
     })
   ],
 
-  // update a user
+  /**
+   * Update a user
+   * Route: PATCH /users/:id
+   * @param {string} name - user name
+   * @returns {object} - updated user
+   */
   patch_update_user: [
     body('name').isLength({ min: 5 }).trim().escape().withMessage('Name must be at least 5 characters'),
     asyncHandler(async (req, res) => {
@@ -136,7 +161,12 @@ const UserController = {
     })
   ],
 
-  // delete a user
+  /**
+   * Delete a user
+   * Route: DELETE /users/:id
+   * @param {string} id - user ID
+   * @returns {} - status 204
+   */
   delete_user: asyncHandler(async (req, res) => {
     const { id } = req.params;
     const user = Users.findOne({ _id: id });
