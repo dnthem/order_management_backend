@@ -47,8 +47,8 @@ const orderSchema = new mongoose.Schema({
     default: 0,
   },
   note: String,
-  comletedTime: {
-    type: Date,
+  completedDate: {
+    type: String,
   }, 
   paymentType: {
     type: String,

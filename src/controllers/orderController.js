@@ -73,6 +73,7 @@ const OrderController = {
     const { id } = req.params;
     const order = await Orders.findById(id);
     order.status = true;
+    order.completedDate = new Date().toISOString().split('T')[0];
     await order.save();
     // update customer order count and total spent
     const customer = await Customers.findById(order.customerId);
