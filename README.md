@@ -287,6 +287,18 @@ Instalation:
   - `username`: Username (must be at least 5 characters long)
   - `password`: Password (must be at least 5 characters long)
 - **Returns:** An object containing an access token and user details upon successful authentication.
+  ```javascript
+  {
+    accessToken: "token",
+    user: {
+      _id: "id",
+      username: "username",
+      email: "email",
+      name: "name"
+    }
+  }
+```
+  
 
 ### Create a User (Signup)
 

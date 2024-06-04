@@ -24,7 +24,7 @@ const customerSchema = new mongoose.Schema({
     default: () => new Date().toISOString().split('T')[0],
   },
   lastPurchase: {
-    type: Date,
+    type: String,
   },
 });
 
