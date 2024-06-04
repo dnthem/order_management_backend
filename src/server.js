@@ -11,14 +11,11 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 
 dotenv.config();
-if (process.env.NODE_ENV === 'test') {
-  console.log = function () { }; // disable console.log
-}
+
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!');
 } else {
-  console.log('Looks like we are in production mode!');
   // disable console.log
   console.log = function () { };
 }
@@ -50,12 +47,6 @@ app.options('*', (req, res) => {
     return res.status(403).send('Forbidden');
   }
   res.send('OK');
-});
-
-
-app.post('/', (req, res) => {
-  const { a, b } = req.body;
-  res.status(200).json(a + b);
 });
 
 app.use('/users', userRoutes);

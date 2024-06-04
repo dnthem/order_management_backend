@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import request from 'supertest';
 import app from '../src/server.js';
-import { connect, mongoose, disconnect, dropDatabase } from '../__helper__/mongodb.memory.test.helper.js';
+import { connect, disconnect, dropDatabase } from '../__helper__/mongodb.memory.test.helper.js';
 import { Incomes } from '../src/db/models/index.js';
 
 let server;
@@ -96,12 +96,12 @@ describe('IncomeController', () => {
       new Incomes({
         userID: USER_TEST_OBJ._id,
         total: 1000,
-        date: new Date(),
+        date: new Date(2024,1,1).toISOString().split('T')[0],
       }),
       new Incomes({
         userID: USER_TEST_OBJ._id,
         total: 2000,
-        date: new Date(2024,5,2),
+        date: new Date(2024,5,1).toISOString().split('T')[0],
       }),
     ];
 
@@ -110,7 +110,7 @@ describe('IncomeController', () => {
     const res = await request(app).get('/incomes').set('Authorization', `Bearer ${ACCESS_TOKEN}`);
     if (res.status === 500) console.log(res.body);
     expect(res.status).toEqual(200);
-    // why 4? 1 from register, 1 from get_income, 2 from get_all_income
-    expect(res.body.length).toEqual(4);
+    // why 3? 1 from get_income, 2 from get_all_income
+    expect(res.body.length).toEqual(3);
   });
 });

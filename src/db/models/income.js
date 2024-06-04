@@ -7,9 +7,8 @@ const incomeSchema = new mongoose.Schema({
     required: true,
   },
   date: {
-    type: Date,
-    default: Date.now,
-    unique: true,
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
   },
   total: {
     type: Number,
@@ -17,6 +16,9 @@ const incomeSchema = new mongoose.Schema({
     min: 0,
   }
 });
+
+// set index for userID and date
+incomeSchema.index({ userID: 1, date: 1 }, { unique: true });
 
 const Incomes = mongoose.model("Income", incomeSchema);
 

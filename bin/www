@@ -3,7 +3,7 @@
 import app from '../src/server.js'; // Import your app module
 import debugLib from 'debug';
 import http from 'http';
-import db from '../src/db.js'; // Import your db module
+import {connect} from '../src/db/mongodb.js'; // Import your db module
 const debug = debugLib('your-app-name:server'); // Replace 'your-app-name' with your app name
 
 /**
@@ -20,7 +20,7 @@ app.set('port', port);
 const server = http.createServer(app);
 
 // Connect to the database
-db.connect().catch(error => console.log(error));
+connect().catch(error => console.log(error));
 
 /**
  * Listen on provided port, on all network interfaces.

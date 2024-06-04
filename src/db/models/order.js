@@ -11,12 +11,12 @@ const orderSchema = new mongoose.Schema({
     default: 0,
   },
   orderDate: {
-    type: Date,
-    default: Date.now,
+    type: String,
+    default: () => new Date().toISOString().split('T')[0],
     required: true,
   },
   deliverDate: {
-    type: Date
+    type: String
   },
   status: {
     type: Boolean,
@@ -46,9 +46,9 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  notes: String,
-  comletedTime: {
-    type: Date,
+  note: String,
+  completedDate: {
+    type: String,
   }, 
   paymentType: {
     type: String,
